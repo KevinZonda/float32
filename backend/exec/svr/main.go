@@ -30,7 +30,7 @@ func main() {
 
 	g := gin.Default()
 	config := cors.DefaultConfig()
-	if os.Getenv("DEBUG") == "1" {
+	if strings.TrimSpace(os.Getenv("DEBUG")) == "1" {
 		gin.SetMode(gin.DebugMode)
 		config.AllowAllOrigins = true
 		g.Use(cors.New(config))
