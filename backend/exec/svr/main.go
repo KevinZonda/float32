@@ -68,23 +68,23 @@ func main() {
 
 		var resp *openai.ChatCompletionStream
 
-		if query.Language != "en" {
-			var zhResp openai.ChatCompletionResponse
-			zhResp, err = cli.CreateChatCompletion(context.Background(), req)
-			if err == nil {
-				req = openai.ChatCompletionRequest{
-					Model:       openai.GPT3Dot5Turbo,
-					Temperature: 0.3,
-					N:           1,
-					Messages:    llm.Translate("Chinese", zhResp.Choices[0].Message.Content),
-				}
-			} else {
-				c.JSON(400, gin.H{
-					"message": err.Error(),
-				})
-				return
-			}
-		}
+		//if query.Language != "en" {
+		//	var zhResp openai.ChatCompletionResponse
+		//	zhResp, err = cli.CreateChatCompletion(context.Background(), req)
+		//	if err == nil {
+		//		req = openai.ChatCompletionRequest{
+		//			Model:       openai.GPT3Dot5Turbo,
+		//			Temperature: 0.3,
+		//			N:           1,
+		//			Messages:    llm.Translate("Chinese", zhResp.Choices[0].Message.Content),
+		//		}
+		//	} else {
+		//		c.JSON(400, gin.H{
+		//			"message": err.Error(),
+		//		})
+		//		return
+		//	}
+		//}
 		resp, err = cli.CreateChatCompletionStream(context.Background(), req)
 
 		if err != nil {
@@ -132,8 +132,10 @@ type Query struct {
 }
 
 func (q Query) Regularize() Query {
-	if q.Language != "en" && q.Language != "zh" {
-		q.Language = "en"
+	if q.Language == "zh" {
+		q.Language = "简体中文"
+	} else {
+		q.Language = "English"
 	}
 	q.ProgLang = rag.MapProgLang(q.ProgLang)
 	return q
