@@ -38,6 +38,22 @@ const proglangOpt = [
     value: 'golang',
   },
   {
+    content: 'Python',
+    value: 'Python',
+  },
+  {
+    content: 'PyTorch',
+    value: 'Python, Pytorch, Numpy',
+  },
+  {
+    content: 'JavaScript',
+    value: 'JavaScript',
+  },
+  {
+    content: 'TypeScript',
+    value: 'TypeScript',
+  },
+  {
     content: 'Java',
     value: 'Java',
   },
