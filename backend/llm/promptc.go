@@ -9,7 +9,7 @@ import (
 
 func Promptc(question string, answerIn string, programmingLanguage string, searchResult any) string {
 	if answerIn == "简体中文" {
-
+		return promptcZh(question, answerIn, programmingLanguage, searchResult)
 	}
 	if programmingLanguage != "" {
 		programmingLanguage = fmt.Sprintf(" When it comes to answers in code, please express them in the %s programming language.", programmingLanguage)
