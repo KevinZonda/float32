@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/KevinZonda/float32/llm"
+	"github.com/KevinZonda/float32/utils"
 	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
 	"io"
@@ -106,6 +107,7 @@ func recvByLine(resp *openai.ChatCompletionStream) (string, error) {
 			panic(err)
 		}
 		delta := msg.Choices[0].Delta.Content
+		delta = utils.CleanStr(delta)
 		sb.WriteString(delta)
 
 		if printOutBySubStrs(&sb, &buf, delta, ".", "\n", ";", "。", "？", "?") {
