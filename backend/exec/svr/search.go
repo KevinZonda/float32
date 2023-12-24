@@ -1,12 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/KevinZonda/float32/rag/serp"
 	"log"
 	"os"
 	"strings"
 )
+
+const SearchPerItemMaxLen = 1000
+const SearchMaxItemCount = 5
 
 func search(query string) string {
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
@@ -21,9 +23,9 @@ func search(query string) string {
 	if len(urls) == 0 {
 		return ""
 	}
-	first5 := arrMaxLen[string](urls, 5)
+	headOfSearch := arrMaxLen[string](urls, SearchMaxItemCount)
 	spider := serp.NewSimpleSpider()
-	results := spider.Search(first5...)
+	results := spider.Search(headOfSearch...)
 	sb := strings.Builder{}
 	for _, r := range results {
 		if r.Error != nil {
@@ -37,15 +39,10 @@ func search(query string) string {
 		sb.WriteString(r.Title)
 		sb.WriteString("\n")
 		//first 1000 chars
-		sb.WriteString(strMaxLen(r.Content, 1000))
+		sb.WriteString(strMaxLen(r.Content, SearchPerItemMaxLen))
 		sb.WriteString("\n\n")
 	}
 	return sb.String()
-}
-
-func jout(v any) {
-	bs, _ := json.MarshalIndent(v, "", "  ")
-	println(string(bs))
 }
 
 func strMaxLen(str string, maxLen int) string {

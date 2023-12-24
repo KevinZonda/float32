@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/prompt"
+	"github.com/sashabaranov/go-openai"
 )
 
 func Promptc(question string, answerIn string, programmingLanguage string, searchResult any) string {
@@ -26,7 +27,27 @@ func Promptc(question string, answerIn string, programmingLanguage string, searc
 	return compiled.Prompts[0].Prompt
 }
 
+func Translate(toLang string, content string) []openai.ChatCompletionMessage {
+	varMap := map[string]string{
+		"to":      toLang,
+		"content": content,
+	}
+
+	compiled := _trans.CompileWithOption(varMap, false)
+	return []openai.ChatCompletionMessage{
+		{
+			Content: compiled.Prompts[0].Prompt,
+			Role:    openai.ChatMessageRoleAssistant,
+		},
+		{
+			Content: compiled.Prompts[1].Prompt,
+			Role:    openai.ChatMessageRoleUser,
+		},
+	}
+}
+
 var _ptc *prompt.PromptC
+var _trans *prompt.PromptC
 
 func init() {
 	pt, err := iox.ReadAllText("prompt.promptc")
@@ -35,4 +56,11 @@ func init() {
 	}
 
 	_ptc = prompt.ParsePromptC(pt)
+
+	pt, err = iox.ReadAllText("translate.promptc")
+	if err != nil {
+		panic(err)
+	}
+
+	_trans = prompt.ParsePromptC(pt)
 }

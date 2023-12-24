@@ -48,7 +48,7 @@ func main() {
 			searched := search(mapProgLang(progLang) + ", " + question)
 			fmt.Println("Search result:", searched)
 			fmt.Println("---------------------------")
-			content = llm.Promptc(question, "English", progLang, searched)
+			content = llm.Promptc(question, "Chinese (Mandarin)", progLang, searched)
 		}
 		history = append(history, openai.ChatCompletionMessage{
 			Content: content,
@@ -64,6 +64,27 @@ func main() {
 		fmt.Println()
 		fmt.Print("<< ")
 		respS, _ := recvByLine(resp)
+		resp.Close()
+		history = append(history, openai.ChatCompletionMessage{
+			Content: respS,
+			Role:    openai.ChatMessageRoleAssistant,
+		})
+
+		fmt.Println()
+
+		req = openai.ChatCompletionRequest{
+			Model:       openai.GPT3Dot5Turbo,
+			Temperature: 0.3,
+			N:           1,
+			Messages:    llm.Translate("Chinese (Mandarin)", respS),
+		}
+
+		resp, err = cli.CreateChatCompletionStream(context.Background(), req)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Print("<< ")
+		respS, _ = recvByLine(resp)
 		resp.Close()
 		history = append(history, openai.ChatCompletionMessage{
 			Content: respS,
