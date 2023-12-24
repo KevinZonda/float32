@@ -75,7 +75,9 @@ function App() {
 
   return (
     <>
-      <h1 style={{fontFamily: 'Linux Libertine'}}><span style={{fontStyle: 'italic'}}>float32</span> AI : Docs 	&times; Elegant</h1>
+      <h1 style={
+        ReqStore.currentAns === '' ? {fontFamily: 'Linux Libertine'} : {fontFamily: 'Linux Libertine', marginTop: 0}
+      }><span style={{fontStyle: 'italic'}}>float32</span> AI : Docs 	&times; Elegant</h1>
       <p className="read-the-docs">
         曲径通幽，拒绝繁琐文档，告别无效思考。清雅绝俗，挑战世俗之见。
       </p>
