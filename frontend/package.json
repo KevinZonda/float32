@@ -12,6 +12,8 @@
   "dependencies": {
     "@uiw/react-markdown-preview": "^5.0.6",
     "katex": "^0.16.9",
+    "mobx": "^6.12.0",
+    "mobx-react-lite": "^4.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tdesign-icons-react": "^0.3.2",
