@@ -3,8 +3,10 @@ package serp
 import (
 	"errors"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/go-shiori/go-readability"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"sync"
 )
@@ -33,7 +35,7 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 				goto store
 			}
 			defer resp.Body.Close()
-			result = _scrab(_url, resp.Body)
+			result = readabilityScrab(_url, resp.Body)
 		store:
 			syncMap.Store(idx, result)
 		}(_idx, _url)
@@ -59,6 +61,21 @@ func (s *SimpleSpider) get(url string) (resp *http.Response, err error) {
 		return
 	}
 	return s.hc.Do(req)
+}
+
+func readabilityScrab(urlS string, r io.Reader) (resp SpiderResult) {
+	resp.Url = urlS
+	parsedUrl, _ := url.Parse(urlS)
+
+	rd, err := readability.FromReader(r, parsedUrl)
+	if err != nil {
+		resp.Error = err
+		return
+	}
+	resp.Title = rd.Title
+	resp.Description = rd.Excerpt
+	resp.Content = rd.TextContent
+	return
 }
 
 func _scrab(url string, r io.Reader) (resp SpiderResult) {

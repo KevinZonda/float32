@@ -36,15 +36,19 @@ func main() {
 			Model:            openai.GPT3Dot5Turbo,
 		}
 
+		content := question
+		role := openai.ChatMessageRoleUser
+
 		if len(history) == 0 {
 			searched := search("Golang, " + question)
 			fmt.Println("Search result:", searched)
 			fmt.Println("---------------------------")
-			history = append(history, openai.ChatCompletionMessage{
-				Content: llm.Promptc(question, "English", "Go", searched),
-				Role:    "system",
-			})
+			content = llm.Promptc(question, "English", "Go", searched)
 		}
+		history = append(history, openai.ChatCompletionMessage{
+			Content: content,
+			Role:    role,
+		})
 		req.Messages = history
 		//fmt.Println(req)
 		resp, err := cli.CreateChatCompletionStream(context.Background(), req)
