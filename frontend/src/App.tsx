@@ -4,6 +4,7 @@ import { Icon } from 'tdesign-icons-react';
 import React from "react";
 import {Content} from "./Content.tsx";
 import ReqStore from "./Store/ReqStore.ts";
+import {observer} from "mobx-react-lite";
 
 const langOpt = [
   {
@@ -69,7 +70,7 @@ function progLangMap(lang: string) {
   }
 }
 
-function App() {
+export const App = observer(() => {
   const [lang, setLang] = React.useState('zh');
   const [progLang, setProgLang] = React.useState('general');
 
@@ -102,6 +103,4 @@ function App() {
       <Content />
     </>
   )
-}
-
-export default App
+})

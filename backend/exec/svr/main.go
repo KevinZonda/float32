@@ -30,8 +30,16 @@ func main() {
 
 	g := gin.Default()
 	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
+	if os.Getenv("DEBUG") == "1" {
+		gin.SetMode(gin.DebugMode)
+		config.AllowAllOrigins = true
+		g.Use(cors.New(config))
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+		config.AllowOrigins = []string{"https://float32.app"}
+	}
 	g.Use(cors.New(config))
+
 	g.POST("/query", func(c *gin.Context) {
 		var query Query
 		err := c.BindJSON(&query)
@@ -41,7 +49,8 @@ func main() {
 			})
 			return
 		}
-		searched := rag.Search(rag.MapProgLang(query.ProgLang) + ", " + query.Question)
+		query = query.Regularize()
+		searched := rag.Search(query.ProgLang + ", " + query.Question)
 		content := llm.Promptc(query.Question, query.Language, query.ProgLang, searched)
 		req := openai.ChatCompletionRequest{
 			Temperature:      0.3,
@@ -59,9 +68,7 @@ func main() {
 
 		var resp *openai.ChatCompletionStream
 
-		if strings.ToLower(query.Language) == "english" {
-			resp, err = cli.CreateChatCompletionStream(context.Background(), req)
-		} else {
+		if query.Language != "en" {
 			var zhResp openai.ChatCompletionResponse
 			zhResp, err = cli.CreateChatCompletion(context.Background(), req)
 			if err == nil {
@@ -69,12 +76,16 @@ func main() {
 					Model:       openai.GPT3Dot5Turbo,
 					Temperature: 0.3,
 					N:           1,
-					Messages:    llm.Translate("Chinese (Mandarin)", zhResp.Choices[0].Message.Content),
+					Messages:    llm.Translate("Chinese", zhResp.Choices[0].Message.Content),
 				}
-
-				resp, err = cli.CreateChatCompletionStream(context.Background(), req)
+			} else {
+				c.JSON(400, gin.H{
+					"message": err.Error(),
+				})
+				return
 			}
 		}
+		resp, err = cli.CreateChatCompletionStream(context.Background(), req)
 
 		if err != nil {
 			c.JSON(400, gin.H{
@@ -118,6 +129,14 @@ type Query struct {
 	Question string `json:"question"`
 	ProgLang string `json:"prog_lang"`
 	Language string `json:"language"`
+}
+
+func (q Query) Regularize() Query {
+	if q.Language != "en" && q.Language != "zh" {
+		q.Language = "en"
+	}
+	q.ProgLang = rag.MapProgLang(q.ProgLang)
+	return q
 }
 
 func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta, subStr string) (needContinue bool) {
