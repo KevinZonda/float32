@@ -56,7 +56,25 @@ func main() {
 			},
 		}
 
-		resp, err := cli.CreateChatCompletionStream(context.Background(), req)
+		var resp *openai.ChatCompletionStream
+
+		if strings.ToLower(query.Language) == "english" {
+			resp, err = cli.CreateChatCompletionStream(context.Background(), req)
+		} else {
+			var zhResp openai.ChatCompletionResponse
+			zhResp, err = cli.CreateChatCompletion(context.Background(), req)
+			if err == nil {
+				req = openai.ChatCompletionRequest{
+					Model:       openai.GPT3Dot5Turbo,
+					Temperature: 0.3,
+					N:           1,
+					Messages:    llm.Translate("Chinese (Mandarin)", zhResp.Choices[0].Message.Content),
+				}
+
+				resp, err = cli.CreateChatCompletionStream(context.Background(), req)
+			}
+		}
+
 		if err != nil {
 			c.JSON(400, gin.H{
 				"message": err.Error(),
@@ -103,9 +121,6 @@ type Query struct {
 
 func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta, subStr string) (needContinue bool) {
 	if idx := strings.Index(delta, subStr); idx > 0 {
-		if subStr == "\n" {
-			fmt.Println(idx)
-		}
 		toPrint := buf.String() + delta[:idx+1]
 		w.Write([]byte(toPrint))
 		buf.Reset()

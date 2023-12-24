@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const SearchPerItemMaxLen = 1000
+const SearchPerItemMaxLen = 500
 const SearchMaxItemCount = 5
 
 func Search(query string) string {

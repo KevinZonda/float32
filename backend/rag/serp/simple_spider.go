@@ -89,6 +89,6 @@ func readabilityScrab(urlS string, r io.Reader) (resp SpiderResult) {
 	}
 	resp.Title = strings.TrimSpace(rd.Title)
 	resp.Description = strings.TrimSpace(rd.Excerpt)
-	resp.Content = strings.TrimSpace(rd.TextContent)
+	resp.Content = strings.Replace(strings.TrimSpace(rd.TextContent), "\n\n", "\n", -1)
 	return
 }

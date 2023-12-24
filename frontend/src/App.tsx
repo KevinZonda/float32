@@ -83,7 +83,7 @@ function App() {
         placeholder="请输入你的问题"
         size="large"
         onEnter={(e) => {
-          ReqStore.queryQuestion(e, lang, 'golang')
+          ReqStore.queryQuestion(e, lang, progLang);
         }}
       />
       <Dropdown options={langOpt} onClick={(e)=> setLang(e.value as string)}>
