@@ -10,6 +10,9 @@ func CleanStr(s string) string {
 		if unicode.IsGraphic(r) {
 			return r
 		}
+		if r == '\n' || r == '\r' || r == '\t' {
+			return r
+		}
 		return -1
 	}, s)
 }

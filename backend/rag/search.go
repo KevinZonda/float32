@@ -1,4 +1,4 @@
-package main
+package rag
 
 import (
 	"github.com/KevinZonda/float32/rag/serp"
@@ -10,7 +10,7 @@ import (
 const SearchPerItemMaxLen = 1000
 const SearchMaxItemCount = 5
 
-func search(query string) string {
+func Search(query string) string {
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
 	resp, err := gs.Search(query)
 	if err != nil {
@@ -58,4 +58,13 @@ func arrMaxLen[T any](str []T, maxLen int) []T {
 		return str
 	}
 	return str[:maxLen]
+}
+
+func MapProgLang(progLang string) string {
+	switch progLang {
+	case "Go":
+		return "Golang"
+	default:
+		return progLang
+	}
 }
