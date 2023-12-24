@@ -1,5 +1,5 @@
 import {makeAutoObservable} from "mobx";
-const baseAPI = 'http://localhost:8080/query'
+const baseAPI = 'https://api.float32.ai/query'
 class reqStore {
   public constructor() {
     makeAutoObservable(this)
