@@ -56,22 +56,63 @@ func main() {
 			panic(err)
 		}
 		defer resp.Close()
-		respSB := strings.Builder{}
+
 		fmt.Println()
 		fmt.Print("<< ")
-		for {
-			msg, respE := resp.Recv()
-			if errors.Is(respE, io.EOF) {
-				break
-			}
-			content := msg.Choices[0].Delta.Content
-			respSB.WriteString(content)
-			fmt.Print(content)
-		}
+		respS, _ := recvByLine(resp)
 		history = append(history, openai.ChatCompletionMessage{
-			Content: respSB.String(),
+			Content: respS,
 			Role:    openai.ChatMessageRoleAssistant,
 		})
 		fmt.Println()
 	}
+}
+
+func recvByLine(resp *openai.ChatCompletionStream) (string, error) {
+	sb := strings.Builder{}
+	buf := strings.Builder{}
+	for {
+		msg, err := resp.Recv()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		delta := msg.Choices[0].Delta.Content
+		sb.WriteString(delta)
+
+		if printOutBySubStrs(&sb, &buf, delta, ".", "\n", ";", "。", "？", "?") {
+			continue
+		}
+		buf.WriteString(delta)
+	}
+	bufS := buf.String()
+	if bufS != "" {
+		fmt.Print(bufS)
+		sb.WriteString(bufS)
+	}
+
+	return sb.String(), nil
+}
+
+func printOutBySubStr(sb, buf *strings.Builder, delta, subStr string) (needContinue bool) {
+	if idx := strings.Index(delta, subStr); idx > 0 {
+		toPrint := buf.String() + delta[:idx+1]
+		fmt.Print(toPrint)
+		buf.Reset()
+		sb.WriteString(delta[idx+1:])
+		needContinue = true
+	}
+	return
+}
+
+func printOutBySubStrs(sb, buf *strings.Builder, delta string, subStrs ...string) (needContinue bool) {
+	for _, subString := range subStrs {
+		if printOutBySubStr(sb, buf, delta, subString) {
+			needContinue = true
+			return
+		}
+	}
+	return
 }
