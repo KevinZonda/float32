@@ -27,7 +27,7 @@ func Promptc(question string, answerIn string, programmingLanguage string, searc
 var _ptc *prompt.PromptC
 
 func init() {
-	pt, err := iox.ReadAllText("../prompt.promptc")
+	pt, err := iox.ReadAllText("prompt.promptc")
 	if err != nil {
 		panic(err)
 	}

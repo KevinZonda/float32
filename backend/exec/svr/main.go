@@ -37,8 +37,11 @@ func main() {
 		}
 
 		if len(history) == 0 {
+			searched := search("Golang, " + question)
+			fmt.Println("Search result:", searched)
+			fmt.Println("---------------------------")
 			history = append(history, openai.ChatCompletionMessage{
-				Content: llm.Promptc(question, "English", "Go", ""),
+				Content: llm.Promptc(question, "English", "Go", searched),
 				Role:    "system",
 			})
 		}

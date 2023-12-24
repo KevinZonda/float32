@@ -19,12 +19,12 @@ func NewGoogleSearch(apiKey string) *GoogleSearch {
 }
 
 type GoogleSearchResponse struct {
-	AnswerBox struct {
-		Snippet string `json:"snippet"`
-		Title   string `json:"title"`
-		Link    string `json:"link"`
-		Date    string `json:"date"`
-	} `json:"answerBox"`
+	//AnswerBox struct {
+	//	Snippet string `json:"snippet"`
+	//	Title   string `json:"title"`
+	//	Link    string `json:"link"`
+	//	Date    string `json:"date"`
+	//} `json:"answerBox"`
 	Result []struct {
 		Title     string `json:"title"`
 		Link      string `json:"link"`
@@ -48,11 +48,11 @@ type _googleQuery struct {
 
 const serperUrl = "https://google.serper.dev/search"
 
-func (s *GoogleSearch) Search(keyword string) (resp GoogleSearchResponse, err error) {
+func (s *GoogleSearch) Search(query string) (resp GoogleSearchResponse, err error) {
 	method := "POST"
 
 	reqM := _googleQuery{
-		Query: keyword,
+		Query: query,
 		//Country: "cn",
 		//Locale:  "zh-cn",
 	}
