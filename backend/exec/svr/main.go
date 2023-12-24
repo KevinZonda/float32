@@ -22,8 +22,9 @@ var cli *openai.Client
 func main() {
 	godotenv.Load(".env")
 	token := os.Getenv("OPENAI_SB")
+	listenAddr := os.Getenv("LISTEN_ADDR")
+
 	fmt.Println("Work at:", os.Getenv("PWD"))
-	fmt.Println("Token found:", token)
 	cfg := openai.DefaultConfig(token)
 	cli = openai.NewClientWithConfig(cfg)
 
@@ -110,7 +111,7 @@ func main() {
 		log.Println("COUNT:", strings.Count(sb.String(), "\n"))
 
 	})
-	g.Run("127.0.0.1:8080")
+	g.Run(listenAddr)
 }
 
 type Query struct {
