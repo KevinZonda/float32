@@ -9,6 +9,8 @@ import (
 func Promptc(question string, answerIn string, programmingLanguage string, searchResult any) string {
 	if programmingLanguage != "" {
 		programmingLanguage = fmt.Sprintf(" When it comes to answers in code, please express them in the %s programming language.", programmingLanguage)
+	} else {
+		programmingLanguage = " Please stand in the perspective of a programmer or an advanced software engineer. When it comes to answers in code, please express them in the Java programming language except user specified any programming language."
 	}
 	if answerIn != "" {
 		answerIn = "English"

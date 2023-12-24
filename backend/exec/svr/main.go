@@ -40,10 +40,15 @@ func main() {
 		role := openai.ChatMessageRoleUser
 
 		if len(history) == 0 {
-			searched := search("Golang, " + question)
+			progLang := "general"
+			if progLang == "general" {
+				progLang = ""
+			}
+
+			searched := search(mapProgLang(progLang) + ", " + question)
 			fmt.Println("Search result:", searched)
 			fmt.Println("---------------------------")
-			content = llm.Promptc(question, "English", "Go", searched)
+			content = llm.Promptc(question, "English", progLang, searched)
 		}
 		history = append(history, openai.ChatCompletionMessage{
 			Content: content,
@@ -55,11 +60,11 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		defer resp.Close()
 
 		fmt.Println()
 		fmt.Print("<< ")
 		respS, _ := recvByLine(resp)
+		resp.Close()
 		history = append(history, openai.ChatCompletionMessage{
 			Content: respS,
 			Role:    openai.ChatMessageRoleAssistant,
@@ -115,4 +120,13 @@ func printOutBySubStrs(sb, buf *strings.Builder, delta string, subStrs ...string
 		}
 	}
 	return
+}
+
+func mapProgLang(progLang string) string {
+	switch progLang {
+	case "Go":
+		return "Golang"
+	default:
+		return progLang
+	}
 }
