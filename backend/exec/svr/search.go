@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/KevinZonda/float32/rag/serp"
+	"log"
 	"os"
 	"strings"
 )
@@ -20,12 +21,13 @@ func search(query string) string {
 	if len(urls) == 0 {
 		return ""
 	}
-	first5 := urls[:5]
+	first5 := arrMaxLen[string](urls, 5)
 	spider := serp.NewSimpleSpider()
 	results := spider.Search(first5...)
 	sb := strings.Builder{}
 	for _, r := range results {
 		if r.Error != nil {
+			log.Println("FAILED", r.Url, r.Error)
 			continue
 		}
 		sb.WriteString("* URL: ")
@@ -35,7 +37,7 @@ func search(query string) string {
 		sb.WriteString(r.Title)
 		sb.WriteString("\n")
 		//first 1000 chars
-		sb.WriteString(r.Content[:1000])
+		sb.WriteString(strMaxLen(r.Content, 1000))
 		sb.WriteString("\n\n")
 	}
 	return sb.String()
@@ -44,4 +46,19 @@ func search(query string) string {
 func jout(v any) {
 	bs, _ := json.MarshalIndent(v, "", "  ")
 	println(string(bs))
+}
+
+func strMaxLen(str string, maxLen int) string {
+	ss := []rune(str)
+	if len(ss) <= maxLen {
+		return str
+	}
+	return string(ss[:maxLen])
+}
+
+func arrMaxLen[T any](str []T, maxLen int) []T {
+	if len(str) <= maxLen {
+		return str
+	}
+	return str[:maxLen]
 }

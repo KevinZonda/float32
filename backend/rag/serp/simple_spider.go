@@ -33,8 +33,7 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 				goto store
 			}
 			defer resp.Body.Close()
-			result = _scrab(resp.Body)
-			result.Url = url
+			result = _scrab(_url, resp.Body)
 		store:
 			syncMap.Store(idx, result)
 		}(_idx, _url)
@@ -62,7 +61,8 @@ func (s *SimpleSpider) get(url string) (resp *http.Response, err error) {
 	return s.hc.Do(req)
 }
 
-func _scrab(r io.Reader) (resp SpiderResult) {
+func _scrab(url string, r io.Reader) (resp SpiderResult) {
+	resp.Url = url
 	doc, err := goquery.NewDocumentFromReader(r)
 	if err != nil {
 		resp.Error = err
@@ -75,16 +75,53 @@ func _scrab(r io.Reader) (resp SpiderResult) {
 		resp.Description, _ = selection.Attr("content")
 	})
 	doc.Find("body").Each(func(i int, selection *goquery.Selection) {
-		// ignore footer
-		selection.Find("footer").Remove()
-		selection.Find("header").Remove()
-		selection.Find("noscript").Remove()
-		// ignore script
-		selection.Find("script").Remove()
-		// ignore style
-		selection.Find("style").Remove()
+		defaultRemover(selection)
+		if strings.Contains(url, "geeksforgeeks.org") {
+			geeksforgeeks(selection)
+		}
+		if strings.Contains(url, "stackoverflow.com") {
+			stackOveflow(selection)
+		}
 		resp.Content = selection.Text()
 		resp.Content = strings.TrimSpace(resp.Content)
 	})
 	return
+}
+
+func defaultRemover(selection *goquery.Selection) {
+	selection.Find("footer").Remove()
+	selection.Find("header").Remove()
+	selection.Find("noscript").Remove()
+	selection.Find("script").Remove()
+	selection.Find("[class*=footer]").Remove()
+	selection.Find("[class*=sidebar]").Remove()
+	selection.Find("[class*=search]").Remove()
+	selection.Find("[class*=nav]").Remove()
+	selection.Find("a[href*=twitter.com]").Remove()
+	selection.Find("a[href*=facebook.com]").Remove()
+	selection.Find("a[href*=linkedin.com]").Remove()
+	selection.Find("[id*=footer]").Remove()
+	selection.Find("[id*=sidebar]").Remove()
+	selection.Find("nav").Remove()
+	selection.Find("style").Remove()
+}
+
+func geeksforgeeks(selection *goquery.Selection) {
+	defaultRemover(selection)
+	selection.Find("[class*=footer]").Remove()
+	selection.Find("[class*=header-main__container]").Remove()
+	selection.Find("[class*=header-main__slider]").Remove()
+	selection.Find("[class*=header-sidebar__wrapper]").Remove()
+	selection.Find("[class*=gfg-footer]").Remove()
+	selection.Find("[class*=article--recommended]").Remove()
+	selection.Find("[class*=cookie-consent]").Remove()
+}
+
+func stackOveflow(selection *goquery.Selection) {
+	defaultRemover(selection)
+	//remove id
+	selection.Find("[id*=left-sidebar]").Remove()
+	selection.Find("[class*=js-dismissable-hero]").Remove()
+	selection.Find("[id*=post-form]").Remove()
+
 }
