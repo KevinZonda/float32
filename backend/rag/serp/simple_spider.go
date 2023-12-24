@@ -72,9 +72,9 @@ func readabilityScrab(urlS string, r io.Reader) (resp SpiderResult) {
 		resp.Error = err
 		return
 	}
-	resp.Title = rd.Title
-	resp.Description = rd.Excerpt
-	resp.Content = rd.TextContent
+	resp.Title = strings.TrimSpace(rd.Title)
+	resp.Description = strings.TrimSpace(rd.Excerpt)
+	resp.Content = strings.TrimSpace(rd.TextContent)
 	return
 }
 
