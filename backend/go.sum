@@ -1,0 +1,16 @@
+github.com/KevinZonda/GoX v0.0.13 h1:6jagLi5dpWR/qQpIQjJirbba5tuqWAwzDQrJHIqUmFs=
+github.com/KevinZonda/GoX v0.0.13/go.mod h1:WHV3YUyG+ou3wuUgwO4SRhMiKxLTVK5inajmtR1MUXo=
+github.com/hjson/hjson-go/v4 v4.3.0 h1:dyrzJdqqFGhHt+FSrs5n9s6b0fPM8oSJdWo+oS3YnJw=
+github.com/hjson/hjson-go/v4 v4.3.0/go.mod h1:KaYt3bTw3zhBjYqnXkYywcYctk0A2nxeEFTse3rH13E=
+github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/promptc/promptc-go v0.1.2 h1:6l7LGyFaLZD9u1w7ytUh3c5+8h4Eh97Ftko6IUw0H6o=
+github.com/promptc/promptc-go v0.1.2/go.mod h1:37Q7j8Vx/pCZVkJIgG7hgFbxIP3xdL1h02VGHJi11/4=
+github.com/robertkrimen/otto v0.2.1 h1:FVP0PJ0AHIjC+N4pKCG9yCDz6LHNPCwi/GKID5pGGF0=
+github.com/robertkrimen/otto v0.2.1/go.mod h1:UPwtJ1Xu7JrLcZjNWN8orJaM5n5YEtqL//farB5FlRY=
+github.com/sashabaranov/go-openai v1.17.9 h1:QEoBiGKWW68W79YIfXWEFZ7l5cEgZBV4/Ow3uy+5hNY=
+github.com/sashabaranov/go-openai v1.17.9/go.mod h1:lj5b/K+zjTSFxVLijLSTDZuP7adOgerWeFyZLUhAKRg=
+golang.org/x/text v0.4.0 h1:BrVqGRd7+k1DiOgtnFvAkoQEWQvBc25ouMJM6429SFg=
+golang.org/x/text v0.4.0/go.mod h1:mrYo+phRRbMaCq/xk9113O4dZlRixOauAjOtrjsXDZ8=
+gopkg.in/sourcemap.v1 v1.0.5 h1:inv58fC9f9J3TK2Y2R1NPntXEn3/wjWHkonhIUODNTI=
+gopkg.in/sourcemap.v1 v1.0.5/go.mod h1:2RlvNNSMglmRrcvhfuzp4hQHwOtjxlbjX7UPY/GXb78=
