@@ -5,12 +5,14 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 const SearchPerItemMaxLen = 500
 const SearchMaxItemCount = 5
 
 func Search(query string) string {
+	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
 	resp, err := gs.Search(query)
 	if err != nil {
@@ -24,6 +26,7 @@ func Search(query string) string {
 		return ""
 	}
 	headOfSearch := arrMaxLen[string](urls, SearchMaxItemCount)
+	afterGoogleTime := time.Now()
 	spider := serp.NewSimpleSpider()
 	results := spider.Search(headOfSearch...)
 	sb := strings.Builder{}
@@ -42,6 +45,8 @@ func Search(query string) string {
 		sb.WriteString(strMaxLen(r.Content, SearchPerItemMaxLen))
 		sb.WriteString("\n\n")
 	}
+	spiderTime := time.Now()
+	log.Println("Search Time:", afterGoogleTime.Sub(beforeGoogleTime), "Spider Time:", spiderTime.Sub(afterGoogleTime))
 	return sb.String()
 }
 

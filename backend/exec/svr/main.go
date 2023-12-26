@@ -12,7 +12,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
 	"io"
-	"log"
 	"os"
 	"strings"
 )
@@ -122,9 +121,8 @@ func main() {
 			buf.WriteString(delta)
 			return true
 		})
-		fmt.Println(sb.String())
-		log.Println("COUNT:", strings.Count(sb.String(), "\n"))
-
+		//fmt.Println(sb.String())
+		//log.Println("COUNT:", strings.Count(sb.String(), "\n"))
 	})
 	g.Run(listenAddr)
 }
