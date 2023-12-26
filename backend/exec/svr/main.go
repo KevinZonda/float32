@@ -59,7 +59,7 @@ func main() {
 		meta := newMeta(searchRaw)
 		c.String(200, "%s\r\n", meta.Json())
 
-		content := llm.Promptc(query.Question, query.Language, query.ProgLang, searched)
+		content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
 		req := openai.ChatCompletionRequest{
 			Temperature:      0.3,
 			N:                1,
@@ -136,21 +136,6 @@ func main() {
 	g.Run(listenAddr)
 }
 
-type Query struct {
-	Question string `json:"question"`
-	ProgLang string `json:"prog_lang"`
-	Language string `json:"language"`
-}
-
-func (q Query) Regularize() Query {
-	if q.Language == "zh" {
-		q.Language = "简体中文"
-	} else {
-		q.Language = "English"
-	}
-	q.ProgLang = rag.MapProgLang(q.ProgLang)
-	return q
-}
 
 func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta string, subStr rune) (needContinue bool) {
 	rs := []rune(delta)

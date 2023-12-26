@@ -7,9 +7,9 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-func Promptc(question string, answerIn string, programmingLanguage string, searchResult any) string {
+func Promptc(field string, question string, answerIn string, programmingLanguage string, searchResult any) string {
 	if answerIn == "简体中文" {
-		return promptcZh(question, answerIn, programmingLanguage, searchResult)
+		return promptcZh(field, question, answerIn, programmingLanguage, searchResult)
 	}
 	if programmingLanguage != "" {
 		programmingLanguage = fmt.Sprintf(" When it comes to answers in code, please express them in the %s programming language.", programmingLanguage)
@@ -30,7 +30,19 @@ func Promptc(question string, answerIn string, programmingLanguage string, searc
 	return compiled.Prompts[0].Prompt
 }
 
-func promptcZh(question string, answerIn string, programmingLanguage string, searchResult any) string {
+func promptcZh(field string, question string, answerIn string, programmingLanguage string, searchResult any) string {
+	if field == "med" {
+		varMap := map[string]string{
+			"lang":        answerIn,
+			"programLang": programmingLanguage,
+			"question":    question,
+			"query":       fmt.Sprint(searchResult),
+		}
+
+		compiled := _med_zh.CompileWithOption(varMap, false)
+		return compiled.Prompts[0].Prompt
+	}
+
 	if programmingLanguage != "" {
 		programmingLanguage = fmt.Sprintf("如果需要用代码作答，请用 %s 程序语言来表达。", programmingLanguage)
 	} else {
@@ -72,26 +84,19 @@ func Translate(toLang string, content string) []openai.ChatCompletionMessage {
 var _ptc *prompt.PromptC
 var _trans *prompt.PromptC
 var _ptc_zh *prompt.PromptC
+var _med_zh *prompt.PromptC
 
 func init() {
-	pt, err := iox.ReadAllText("prompt.promptc")
+	_ptc = loadPromptc("prompt.promptc")
+	_trans = loadPromptc("translate.promptc")
+	_ptc_zh = loadPromptc("prompt_zh.promptc")
+	_med_zh = loadPromptc("med_prompt_zh.promptc")
+}
+
+func loadPromptc(path string) *prompt.PromptC {
+	pt, err := iox.ReadAllText(path)
 	if err != nil {
 		panic(err)
 	}
-
-	_ptc = prompt.ParsePromptC(pt)
-
-	pt, err = iox.ReadAllText("translate.promptc")
-	if err != nil {
-		panic(err)
-	}
-
-	_trans = prompt.ParsePromptC(pt)
-
-	pt, err = iox.ReadAllText("prompt_zh.promptc")
-	if err != nil {
-		panic(err)
-	}
-
-	_ptc_zh = prompt.ParsePromptC(pt)
+	return prompt.ParsePromptC(pt)
 }
