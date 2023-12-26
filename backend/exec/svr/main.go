@@ -121,7 +121,7 @@ func main() {
 			buf.WriteString(delta)
 			return true
 		})
-		//fmt.Println(sb.String())
+		fmt.Println(sb.String())
 		//log.Println("COUNT:", strings.Count(sb.String(), "\n"))
 	})
 	g.Run(listenAddr)

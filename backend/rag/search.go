@@ -11,6 +11,15 @@ import (
 const SearchPerItemMaxLen = 500
 const SearchMaxItemCount = 5
 
+func hasTails(str string, tails ...string) bool {
+	for _, tail := range tails {
+		if strings.HasSuffix(str, tail) {
+			return true
+		}
+	}
+	return false
+}
+
 func Search(query string) string {
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
@@ -20,15 +29,26 @@ func Search(query string) string {
 	}
 	var urls []string
 	for _, r := range resp.Result {
+		if len(urls) >= SearchMaxItemCount {
+			break
+		}
+		link := r.Link
+		if hasTails(link, ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls") {
+			continue
+		}
+		if strings.Contains(link, "gov.cn") {
+			continue
+		}
 		urls = append(urls, r.Link)
+
 	}
 	if len(urls) == 0 {
 		return ""
 	}
-	headOfSearch := arrMaxLen[string](urls, SearchMaxItemCount)
+
 	afterGoogleTime := time.Now()
 	spider := serp.NewSimpleSpider()
-	results := spider.Search(headOfSearch...)
+	results := spider.Search(urls...)
 	sb := strings.Builder{}
 	for _, r := range results {
 		if r.Error != nil {
