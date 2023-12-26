@@ -51,7 +51,12 @@ func main() {
 		}
 		query = query.Regularize()
 		searched := ""
-		searchRaw, err := rag.SearchRaw(query.ProgLang + ", " + query.Question)
+		// TODO: Country fix
+		country := "us"
+		if strings.Contains(query.ProgLang, "nhs") {
+			country = "uk"
+		}
+		searchRaw, err := rag.SearchRaw(country, query.ProgLang+", "+query.Question)
 		if err == nil {
 			searched = rag.SearchResultsToText(searchRaw)
 		}
@@ -135,7 +140,6 @@ func main() {
 	})
 	g.Run(listenAddr)
 }
-
 
 func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta string, subStr rune) (needContinue bool) {
 	rs := []rune(delta)

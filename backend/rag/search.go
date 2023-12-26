@@ -21,10 +21,10 @@ func hasTails(str string, tails ...string) bool {
 	return false
 }
 
-func SearchRaw(query string) ([]serp.SpiderResult, error) {
+func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
-	resp, err := gs.Search(query)
+	resp, err := gs.Search(country, query)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func SearchRaw(query string) ([]serp.SpiderResult, error) {
 }
 
 func Search(query string) string {
-	results, err := SearchRaw(query)
+	results, err := SearchRaw("us", query)
 	if err != nil {
 		return ""
 	}

@@ -48,13 +48,13 @@ type _googleQuery struct {
 
 const serperUrl = "https://google.serper.dev/search"
 
-func (s *GoogleSearch) Search(query string) (resp GoogleSearchResponse, err error) {
+func (s *GoogleSearch) Search(country, query string) (resp GoogleSearchResponse, err error) {
 	method := "POST"
 
 	reqM := _googleQuery{
-		Query: query,
-		//Country: "cn",
-		//Locale:  "zh-cn",
+		Query:   query,
+		Country: country,
+		//Locale:  "en-us",
 	}
 	reqB, err := json.Marshal(reqM)
 	if err != nil {
