@@ -6,6 +6,8 @@ import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import {useNavigate} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
+import {FcPlus} from "react-icons/fc";
+import {MdOutlineMedicalInformation} from "react-icons/md";
 
 function newQuery(content: string, query: string = content) {
   return {
@@ -40,8 +42,10 @@ const progLangOpt = [
 
 interface IField {
   content: string
+  field: string
   options: { content: string, value: { query: string, content: string } }[]
   icon: React.ReactElement
+  subIcon: React.ReactElement
 }
 
 const fieldsOpt = [
@@ -49,8 +53,35 @@ const fieldsOpt = [
     content: '程序开发',
     value: {
       content: '程序开发',
+      field: 'code',
       options: progLangOpt,
-      icon: <Icon name="code" size="16"/>
+      icon: <Icon name="dividers-1" size="16"/>,
+      subIcon: <Icon name="code" size="16"/>
+    },
+  },
+  {
+    content: '医学',
+    value: {
+      content: '医学',
+      field: 'med',
+      options: [
+        newQuery('NHS (UK)', 'nhs'),
+        newQuery('NICE (UK)', 'nice'),
+        newQuery('CDC (US)', 'nice'),
+        newQuery('默认', ''),
+      ],
+      icon: <div style={{paddingRight: '8px'}}>
+        <FcPlus size={'18px'} style={{
+          fontSize: '17px',
+          verticalAlign: 'middle',
+          marginBottom: '2px'
+        }} class={'t-icon'}/></div>,
+      subIcon: <div style={{paddingRight: '8px'}}>
+        <MdOutlineMedicalInformation size={'18px'} style={{
+          fontSize: '17px',
+          verticalAlign: 'middle',
+          marginBottom: '2px'
+        }} class={'t-icon'}/></div>
     },
   }
 ]
@@ -59,8 +90,10 @@ const fieldsOpt = [
 export const App = observer(() => {
   const [lang, setLang] = React.useState(langOpt[0].value);
   const [field, setField] = React.useState(fieldsOpt[0].value);
-  const [progLang, setProgLang] = React.useState(field.options[0].value);
+  const [fieldSpec, setFieldSpec] = React.useState(field.options[0].value);
   const [fieldIcon, setFieldIcon] = React.useState(field.icon);
+  const [subIcon, setSubIcon] = React.useState(field.subIcon);
+
   const nav = useNavigate()
   return (
     <>
@@ -77,7 +110,7 @@ export const App = observer(() => {
         placeholder="请输入你的问题"
         size="large"
         onEnter={(e) => {
-          ReqStore.queryQuestion(e, lang.query, progLang.query);
+          ReqStore.queryQuestion(e, lang.query, field.field,fieldSpec.query);
         }}
       />
       <Dropdown options={langOpt} onClick={(e) => setLang(e.value as { query: string, content: string })}>
@@ -90,9 +123,11 @@ export const App = observer(() => {
           <Dropdown options={fieldsOpt} onClick={(e) => {
             const f = e.value as IField
             setFieldIcon(f.icon)
+            setSubIcon(f.subIcon)
             setField(f)
+            setFieldSpec(f.options[0].value)
           }}>
-              <Button variant="text" icon={<Icon name="dividers-1" size="16"/>}>
+              <Button variant="text" icon={fieldIcon}>
                 {field.content}
               </Button>
           </Dropdown>
@@ -100,9 +135,9 @@ export const App = observer(() => {
       {
         field.options.length > 1 &&
           <Dropdown options={field.options}
-                    onClick={(e) => setProgLang(e.value as { query: string, content: string, icon: string })}>
-              <Button variant="text" icon={fieldIcon}>
-                {progLang.content}
+                    onClick={(e) => setFieldSpec(e.value as { query: string, content: string, icon: string })}>
+              <Button variant="text" icon={subIcon}>
+                {fieldSpec.content}
               </Button>
           </Dropdown>
       }

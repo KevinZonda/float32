@@ -44,7 +44,7 @@ class reqStore {
     this._isFailed = value
   }
 
-  public async queryQuestion(question: string, lang: string, progLang: string) {
+  public async queryQuestion(question: string, lang: string, field : string, progLang: string) {
     if (this.isLoading) return
 
     this.isLoading = true
@@ -60,7 +60,8 @@ class reqStore {
       body: JSON.stringify({
         'question': question,
         'language': lang,
-        'prog_lang': progLang
+        'prog_lang': progLang,
+        'field': field,
       })
     }).then(async (res) => {
       let buf = ''
