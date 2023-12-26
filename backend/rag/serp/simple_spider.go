@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/go-shiori/go-readability"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -23,6 +24,8 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 	syncMap := sync.Map{}
 	for _idx, _url := range urls {
 		go func(idx int, url string) {
+			spiderStart := time.Now()
+			spiderEnd := time.Now()
 			defer wg.Done()
 			result := SpiderResult{
 				Url: url,
@@ -38,8 +41,12 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 			}
 			defer resp.Body.Close()
 			result = readabilityScrab(_url, resp.Body)
+			spiderEnd = time.Now()
+
 		store:
 			syncMap.Store(idx, result)
+			mutexTime := time.Now()
+			log.Println("Spider Time:", spiderEnd.Sub(spiderStart), "Mutex Time:", mutexTime.Sub(spiderEnd))
 		}(_idx, _url)
 	}
 	wg.Wait()
