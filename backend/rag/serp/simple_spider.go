@@ -49,7 +49,7 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 				spiderEnd = time.Now()
 				goto store
 			}
-			result = readabilityScrab(_url, bytes.NewReader(body))
+			result = readabilityScrab(url, bytes.NewReader(body))
 			spiderEnd = time.Now()
 		store:
 			syncMap.Store(idx, result)
