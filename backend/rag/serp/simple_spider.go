@@ -24,6 +24,7 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 	syncMap := sync.Map{}
 	for _idx, _url := range urls {
 		go func(idx int, url string) {
+			log.Println("Spider", url, "time", time.Now())
 			spiderStart := time.Now()
 			spiderEnd := time.Now()
 			defer wg.Done()
