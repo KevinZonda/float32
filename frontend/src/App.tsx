@@ -2,10 +2,10 @@ import './App.css'
 import {Button, Dropdown, Input} from "tdesign-react";
 import {Icon} from 'tdesign-icons-react';
 import React from "react";
-import {Content} from "./Content.tsx";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import {useNavigate} from "react-router-dom";
+import {ContentLayout} from "./ContentLayout.tsx";
 
 const langOpt = [
   {
@@ -123,7 +123,7 @@ export const App = observer(() => {
         关于
       </Button>
       <div style={{height: '16px'}}></div>
-      <Content/>
+      <ContentLayout/>
     </>
   )
 })

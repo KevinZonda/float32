@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/KevinZonda/float32/llm"
 	"github.com/KevinZonda/float32/rag"
+	"github.com/KevinZonda/float32/rag/serp"
 	"github.com/KevinZonda/float32/utils"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -49,7 +50,15 @@ func main() {
 			return
 		}
 		query = query.Regularize()
-		searched := rag.Search(query.ProgLang + ", " + query.Question)
+		searched := ""
+		searchRaw, err := rag.SearchRaw(query.ProgLang + ", " + query.Question)
+		if err == nil {
+			searched = rag.SearchResultsToText(searchRaw)
+		}
+		// write meta info to Http
+		meta := newMeta(searchRaw)
+		c.String(200, "%s\r\n", meta.Json())
+
 		content := llm.Promptc(query.Question, query.Language, query.ProgLang, searched)
 		req := openai.ChatCompletionRequest{
 			Temperature:      0.3,
@@ -172,4 +181,21 @@ func printOutBySubStrs(w io.Writer, sb, buf *strings.Builder, delta string, subS
 		}
 	}
 	return
+}
+
+func newMeta(searched []serp.SpiderResult) MetaModel {
+	var evi []SearchItem
+	for _, r := range searched {
+		if r.Error != nil {
+			continue
+		}
+		evi = append(evi, SearchItem{
+			Url:   r.Url,
+			Title: r.Title,
+			//Content: r.Content,
+		})
+	}
+	return MetaModel{
+		Evidences: evi,
+	}
 }

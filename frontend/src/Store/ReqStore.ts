@@ -16,6 +16,15 @@ class reqStore {
     this._currentAns = value
   }
 
+  private _evidenceList: Array<Evidence> = []
+  public get evidenceList(): Array<Evidence> {
+    return this._evidenceList
+  }
+
+  public set evidenceList(value: Array<Evidence>) {
+    this._evidenceList = value
+  }
+
   private _isLoading: boolean = false
 
   public get isLoading(): boolean {
@@ -70,6 +79,11 @@ class reqStore {
       return
     })
   }
+}
+
+export  interface Evidence {
+  url: string
+  title: string
 }
 
 export default new reqStore()

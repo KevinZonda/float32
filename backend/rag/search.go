@@ -20,12 +20,12 @@ func hasTails(str string, tails ...string) bool {
 	return false
 }
 
-func Search(query string) string {
+func SearchRaw(query string) ([]serp.SpiderResult, error) {
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
 	resp, err := gs.Search(query)
 	if err != nil {
-		return err.Error()
+		return nil, err
 	}
 	var urls []string
 	for _, r := range resp.Result {
@@ -43,13 +43,33 @@ func Search(query string) string {
 
 	}
 	if len(urls) == 0 {
-		return ""
+		return nil, nil
 	}
 
 	afterGoogleTime := time.Now()
+
 	spider := serp.NewSimpleSpider()
 	results := spider.Search(urls...)
+	spiderTime := time.Now()
+
+	log.Println("Search Time:", afterGoogleTime.Sub(beforeGoogleTime), "Spider Time:", spiderTime.Sub(afterGoogleTime))
+
+	return results, nil
+}
+
+func Search(query string) string {
+	results, err := SearchRaw(query)
+	if err != nil {
+		return ""
+	}
+	return SearchResultsToText(results)
+}
+
+func SearchResultsToText(results []serp.SpiderResult) string {
 	sb := strings.Builder{}
+	if len(results) == 0 {
+		return ""
+	}
 	for _, r := range results {
 		if r.Error != nil {
 			log.Println("FAILED", r.Url, r.Error)
@@ -65,8 +85,6 @@ func Search(query string) string {
 		sb.WriteString(strMaxLen(r.Content, SearchPerItemMaxLen))
 		sb.WriteString("\n\n")
 	}
-	spiderTime := time.Now()
-	log.Println("Search Time:", afterGoogleTime.Sub(beforeGoogleTime), "Spider Time:", spiderTime.Sub(afterGoogleTime))
 	return sb.String()
 }
 
