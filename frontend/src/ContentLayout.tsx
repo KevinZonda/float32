@@ -3,8 +3,34 @@ import {Content} from "./Content.tsx";
 import {observer} from "mobx-react-lite";
 import ReqStore from "./Store/ReqStore.ts";
 import ListItem from "tdesign-react/es/list/ListItem";
+import {useEffect, useState} from "react";
 
 export const ContentLayout = observer(() => {
+  const [isMobile, setIsMobile] = useState(false)
+
+//choose the screen size
+  const handleResize = () => {
+    if (window.innerWidth < 720) {
+      setIsMobile(true)
+    } else {
+      setIsMobile(false)
+    }
+  }
+
+// create an event listener
+  useEffect(() => {
+    window.addEventListener("resize", handleResize)
+  })
+
+  if (isMobile) {
+    return (
+      <>
+        <Content/>
+        <Evidence/>
+      </>
+    )
+  }
+
   return (
     <>
       <Row>
@@ -13,23 +39,34 @@ export const ContentLayout = observer(() => {
         </Col>
         <Col style={{textAlign: 'left', paddingLeft: '24px'}}
              span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>
-          <h3 style={{
-            paddingBottom: '16px',
-            marginBlock: 0,
-            marginBlockStart: 0,
-            marginBlockEnd: 0,
-            textAlign: 'left'
-          }}>{'📖 References'}</h3>
-          <List>
-            {ReqStore.evidenceList && ReqStore.evidenceList.map((item, idx) => (
-              <ListItem style={{paddingTop: 0, paddingLeft: 0}}>
-                <LinkBox title={item.title} url={item.url} idx={idx} description={item.description}/>
-              </ListItem>
-            ))}
-          </List>
+          <Evidence/>
         </Col>
       </Row>
     </>)
+})
+
+export const Evidence = observer(() =>{
+  if (!ReqStore.evidenceList || ReqStore.evidenceList.length === 0) {
+    return <></>
+  }
+  return (
+    <>
+      <h3 style={{
+        paddingBottom: '16px',
+        marginBlock: 0,
+        marginBlockStart: 0,
+        marginBlockEnd: 0,
+        textAlign: 'left'
+      }}>{'📖 References'}</h3>
+      <List>
+        {ReqStore.evidenceList && ReqStore.evidenceList.map((item, idx) => (
+          <ListItem style={{paddingTop: 0, paddingLeft: 0}}>
+            <LinkBox title={item.title} url={item.url} idx={idx} description={item.description}/>
+          </ListItem>
+        ))}
+      </List>
+    </>
+  )
 })
 
 interface LinkBoxProps {
