@@ -11,7 +11,7 @@ export const ContentLayout = observer(() => {
         <Col span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 8 : 12}>
           <Content/>
         </Col>
-        <Col style={{textAlign: 'left'}} span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>
+        <Col style={{textAlign: 'left', paddingLeft: '24px'}} span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>
           <h3 style={{
             paddingBottom: '16px',
             marginBlock: 0,
