@@ -10,7 +10,7 @@ export const  Content = observer(()=> {
   }
   return (
     <>
-      <h3 style={{paddingBottom: '16px', marginBlock: 0, marginBlockStart: 0, marginBlockEnd: 0, textAlign: 'left'}}>🔍 Answer</h3>
+      <h3 style={{paddingBottom: '16px', marginBlock: 0, marginBlockStart: 0, marginBlockEnd: 0, textAlign: 'left'}}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
       <MarkdownPreview
         wrapperElement={{
              "data-color-mode": "light"
