@@ -1,6 +1,7 @@
 package serp
 
 import (
+	"bytes"
 	"errors"
 	"github.com/go-shiori/go-readability"
 	"io"
@@ -25,6 +26,7 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 	for _idx, _url := range urls {
 		go func(idx int, url string) {
 			log.Println("Spider", url, "time", time.Now())
+			var body []byte
 			spiderStart := time.Now()
 			spiderEnd := time.Now()
 			defer wg.Done()
@@ -41,9 +43,14 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 				goto store
 			}
 			defer resp.Body.Close()
-			result = readabilityScrab(_url, resp.Body)
+			body, err = readAllWithTimeout(resp.Body, s.Timeout)
+			if err != nil {
+				result.Error = err
+				spiderEnd = time.Now()
+				goto store
+			}
+			result = readabilityScrab(_url, bytes.NewReader(body))
 			spiderEnd = time.Now()
-
 		store:
 			syncMap.Store(idx, result)
 			mutexTime := time.Now()
@@ -55,6 +62,20 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 		results = append(results, value.(SpiderResult))
 		return true
 	})
+	return
+}
+
+func readAllWithTimeout(r io.Reader, timeout time.Duration) (result []byte, err error) {
+	ch := make(chan []byte)
+	go func() {
+		result, err = io.ReadAll(r)
+		ch <- result
+	}()
+	select {
+	case <-time.After(timeout):
+		err = errors.New("timeout")
+	case result = <-ch:
+	}
 	return
 }
 
