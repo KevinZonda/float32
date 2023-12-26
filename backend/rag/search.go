@@ -49,6 +49,7 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 		if strings.Contains(link, "gov.cn") {
 			continue
 		}
+		urls = append(urls, link)
 		urlMap[link] = urlInfo{
 			Title:       r.Title,
 			Description: r.Snippet,
