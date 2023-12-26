@@ -25,7 +25,7 @@ func StrMaxLen(str string, maxLen int) string {
 	return string(ss[:maxLen])
 }
 
-func StrMaxLenSmart(str string, maxLen int) string {
+func StrMaxLenSmart(str string, maxLen int, tail string) string {
 
 	bl := float64(len([]byte(str)))
 	rl := float64(len([]rune(str)))
@@ -38,5 +38,5 @@ func StrMaxLenSmart(str string, maxLen int) string {
 	if len(ss) <= maxLen {
 		return str
 	}
-	return string(ss[:maxLen])
+	return string(ss[:maxLen]) + tail
 }

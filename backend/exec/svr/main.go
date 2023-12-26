@@ -192,7 +192,7 @@ func newMeta(searched []serp.SpiderResult) MetaModel {
 		evi = append(evi, SearchItem{
 			Url:         r.Url,
 			Title:       r.Title,
-			Description: utils.StrMaxLenSmart(r.Description, 50),
+			Description: utils.StrMaxLenSmart(r.Description, 50, "..."),
 		})
 	}
 	return MetaModel{
