@@ -3,6 +3,15 @@ import {makeAutoObservable} from "mobx";
 const baseAPI = 'https://api.float32.app/query'
 
 class reqStore {
+
+  private _warning = ''
+  public get warning(): string {
+    return this._warning
+  }
+
+  public set warning(value: string) {
+    this._warning = value
+  }
   public constructor() {
     makeAutoObservable(this)
   }

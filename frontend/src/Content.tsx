@@ -2,14 +2,43 @@ import {Skeleton} from "tdesign-react";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
+import './Warning.css'
+
+const Warning = observer(() => {
+  return (
+    ReqStore.warning === '' ? <></> :
+      <>
+        <div className="warning">
+          <div style={{backgroundColor: '#fcfbfa', height: '100%', padding: '10px'}}>
+            <h2 style={{
+              paddingBottom: '16px',
+              marginBlock: 0,
+              marginBlockStart: 0,
+              marginBlockEnd: 0,
+              padding: 0,
+              textAlign: 'left'
+            }}>⚠️ 警告</h2>
+            <p style={{textAlign: 'left', paddingBottom: 0, marginBlockEnd:0, marginBottom:0}}>
+              {ReqStore.warning}
+            </p>
+          </div>
+
+
+        </div>
+      </>
+  )
+})
 
 export const Content = observer(() => {
   // TODO LaTeX
   if (!ReqStore.isLoading && ReqStore.currentAns === '') {
-    return <></>
+    return <>
+      <Warning/>
+    </>
   }
   return (
     <>
+    <Warning/>
       <h3 style={{
         paddingBottom: '16px',
         marginBlock: 0,

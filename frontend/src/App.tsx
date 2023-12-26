@@ -126,6 +126,11 @@ export const App = observer(() => {
             setSubIcon(f.subIcon)
             setField(f)
             setFieldSpec(f.options[0].value)
+            if (f.field === 'med') {
+              ReqStore.warning = '本网站上的信息来自互联网或人工智能生成内容。网站无意提供医疗建议，也不能代替由资质的医生、药剂师或其他医疗保健专业人员所提供的咨询。读者不能因为本网站上提供的某些信息，而无视医生的建议或延迟就医。'
+            } else {
+              ReqStore.warning = ''
+            }
           }}>
               <Button variant="text" icon={fieldIcon}>
                 {field.content}

@@ -1,0 +1,13 @@
+.warning {
+    border: 10px solid transparent;
+    background: linear-gradient(
+            45deg,
+            #ffdd00 25%,
+            black 25%,
+            black 50%,
+            #ffdd00 50%,
+            #ffdd00 75%,
+            black 75%
+    );
+    background-size: 20px 20px; /* Adjust stripe size */
+}
