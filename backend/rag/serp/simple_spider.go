@@ -67,13 +67,14 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 
 func readAllWithTimeout(r io.Reader, timeout time.Duration) (result []byte, err error) {
 	ch := make(chan []byte)
+	start := time.Now()
 	go func() {
 		result, err = io.ReadAll(r)
 		ch <- result
 	}()
 	select {
 	case <-time.After(timeout):
-		err = errors.New("timeout")
+		err = errors.New("timeout" + time.Since(start).String())
 	case result = <-ch:
 	}
 	return
