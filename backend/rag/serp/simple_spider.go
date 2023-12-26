@@ -85,6 +85,7 @@ func NewSimpleSpider() *SimpleSpider {
 		hc: &http.Client{
 			Timeout: 5 * time.Second,
 		},
+		Timeout: 5 * time.Second,
 		HttpReq: GoogleBotHeader,
 	}
 }
