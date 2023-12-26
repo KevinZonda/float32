@@ -53,7 +53,7 @@ func main() {
 		searched := ""
 		// TODO: Country fix
 		country := "us"
-		if strings.Contains(query.ProgLang, "nhs") {
+		if utils.StrContains(query.ProgLang, "nhs", "nice") {
 			country = "uk"
 		}
 		searchRaw, err := rag.SearchRaw(country, query.ProgLang+", "+query.Question)

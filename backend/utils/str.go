@@ -40,3 +40,16 @@ func StrMaxLenSmart(str string, maxLen int, tail string) string {
 	}
 	return string(ss[:maxLen]) + tail
 }
+
+func StrContains(c string, ss ...string) bool {
+	if ss == nil {
+		return false
+	}
+
+	for _, s := range ss {
+		if s == c {
+			return true
+		}
+	}
+	return false
+}
