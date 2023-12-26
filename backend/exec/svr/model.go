@@ -7,9 +7,9 @@ type MetaModel struct {
 }
 
 type SearchItem struct {
-	Url   string `json:"url"`
-	Title string `json:"title"`
-	//Description string `json:"description"`
+	Url         string `json:"url"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 func (m MetaModel) Json() string {

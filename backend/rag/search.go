@@ -2,6 +2,7 @@ package rag
 
 import (
 	"github.com/KevinZonda/float32/rag/serp"
+	"github.com/KevinZonda/float32/utils"
 	"log"
 	"os"
 	"strings"
@@ -82,25 +83,10 @@ func SearchResultsToText(results []serp.SpiderResult) string {
 		sb.WriteString(r.Title)
 		sb.WriteString("\n")
 		//first 1000 chars
-		sb.WriteString(strMaxLen(r.Content, SearchPerItemMaxLen))
+		sb.WriteString(utils.StrMaxLen(r.Content, SearchPerItemMaxLen))
 		sb.WriteString("\n\n")
 	}
 	return sb.String()
-}
-
-func strMaxLen(str string, maxLen int) string {
-	ss := []rune(str)
-	if len(ss) <= maxLen {
-		return str
-	}
-	return string(ss[:maxLen])
-}
-
-func arrMaxLen[T any](str []T, maxLen int) []T {
-	if len(str) <= maxLen {
-		return str
-	}
-	return str[:maxLen]
 }
 
 func MapProgLang(progLang string) string {
