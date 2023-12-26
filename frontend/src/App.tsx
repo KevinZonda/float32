@@ -5,6 +5,7 @@ import React from "react";
 import {Content} from "./Content.tsx";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
+import {useNavigate} from "react-router-dom";
 
 const langOpt = [
   {
@@ -89,7 +90,7 @@ function progLangMap(lang: string) {
 export const App = observer(() => {
   const [lang, setLang] = React.useState('zh');
   const [progLang, setProgLang] = React.useState('general');
-
+  const nav =useNavigate()
   return (
     <>
       <h1 style={
@@ -109,15 +110,18 @@ export const App = observer(() => {
         }}
       />
       <Dropdown options={langOpt} onClick={(e) => setLang(e.value as string)}>
-        <Button variant="text" suffix={<Icon name="chevron-down" size="16"/>}>
+        <Button variant="text" icon={<Icon name="earth" size="16"/>}>
           {langMap(lang)}
         </Button>
       </Dropdown>
       <Dropdown options={proglangOpt} onClick={(e) => setProgLang(e.value as string)}>
-        <Button variant="text" suffix={<Icon name="chevron-down" size="16"/>}>
+        <Button variant="text" icon={<Icon name="code" size="16"/>} >
           {progLangMap(progLang)}
         </Button>
       </Dropdown>
+      <Button theme="default" variant="text" icon={<Icon name="info-circle"/>} onClick={() => {nav('/about')}}>
+        关于
+      </Button>
       <div style={{height: '16px'}}></div>
       <Content/>
     </>
