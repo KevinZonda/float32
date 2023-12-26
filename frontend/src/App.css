@@ -1,8 +1,12 @@
+
+@import url('https://fonts.cdnfonts.com/css/linux-libertine-o');
+
 #root {
   max-width: 960px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   min-width: 40%;
+  font-family: 'Songti SC', '宋体', 'Songti TC', 'SimSun', 'sans-serif';
 }
 

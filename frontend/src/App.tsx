@@ -1,6 +1,6 @@
 import './App.css'
 import {Button, Dropdown, Input} from "tdesign-react";
-import { Icon } from 'tdesign-icons-react';
+import {Icon} from 'tdesign-icons-react';
 import React from "react";
 import {Content} from "./Content.tsx";
 import ReqStore from "./Store/ReqStore.ts";
@@ -93,8 +93,11 @@ export const App = observer(() => {
   return (
     <>
       <h1 style={
-        ReqStore.currentAns === '' ? {fontFamily: 'Linux Libertine'} : {fontFamily: 'Linux Libertine', marginTop: 0}
-      }><span style={{fontStyle: 'italic'}}>float32</span> AI : Docs 	&times; Elegant</h1>
+        ReqStore.currentAns === '' ? {fontFamily: `'Linux Libertine', 'Linux Libertine O'`} : {
+          fontFamily: `'Linux Libertine', 'Linux Libertine O'`,
+          marginTop: 0
+        }
+      }><span style={{fontStyle: 'italic'}}>float32</span> AI : Docs  &times; Elegant</h1>
       <p className="read-the-docs">
         曲径通幽，拒绝繁琐文档，告别无效思考。清雅绝俗，挑战世俗之见。
       </p>
@@ -105,18 +108,18 @@ export const App = observer(() => {
           ReqStore.queryQuestion(e, lang, progLang);
         }}
       />
-      <Dropdown options={langOpt} onClick={(e)=> setLang(e.value as string)}>
-        <Button variant="text" suffix={<Icon name="chevron-down" size="16" />}>
+      <Dropdown options={langOpt} onClick={(e) => setLang(e.value as string)}>
+        <Button variant="text" suffix={<Icon name="chevron-down" size="16"/>}>
           {langMap(lang)}
         </Button>
       </Dropdown>
-      <Dropdown options={proglangOpt} onClick={(e)=> setProgLang(e.value as string)}>
-        <Button variant="text" suffix={<Icon name="chevron-down" size="16" />}>
+      <Dropdown options={proglangOpt} onClick={(e) => setProgLang(e.value as string)}>
+        <Button variant="text" suffix={<Icon name="chevron-down" size="16"/>}>
           {progLangMap(progLang)}
         </Button>
       </Dropdown>
       <div style={{height: '16px'}}></div>
-      <Content />
+      <Content/>
     </>
   )
 })

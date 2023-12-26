@@ -3,26 +3,34 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 
-export const  Content = observer(()=> {
+export const Content = observer(() => {
   // TODO LaTeX
   if (!ReqStore.isLoading && ReqStore.currentAns === '') {
     return <></>
   }
   return (
     <>
-      <h3 style={{paddingBottom: '16px', marginBlock: 0, marginBlockStart: 0, marginBlockEnd: 0, textAlign: 'left'}}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
+      <h3 style={{
+        paddingBottom: '16px',
+        marginBlock: 0,
+        marginBlockStart: 0,
+        marginBlockEnd: 0,
+        textAlign: 'left'
+      }}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
       <MarkdownPreview
         wrapperElement={{
-             "data-color-mode": "light"
+          "data-color-mode": "light"
         }}
         style={{textAlign: 'left', fontFamily: 'Linux Libertine'}}
-        source={regularizeMarkdown(ReqStore.currentAns)} />
-      { ReqStore.isLoading ? <Skeleton animation={'flashed'} theme={'paragraph'} style={{paddingTop: '16px', paddingBottom: '16px'}}>
-        <p>LOAD</p>
-      </Skeleton> : null}
+        source={regularizeMarkdown(ReqStore.currentAns)}/>
+      {ReqStore.isLoading ?
+        <Skeleton animation={'flashed'} theme={'paragraph'} style={{paddingTop: '16px', paddingBottom: '16px'}}>
+          <p>LOAD</p>
+        </Skeleton> : null}
     </>
   )
 })
+
 function regularizeMarkdown(markdown: string): string {
   // Pattern to match code blocks
   const codeBlockPattern = /```[\s\S]*?```/g;
