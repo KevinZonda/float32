@@ -7,90 +7,61 @@ import {observer} from "mobx-react-lite";
 import {useNavigate} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
 
+function newQuery(content: string, query: string = content) {
+  return {
+    content: content,
+    value: {
+      query: query,
+      content: content
+    },
+  }
+}
+
 const langOpt = [
-  {
-    content: 'English',
-    value: 'en',
-  },
-  {
-    content: '简体中文',
-    value: 'zh',
-  }
+  newQuery('简体中文', 'zh'),
+  newQuery('English', 'en'),
 ];
 
-function langMap(lang: string) {
-  switch (lang) {
-    case 'en':
-      return 'English';
-    case 'zh':
-      return '简体中文';
-    default:
-      return 'Default';
-  }
-}
 
-const proglangOpt = [
-  {
-    content: 'General',
-    value: 'General',
-  },
-  {
-    content: 'Go',
-    value: 'golang',
-  },
-  {
-    content: 'Python',
-    value: 'Python',
-  },
-  {
-    content: 'PyTorch',
-    value: 'Python, Pytorch, Numpy',
-  },
-  {
-    content: 'JavaScript',
-    value: 'JavaScript',
-  },
-  {
-    content: 'TypeScript',
-    value: 'TypeScript',
-  },
-  {
-    content: 'Java',
-    value: 'Java',
-  },
-  {
-    content: 'C#',
-    value: 'C#',
-  },
-  {
-    content: 'C',
-    value: 'C',
-  },
-  {
-    content: 'C++',
-    value: 'C++',
-  },
-  {
-    content: 'Haskell',
-    value: 'Haskell',
-  }
+const progLangOpt = [
+  newQuery('默认语言', ''),
+  newQuery('Go', 'golang'),
+  newQuery('Python', 'python'),
+  newQuery('PyTorch', 'Python, Pytorch, Numpy'),
+  newQuery('Rust', 'rust'),
+  newQuery('JavaScript', 'JavaScript'),
+  newQuery('TypeScript', 'TypeScript'),
+  newQuery('Java', 'Java'),
+  newQuery('C#', 'C#'),
+  newQuery('C', 'C'),
+  newQuery('C++', 'C++'),
+  newQuery('Haskell', 'Haskell'),
 ];
 
-function progLangMap(lang: string) {
-  switch (lang) {
-    case 'general':
-      return 'General';
-    case 'golang':
-      return 'Go';
-    default:
-      return lang;
-  }
+interface IField {
+  content: string
+  options: { content: string, value: { query: string, content: string } }[]
+  icon: string
 }
+
+const fieldsOpt = [
+  {
+    content: '程序开发',
+    value: {
+      content: '程序开发',
+      options: progLangOpt,
+      icon: "code"
+    },
+  }
+]
+
 
 export const App = observer(() => {
-  const [lang, setLang] = React.useState('zh');
-  const [progLang, setProgLang] = React.useState('general');
-  const nav =useNavigate()
+  const [lang, setLang] = React.useState(langOpt[0].value);
+  const [field, setField] = React.useState(fieldsOpt[0].value);
+  const [progLang, setProgLang] = React.useState(field.options[0].value);
+  const [fieldIcon, setFieldIcon] = React.useState(field.icon);
+  const nav = useNavigate()
   return (
     <>
       <h1 style={
@@ -106,20 +77,38 @@ export const App = observer(() => {
         placeholder="请输入你的问题"
         size="large"
         onEnter={(e) => {
-          ReqStore.queryQuestion(e, lang, progLang);
+          ReqStore.queryQuestion(e, lang.query, progLang.query);
         }}
       />
-      <Dropdown options={langOpt} onClick={(e) => setLang(e.value as string)}>
+      <Dropdown options={langOpt} onClick={(e) => setLang(e.value as { query: string, content: string })}>
         <Button variant="text" icon={<Icon name="earth" size="16"/>}>
-          {langMap(lang)}
+          {lang.content}
         </Button>
       </Dropdown>
-      <Dropdown options={proglangOpt} onClick={(e) => setProgLang(e.value as string)}>
-        <Button variant="text" icon={<Icon name="code" size="16"/>} >
-          {progLangMap(progLang)}
-        </Button>
-      </Dropdown>
-      <Button theme="default" variant="text" icon={<Icon name="info-circle"/>} onClick={() => {nav('/about')}}>
+      {
+        fieldsOpt.length > 1 &&
+          <Dropdown options={fieldsOpt} onClick={(e) => {
+            const f = e.value as IField
+            setFieldIcon(f.icon)
+            setField(f)
+          }}>
+              <Button variant="text" icon={<Icon name="dividers-1" size="16"/>}>
+                {field.content}
+              </Button>
+          </Dropdown>
+      }
+      {
+        field.options.length > 1 &&
+          <Dropdown options={field.options}
+                    onClick={(e) => setProgLang(e.value as { query: string, content: string, icon: string })}>
+              <Button variant="text" icon={<Icon name={fieldIcon} size="16"/>}>
+                {progLang.content}
+              </Button>
+          </Dropdown>
+      }
+      <Button theme="default" variant="text" icon={<Icon name="info-circle"/>} onClick={() => {
+        nav('/about')
+      }}>
         关于
       </Button>
       <div style={{height: '16px'}}></div>
