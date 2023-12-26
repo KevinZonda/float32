@@ -87,6 +87,7 @@ var _ptc_zh *prompt.PromptC
 var _med_zh *prompt.PromptC
 
 func init() {
+	fmt.Println("Loading promptc...")
 	_ptc = loadPromptc("prompt.promptc")
 	_trans = loadPromptc("translate.promptc")
 	_ptc_zh = loadPromptc("prompt_zh.promptc")
@@ -96,6 +97,7 @@ func init() {
 func loadPromptc(path string) *prompt.PromptC {
 	pt, err := iox.ReadAllText(path)
 	if err != nil {
+		fmt.Println("Failed to load promptc", err)
 		panic(err)
 	}
 	return prompt.ParsePromptC(pt)
