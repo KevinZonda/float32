@@ -7,7 +7,6 @@ import (
 	"github.com/KevinZonda/float32/llm"
 	"github.com/KevinZonda/float32/rag"
 	"github.com/KevinZonda/float32/utils"
-	"github.com/chzyer/readline/runes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -144,7 +143,7 @@ func (q Query) Regularize() Query {
 
 func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta string, subStr rune) (needContinue bool) {
 	rs := []rune(delta)
-	if idx := runes.Index(subStr, rs); idx > 0 {
+	if idx := idxRunes(rs, subStr); idx > 0 {
 		toPrint := buf.String() + string(rs[:idx+1])
 		w.Write([]byte(toPrint))
 		buf.Reset()
@@ -152,6 +151,15 @@ func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta string, subSt
 		needContinue = true
 	}
 	return
+}
+
+func idxRunes(rs []rune, r rune) int {
+	for idx, r1 := range rs {
+		if r == r1 {
+			return idx
+		}
+	}
+	return -1
 }
 
 func printOutBySubStrs(w io.Writer, sb, buf *strings.Builder, delta string, subStrs ...rune) (needContinue bool) {
