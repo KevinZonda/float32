@@ -23,10 +23,7 @@ export const ContentLayout = observer(() => {
           <List>
             {ReqStore.evidenceList && ReqStore.evidenceList.map((item, idx) => (
               <ListItem style={{paddingTop: 0, paddingLeft: 0}}>
-                <Link theme="default" hover="underline" href={item.url}>
-                  {'[' + (idx + 1) + '] ' + item.title} <br/>
-                  {new URL(item.url).host}
-                </Link>
+                <LinkBox title={item.title} url={item.url} idx={idx} description={item.description}/>
               </ListItem>
             ))}
           </List>
@@ -34,3 +31,29 @@ export const ContentLayout = observer(() => {
       </Row>
     </>)
 })
+
+interface LinkBoxProps {
+  title: string
+  url: string
+  idx?: number
+  description: string
+}
+
+const LinkBox = (props: LinkBoxProps) => {
+  const uri = new URL(props.url).host
+  return (
+    <div style={{wordWrap: 'break-word'}}>
+      <div>
+        <img style={{verticalAlign: 'middle'}} src={'https://s2.googleusercontent.com/s2/favicons?domain=' + uri}></img>
+        <span style={{color: 'grey', paddingLeft: '4px', verticalAlign: 'middle'}}>{uri}</span>
+      </div>
+
+      <Link theme="default" hover={'color'} href={props.url}>
+        {props.title}
+      </Link>
+      <p style={{color: 'grey', margin: 0}}>
+        {props.description}
+      </p>
+    </div>
+  )
+}

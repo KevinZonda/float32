@@ -105,6 +105,7 @@ export interface AnsMetaInfo {
 export  interface Evidence {
   url: string
   title: string
+  description: string
 }
 
 export default new reqStore()
