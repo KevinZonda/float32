@@ -8,7 +8,7 @@ const Warning = observer(() => {
   return (
     ReqStore.warning === '' ? <></> :
       <>
-        <div className="warning">
+        <div className="warning" style={{marginBottom: '16px'}}>
           <div style={{backgroundColor: '#fcfbfa', height: '100%', padding: '10px'}}>
             <h2 style={{
               paddingBottom: '16px',
