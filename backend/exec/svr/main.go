@@ -63,6 +63,10 @@ func main() {
 					Content: content,
 					Role:    openai.ChatMessageRoleSystem,
 				},
+				{
+					Content: query.Question,
+					Role:    openai.ChatMessageRoleUser,
+				},
 			},
 		}
 
