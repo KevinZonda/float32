@@ -67,7 +67,7 @@ const fieldsOpt = [
       options: [
         newQuery('NHS (UK)', 'nhs'),
         newQuery('NICE (UK)', 'nice'),
-        newQuery('CDC (US)', 'nice'),
+        newQuery('CDC (US)', 'cdc'),
         newQuery('默认', ''),
       ],
       icon: <div style={{paddingRight: '8px'}}>
