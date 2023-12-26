@@ -26,19 +26,25 @@ func StrMaxLen(str string, maxLen int) string {
 }
 
 func StrMaxLenSmart(str string, maxLen int, tail string) string {
-
-	bl := float64(len([]byte(str)))
-	rl := float64(len([]rune(str)))
 	// if is latin, then double len
-	needDouble := (1.0*(bl-rl))/bl < 0.2
-	if needDouble {
-		maxLen = int(2.5 * float64(maxLen))
+	diffRate := StrByteRuneDiffRate(str)
+	if diffRate < 0.2 {
+		maxLen = int(3 * float64(maxLen))
+	} else if diffRate < 0.4 {
+		maxLen = int(2 * float64(maxLen))
 	}
 	ss := []rune(str)
 	if len(ss) <= maxLen {
 		return str
 	}
 	return string(ss[:maxLen]) + tail
+}
+
+func StrByteRuneDiffRate(str string) float64 {
+	bl := float64(len([]byte(str)))
+	rl := float64(len([]rune(str)))
+	// if is latin, then double len
+	return (1.0 * (bl - rl)) / bl
 }
 
 func StrContains(c string, ss ...string) bool {

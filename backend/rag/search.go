@@ -83,7 +83,7 @@ func SearchResultsToText(results []serp.SpiderResult) string {
 		sb.WriteString(r.Title)
 		sb.WriteString("\n")
 		//first 1000 chars
-		sb.WriteString(utils.StrMaxLen(r.Content, SearchPerItemMaxLen))
+		sb.WriteString(utils.StrMaxLenSmart(r.Content, SearchPerItemMaxLen, ""))
 		sb.WriteString("\n\n")
 	}
 	return sb.String()
