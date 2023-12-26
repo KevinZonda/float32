@@ -59,9 +59,8 @@ class reqStore {
           this.currentAns = this.currentAns + value
         }
         if (done) break;
-
-        this.isLoading = false
       }
+      this.isLoading = false
     }).catch((r) => {
       this.isFailed = true
       this.isLoading = false
