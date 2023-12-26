@@ -33,7 +33,7 @@ export const About = () => {
         </p>
         <p>愿大家永远开心。Merry Christmas! 🎄</p>
         <p>Docs Done Right.<br/>
-          Float32.App Teams in UK<br/>
+          Float32.App Team in UK<br/>
           25/Dec/2023
         </p>
       </div>
