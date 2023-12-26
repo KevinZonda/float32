@@ -21,6 +21,11 @@ func hasTails(str string, tails ...string) bool {
 	return false
 }
 
+type urlInfo struct {
+	Title       string
+	Description string
+}
+
 func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
@@ -29,9 +34,13 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 		return nil, err
 	}
 	var urls []string
+	urlMap := make(map[string]urlInfo)
 	for _, r := range resp.Result {
 		if len(urls) >= SearchMaxItemCount {
 			break
+		}
+		if strings.HasPrefix(r.Title, "[PDF]") {
+			continue
 		}
 		link := r.Link
 		if hasTails(link, ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls") {
@@ -40,8 +49,10 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 		if strings.Contains(link, "gov.cn") {
 			continue
 		}
-		urls = append(urls, r.Link)
-
+		urlMap[link] = urlInfo{
+			Title:       r.Title,
+			Description: r.Snippet,
+		}
 	}
 	if len(urls) == 0 {
 		return nil, nil
@@ -52,6 +63,14 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 	spider := serp.NewSimpleSpider()
 	results := spider.Search(urls...)
 	spiderTime := time.Now()
+	for i, r := range results {
+		if r.Error != nil {
+			continue
+		}
+		info := urlMap[r.Url]
+		results[i].Title = info.Title
+		results[i].Description = info.Description
+	}
 
 	log.Println("Search Time:", afterGoogleTime.Sub(beforeGoogleTime), "Spider Time:", spiderTime.Sub(afterGoogleTime))
 
