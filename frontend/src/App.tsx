@@ -41,7 +41,7 @@ const progLangOpt = [
 interface IField {
   content: string
   options: { content: string, value: { query: string, content: string } }[]
-  icon: string
+  icon: React.ReactElement
 }
 
 const fieldsOpt = [
@@ -50,7 +50,7 @@ const fieldsOpt = [
     value: {
       content: '程序开发',
       options: progLangOpt,
-      icon: "code"
+      icon: <Icon name="code" size="16"/>
     },
   }
 ]
@@ -101,7 +101,7 @@ export const App = observer(() => {
         field.options.length > 1 &&
           <Dropdown options={field.options}
                     onClick={(e) => setProgLang(e.value as { query: string, content: string, icon: string })}>
-              <Button variant="text" icon={<Icon name={fieldIcon} size="16"/>}>
+              <Button variant="text" icon={fieldIcon}>
                 {progLang.content}
               </Button>
           </Dropdown>
