@@ -7,6 +7,7 @@ import (
 	"github.com/KevinZonda/float32/llm"
 	"github.com/KevinZonda/float32/rag"
 	"github.com/KevinZonda/float32/utils"
+	"github.com/chzyer/readline/runes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -112,7 +113,7 @@ func main() {
 			delta = utils.CleanStr(delta)
 			sb.WriteString(delta)
 
-			if printOutBySubStrs(w, &sb, &buf, delta, "\n", ".", ";", "。", "？", "?") {
+			if printOutBySubStrs(w, &sb, &buf, delta, '\n', '.', ';', '。', '？', '?') {
 				return true
 			}
 			buf.WriteString(delta)
@@ -141,18 +142,19 @@ func (q Query) Regularize() Query {
 	return q
 }
 
-func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta, subStr string) (needContinue bool) {
-	if idx := strings.Index(delta, subStr); idx > 0 {
-		toPrint := buf.String() + delta[:idx+1]
+func printOutBySubStr(w io.Writer, sb, buf *strings.Builder, delta string, subStr rune) (needContinue bool) {
+	rs := []rune(delta)
+	if idx := runes.Index(subStr, rs); idx > 0 {
+		toPrint := buf.String() + string(rs[:idx+1])
 		w.Write([]byte(toPrint))
 		buf.Reset()
-		sb.WriteString(delta[idx+1:])
+		sb.WriteString(string(rs[idx+1:]))
 		needContinue = true
 	}
 	return
 }
 
-func printOutBySubStrs(w io.Writer, sb, buf *strings.Builder, delta string, subStrs ...string) (needContinue bool) {
+func printOutBySubStrs(w io.Writer, sb, buf *strings.Builder, delta string, subStrs ...rune) (needContinue bool) {
 	for _, subString := range subStrs {
 		if printOutBySubStr(w, sb, buf, delta, subString) {
 			needContinue = true
