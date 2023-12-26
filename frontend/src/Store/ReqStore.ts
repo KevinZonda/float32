@@ -50,6 +50,7 @@ class reqStore {
     this.isLoading = true
     this.isFailed = false
     this.currentAns = ''
+    this.evidenceList = []
 
     await fetch(baseAPI, {
       method: 'POST',
@@ -62,12 +63,28 @@ class reqStore {
         'prog_lang': progLang
       })
     }).then(async (res) => {
+      let buf = ''
+      let hasDoneMeta = false
       const reader = res.body!.pipeThrough(new TextDecoderStream()).getReader();
       /*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
       while (true) {
         const {done, value} = await reader.read();
         if (value !== undefined) {
-          this.currentAns = this.currentAns + value
+          if (hasDoneMeta) {
+            this.currentAns = this.currentAns + value
+            continue
+          }
+          buf = buf + value
+          const idx = buf.indexOf('\r\n')
+          if (idx !== -1) {
+            const meta = buf.slice(0, idx)
+            console.log(meta)
+            const metaObj : AnsMetaInfo = JSON.parse(meta)
+            this.evidenceList = metaObj.evidences
+            this.currentAns = buf.slice(idx + 2)
+            hasDoneMeta = true
+            continue
+          }
         }
         if (done) break;
       }
@@ -79,6 +96,10 @@ class reqStore {
       return
     })
   }
+}
+
+export interface AnsMetaInfo {
+  evidences: Evidence[]
 }
 
 export  interface Evidence {
