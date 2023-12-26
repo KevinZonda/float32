@@ -11,7 +11,8 @@ export const ContentLayout = observer(() => {
         <Col span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 8 : 12}>
           <Content/>
         </Col>
-        <Col style={{textAlign: 'left', paddingLeft: '24px'}} span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>
+        <Col style={{textAlign: 'left', paddingLeft: '24px'}}
+             span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>
           <h3 style={{
             paddingBottom: '16px',
             marginBlock: 0,
@@ -22,7 +23,10 @@ export const ContentLayout = observer(() => {
           <List>
             {ReqStore.evidenceList && ReqStore.evidenceList.map((item, idx) => (
               <ListItem style={{paddingTop: 0, paddingLeft: 0}}>
-                <Link theme="default" hover="underline" href={item.url}>{'[' + (idx + 1) + '] ' + item.title}</Link>
+                <Link theme="default" hover="underline" href={item.url}>
+                  {'[' + (idx + 1) + '] ' + item.title} <br/>
+                  {new URL(item.url).host}
+                </Link>
               </ListItem>
             ))}
           </List>
