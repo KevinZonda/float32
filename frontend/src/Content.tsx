@@ -1,9 +1,12 @@
 import {Button, NotificationPlugin, Skeleton} from "tdesign-react";
-import MarkdownPreview from '@uiw/react-markdown-preview';
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import './Warning.css'
-import {FileCopyIcon, RefreshIcon, ShareIcon} from "tdesign-icons-react";
+import {FileCopyIcon, ShareIcon} from "tdesign-icons-react";
+import Markdown from "react-markdown";
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
+import remarkMath from 'remark-math'
 
 const Warning = observer(() => {
   return (
@@ -47,12 +50,17 @@ export const Content = observer(() => {
         marginBlockEnd: 0,
         textAlign: 'left'
       }}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
-      <MarkdownPreview
-        wrapperElement={{
-          "data-color-mode": "light"
-        }}
-        style={{textAlign: 'left', fontFamily: 'Linux Libertine'}}
-        source={regularizeMarkdown(ReqStore.currentAns)}/>
+      <div style={{textAlign: 'left'}}>
+        <Markdown
+          // wrapperElement={{
+          //   "data-color-mode": "light"
+          // }}
+          remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}
+        >
+          {regularizeMarkdown(ReqStore.currentAns)}
+        </Markdown>
+      </div>
+
       {ReqStore.isLoading ?
         <Skeleton animation={'flashed'} theme={'paragraph'} style={{paddingTop: '16px', paddingBottom: '16px'}}>
           <p>LOAD</p>
