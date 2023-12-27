@@ -38,6 +38,7 @@ func queryQuestion(c *gin.Context) {
 	}
 	// write meta info to Http
 	meta := newMeta(searchRaw)
+	meta.ID = ans.ID
 	c.String(200, "%s\r\n", meta.Json())
 
 	content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
