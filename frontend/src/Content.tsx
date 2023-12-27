@@ -1,12 +1,14 @@
 import {Button, NotificationPlugin, Skeleton} from "tdesign-react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
-import './Warning.css'
 import {FileCopyIcon, ShareIcon} from "tdesign-icons-react";
 import Markdown from "react-markdown";
 import rehypeKatex from 'rehype-katex'
-import 'katex/dist/katex.min.css'
 import remarkMath from 'remark-math'
+import remarkGfm from 'remark-gfm'
+
+import './Warning.css'
+import 'katex/dist/katex.min.css'
 
 const Warning = observer(() => {
   return (
@@ -55,7 +57,7 @@ export const Content = observer(() => {
           // wrapperElement={{
           //   "data-color-mode": "light"
           // }}
-          remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}
+          remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}
         >
           {regularizeMarkdown(ReqStore.currentAns)}
         </Markdown>

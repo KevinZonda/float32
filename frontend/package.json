@@ -19,6 +19,7 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.21.1",
     "rehype-katex": "^7.0.0",
+    "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "tdesign-icons-react": "^0.3.2",
     "tdesign-react": "^1.4.1"
