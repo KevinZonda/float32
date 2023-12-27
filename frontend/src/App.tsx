@@ -99,7 +99,7 @@ export const App = observer(() => {
   if (id && id !== '') {
     ReqStore.queryHistory(id);
   }
-  
+
   const nav = useNavigate()
   return (
     <>
@@ -115,6 +115,10 @@ export const App = observer(() => {
       <Input
         placeholder="请输入你的问题"
         size="large"
+        value={ReqStore.question}
+        onChange={(e) => {
+          ReqStore.question = e
+        }}
         onEnter={(e) => {
           ReqStore.queryQuestion(e, lang.query, field.field,fieldSpec.query);
         }}

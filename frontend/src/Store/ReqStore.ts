@@ -3,62 +3,24 @@ import {makeAutoObservable} from "mobx";
 const baseAPI = 'https://api.float32.app/query'
 const historyAPI = 'https://api.float32.app/history?id='
 class reqStore {
-  public shareId = ''
 
-  private _warning = ''
-  public get warning(): string {
-    return this._warning
-  }
-
-  public set warning(value: string) {
-    this._warning = value
-  }
   public constructor() {
     makeAutoObservable(this)
   }
 
-  private _currentAns: string = ''
-  public get currentAns(): string {
-    return this._currentAns
-  }
-
-  public set currentAns(value: string) {
-    this._currentAns = value
-  }
-
-  private _evidenceList: Array<Evidence> = []
-  public get evidenceList(): Array<Evidence> {
-    return this._evidenceList
-  }
-
-  public set evidenceList(value: Array<Evidence>) {
-    this._evidenceList = value
-  }
-
-  private _isLoading: boolean = false
-
-  public get isLoading(): boolean {
-    return this._isLoading
-  }
-
-  public set isLoading(value: boolean) {
-    this._isLoading = value
-  }
-
-  private _isFailed: boolean = false
-  public get isFailed(): boolean {
-    return this._isFailed
-  }
-
-  public set isFailed(value: boolean) {
-    this._isFailed = value
-  }
-  private currentHistory = ''
+  public evidenceList: Array<Evidence> = []
+  public isLoading: boolean = false
+  public isFailed: boolean = false
+  public shareId = ''
+  public question = ''
+  public warning = ''
+  public currentAns: string = ''
+  private _currentHistory = ''
 
   public async queryHistory(id: string) {
     if (this.isLoading) return
-    if (id === this.currentHistory) return
-    this.currentHistory = id
+    if (id === this._currentHistory) return
+    this._currentHistory = id
     this.shareId = id
 
     this.isLoading = true
@@ -76,6 +38,7 @@ class reqStore {
         this.isLoading = false
         this.isFailed = false
         this.currentAns = json.answer ?? ''
+        this.question = json.question ?? ''
         this.evidenceList = json.evidence ?? []
       })
 
