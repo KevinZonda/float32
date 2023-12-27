@@ -7,6 +7,7 @@ import (
 
 type MetaModel struct {
 	Evidences []SearchItem `json:"evidences"`
+	ID        string       `json:"id"`
 }
 
 type SearchItem struct {
