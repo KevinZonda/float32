@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sashabaranov/go-openai"
 	"io"
-	"log"
 	"strings"
 )
 
@@ -40,8 +39,6 @@ func queryQuestion(c *gin.Context) {
 	// write meta info to Http
 	meta := newMeta(searchRaw)
 	meta.ID = ans.ID
-	log.Println("meta:", meta)
-	log.Println("ans", ans)
 	c.String(200, "%s\r\n", meta.Json())
 
 	content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
@@ -96,7 +93,7 @@ func queryQuestion(c *gin.Context) {
 		buf.WriteString(delta)
 		return true
 	})
-	fmt.Println(sb.String(), "ANS____", ans)
+	fmt.Println(sb.String(), "\n->", ans)
 	ans.FirstAnswer = sb.String()
 	ans.IsOk = true
 	db.UpdateAnswer(ans)
