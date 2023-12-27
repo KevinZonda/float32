@@ -59,3 +59,12 @@ func StrContains(c string, ss ...string) bool {
 	}
 	return false
 }
+
+func IndexOfRunes(rs []rune, r rune) int {
+	for idx, r1 := range rs {
+		if r == r1 {
+			return idx
+		}
+	}
+	return -1
+}

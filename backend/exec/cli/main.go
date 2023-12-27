@@ -50,7 +50,7 @@ func main() {
 			searched := rag.Search(rag.MapProgLang(progLang) + ", " + question)
 			fmt.Println("Search result:", searched)
 			fmt.Println("---------------------------")
-			content = llm.Promptc(question, "English", progLang, searched)
+			content = llm.Promptc("code", question, "English", progLang, searched)
 		}
 		history = append(history, openai.ChatCompletionMessage{
 			Content: content,

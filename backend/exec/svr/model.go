@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/KevinZonda/float32/rag/serp"
 )
 
 type MetaModel struct {
@@ -45,4 +46,21 @@ func (q Query) Regularize() Query {
 
 	}
 	return q
+}
+
+func newMeta(searched []serp.SpiderResult) MetaModel {
+	var evi []SearchItem
+	for _, r := range searched {
+		if r.Error != nil {
+			continue
+		}
+		evi = append(evi, SearchItem{
+			Url:         r.Url,
+			Title:       r.Title,
+			Description: r.Description, // utils.StrMaxLenSmart(r.Description, 50, "..."),
+		})
+	}
+	return MetaModel{
+		Evidences: evi,
+	}
 }
