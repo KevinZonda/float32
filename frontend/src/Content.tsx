@@ -46,11 +46,11 @@ export const Content = observer(() => {
     <>
       <Warning/>
       <h3 style={{
-        paddingBottom: '16px',
         marginBlock: 0,
         marginBlockStart: 0,
         marginBlockEnd: 0,
-        textAlign: 'left'
+        textAlign: 'left',
+        marginBottom: '16px'
       }}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
       <div style={{textAlign: 'left'}}>
         <Markdown
