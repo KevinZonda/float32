@@ -1,4 +1,4 @@
 #!/bin/bash
 cd backend
-go build -o ../out/ ./exec/svr/*.go
+go build -v-o ../out/ ./exec/svr/*...
 cd ..
