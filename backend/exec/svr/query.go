@@ -46,7 +46,7 @@ func queryQuestion(c *gin.Context) {
 
 	content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
 	req := openai.ChatCompletionRequest{
-		Temperature:      0.3,
+		Temperature:      0.15,
 		N:                1,
 		PresencePenalty:  0,
 		FrequencyPenalty: 0,
