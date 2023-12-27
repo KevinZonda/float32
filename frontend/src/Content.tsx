@@ -1,8 +1,9 @@
-import {Skeleton} from "tdesign-react";
+import {Button, NotificationPlugin, Skeleton} from "tdesign-react";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import './Warning.css'
+import {FileCopyIcon, ShareIcon} from "tdesign-icons-react";
 
 const Warning = observer(() => {
   return (
@@ -18,7 +19,7 @@ const Warning = observer(() => {
               padding: 0,
               textAlign: 'left'
             }}>⚠️ 警告</h2>
-            <p style={{textAlign: 'left', paddingBottom: 0, marginBlockEnd:0, marginBottom:0}}>
+            <p style={{textAlign: 'left', paddingBottom: 0, marginBlockEnd: 0, marginBottom: 0}}>
               {ReqStore.warning}
             </p>
           </div>
@@ -38,7 +39,7 @@ export const Content = observer(() => {
   }
   return (
     <>
-    <Warning/>
+      <Warning/>
       <h3 style={{
         paddingBottom: '16px',
         marginBlock: 0,
@@ -55,7 +56,37 @@ export const Content = observer(() => {
       {ReqStore.isLoading ?
         <Skeleton animation={'flashed'} theme={'paragraph'} style={{paddingTop: '16px', paddingBottom: '16px'}}>
           <p>LOAD</p>
-        </Skeleton> : null}
+        </Skeleton> :
+        <div style={{textAlign: 'left', paddingTop: '16px'}}>
+          <Button icon={<FileCopyIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(regularizeMarkdown(ReqStore.currentAns))
+                    NotificationPlugin.success({
+                      title: '内容',
+                      content: '复制成功',
+                      offset: [-10, 10],
+                      placement: 'top-right',
+                      duration: 1000,
+                      closeBtn: true,
+                    });
+                  }}>
+          </Button>
+          <Button icon={<ShareIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText('https://float32.app/' + ReqStore.shareId)
+                    NotificationPlugin.success({
+                      title: '分享链接',
+                      content: '复制成功',
+                      offset: [-10, 10],
+                      placement: 'top-right',
+                      duration: 1000,
+                      closeBtn: true,
+                    });
+                  }}>
+          </Button>
+        </div>
+
+      }
     </>
   )
 })

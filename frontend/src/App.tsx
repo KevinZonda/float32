@@ -4,7 +4,7 @@ import {Icon} from 'tdesign-icons-react';
 import React from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
 import {FcPlus} from "react-icons/fc";
 import {MdOutlineMedicalInformation} from "react-icons/md";
@@ -94,6 +94,12 @@ export const App = observer(() => {
   const [fieldIcon, setFieldIcon] = React.useState(field.icon);
   const [subIcon, setSubIcon] = React.useState(field.subIcon);
 
+  const query = useParams();
+  const id = query.id
+  if (id && id !== '') {
+    ReqStore.queryHistory(id);
+  }
+  
   const nav = useNavigate()
   return (
     <>

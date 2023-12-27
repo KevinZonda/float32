@@ -1,8 +1,9 @@
 import {makeAutoObservable} from "mobx";
 
 const baseAPI = 'https://api.float32.app/query'
-
+const historyAPI = 'https://api.float32.app/history?id='
 class reqStore {
+  public shareId = ''
 
   private _warning = ''
   public get warning(): string {
@@ -52,6 +53,39 @@ class reqStore {
   public set isFailed(value: boolean) {
     this._isFailed = value
   }
+  private currentHistory = ''
+
+  public async queryHistory(id: string) {
+    if (this.isLoading) return
+    if (id === this.currentHistory) return
+    this.currentHistory = id
+    this.shareId = id
+
+    this.isLoading = true
+    this.isFailed = false
+    this.currentAns = ''
+    this.evidenceList = []
+    await fetch(historyAPI+id, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then(async (res) => {
+      // decode res to json
+      res.json().then((json) => {
+        this.isLoading = false
+        this.isFailed = false
+        this.currentAns = json.answer ?? ''
+        this.evidenceList = json.evidence ?? []
+      })
+
+    }).catch((e) => {
+      this.isFailed = true
+      this.isLoading = false
+      this.currentAns = 'Error: ' + e
+      return
+    })
+  }
 
   public async queryQuestion(question: string, lang: string, field : string, progLang: string) {
     if (this.isLoading) return
@@ -60,6 +94,7 @@ class reqStore {
     this.isFailed = false
     this.currentAns = ''
     this.evidenceList = []
+    this.shareId = ''
 
     await fetch(baseAPI, {
       method: 'POST',
@@ -92,6 +127,7 @@ class reqStore {
             const metaObj : AnsMetaInfo = JSON.parse(meta)
             this.evidenceList = metaObj.evidences
             this.currentAns = buf.slice(idx + 2)
+            this.shareId = metaObj.id
             hasDoneMeta = true
             continue
           }
@@ -110,6 +146,7 @@ class reqStore {
 
 export interface AnsMetaInfo {
   evidences: Evidence[]
+  id: string
 }
 
 export  interface Evidence {

@@ -7,12 +7,16 @@ import {About} from "./About.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/about",
+    element: <About/>,
+  },
+  {
+    path: "/:id",
     element: <App />,
   },
   {
-    path: "/about",
-    element: <About/>,
+    path: "/",
+    element: <App />,
   }
 ]);
 
