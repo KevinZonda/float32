@@ -96,7 +96,7 @@ func queryQuestion(c *gin.Context) {
 		buf.WriteString(delta)
 		return true
 	})
-	fmt.Println(sb.String())
+	fmt.Println(sb.String(), "ANS____", ans)
 	ans.FirstAnswer = sb.String()
 	ans.IsOk = true
 	db.UpdateAnswer(ans)
