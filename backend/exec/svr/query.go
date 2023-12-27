@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/KevinZonda/float32/exec/svr/db"
@@ -40,6 +41,8 @@ func queryQuestion(c *gin.Context) {
 	meta := newMeta(searchRaw)
 	meta.ID = ans.ID
 	c.String(200, "%s\r\n", meta.Json())
+	bs, _ := json.Marshal(meta.Evidences)
+	ans.Evidence = string(bs)
 
 	content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
 	req := openai.ChatCompletionRequest{

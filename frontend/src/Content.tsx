@@ -3,7 +3,7 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import './Warning.css'
-import {FileCopyIcon, ShareIcon} from "tdesign-icons-react";
+import {FileCopyIcon, RefreshIcon, ShareIcon} from "tdesign-icons-react";
 
 const Warning = observer(() => {
   return (
