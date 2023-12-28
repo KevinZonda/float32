@@ -119,8 +119,10 @@ export const App = observer(() => {
         onChange={(e) => {
           ReqStore.question = e
         }}
-        onEnter={(e) => {
-          ReqStore.queryQuestion(e, lang.query, field.field,fieldSpec.query);
+        onEnter={(question, e) => {
+          if (!e.e.nativeEvent.isComposing) {
+            ReqStore.queryQuestion(question, lang.query, field.field,fieldSpec.query);
+          }
         }}
       />
       <Dropdown options={langOpt} onClick={(e) => setLang(e.value as { query: string, content: string })}>
