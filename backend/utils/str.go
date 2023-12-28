@@ -29,7 +29,7 @@ func StrMaxLenSmart(str string, maxLen int, tail string) string {
 	// if is latin, then double len
 	diffRate := StrByteRuneDiffRate(str)
 	if diffRate < 0.2 {
-		maxLen = int(3 * float64(maxLen))
+		maxLen = int(4 * float64(maxLen))
 	} else if diffRate < 0.4 {
 		maxLen = int(2 * float64(maxLen))
 	}
