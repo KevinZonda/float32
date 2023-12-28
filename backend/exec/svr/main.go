@@ -32,8 +32,12 @@ func initDb() {
 }
 
 func initChatGPT() {
-	token := os.Getenv("OPENAI_SB")
+	token := os.Getenv("OPENAI")
+	ep := os.Getenv("OPENAI_ENDPOINT")
 	cfg := openai.DefaultConfig(token)
+	if ep != "" {
+		cfg.BaseURL = ep
+	}
 	cli = openai.NewClientWithConfig(cfg)
 }
 
