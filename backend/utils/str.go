@@ -85,4 +85,5 @@ var sensitiveWords = []string{
 	"微信电话:",
 	"同城",
 	"少妇",
+	"Google My Maps",
 }
