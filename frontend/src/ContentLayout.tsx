@@ -6,7 +6,7 @@ import ListItem from "tdesign-react/es/list/ListItem";
 import {useEffect, useState} from "react";
 
 export const ContentLayout = observer(() => {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
 
 //choose the screen size
   const handleResize = () => {
@@ -45,7 +45,7 @@ export const ContentLayout = observer(() => {
     </>)
 })
 
-export const Evidence = observer(() =>{
+export const Evidence = observer(() => {
   if (!ReqStore.evidenceList || ReqStore.evidenceList.length === 0) {
     return <></>
   }
