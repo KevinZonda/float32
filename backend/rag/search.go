@@ -74,6 +74,10 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 		results[i].Description = info.Description
 	}
 
+	if len(results) > SearchMaxIncludeInContext {
+		results = results[:SearchMaxIncludeInContext]
+	}
+
 	log.Println("Search Time:", afterGoogleTime.Sub(beforeGoogleTime), "Spider Time:", spiderTime.Sub(afterGoogleTime))
 
 	return results, nil
@@ -92,11 +96,7 @@ func SearchResultsToText(results []serp.SpiderResult) string {
 	if len(results) == 0 {
 		return ""
 	}
-	count := 0
 	for _, r := range results {
-		if count >= SearchMaxIncludeInContext {
-			break
-		}
 		if r.Error != nil {
 			log.Println("FAILED", r.Url, r.Error)
 			continue
@@ -110,7 +110,6 @@ func SearchResultsToText(results []serp.SpiderResult) string {
 		//first 1000 chars
 		sb.WriteString(utils.StrMaxLenSmart(r.Content, SearchPerItemMaxLen, ""))
 		sb.WriteString("\n\n")
-		count++
 	}
 	return sb.String()
 }
