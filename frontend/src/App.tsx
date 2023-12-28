@@ -86,6 +86,7 @@ const fieldsOpt = [
   }
 ]
 
+const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
 
 export const App = observer(() => {
   const [lang, setLang] = React.useState(langOpt[0].value);
@@ -103,7 +104,9 @@ export const App = observer(() => {
   const nav = useNavigate()
   return (
     <>
-      <div style={{width: '100%', textAlign: 'center'}} onClick={() => {ReqStore.isRainbow = !ReqStore.isRainbow}}>
+      <div style={{width: '100%', textAlign: 'center'}} onClick={() => {
+        ReqStore.isRainbow = !ReqStore.isRainbow
+      }}>
         <h1 style={{
           fontFamily: `'PT Sans Narrow', sans-serif;`,
           color: 'black',
@@ -138,7 +141,7 @@ export const App = observer(() => {
         }}
       />
       <Dropdown options={langOpt} onClick={(e) => setLang(e.value as { query: string, content: string })}>
-        <Button variant="text" icon={<Icon name="earth" size="16"/>}>
+        <Button style={dropdownBtnStyle} variant="text" icon={<Icon name="earth" size="16"/>}>
           {lang.content}
         </Button>
       </Dropdown>
@@ -156,7 +159,7 @@ export const App = observer(() => {
               ReqStore.warning = ''
             }
           }}>
-              <Button variant="text" icon={fieldIcon}>
+              <Button style={dropdownBtnStyle} variant="text" icon={fieldIcon}>
                 {field.content}
               </Button>
           </Dropdown>
@@ -165,12 +168,12 @@ export const App = observer(() => {
         field.options.length > 1 &&
           <Dropdown options={field.options}
                     onClick={(e) => setFieldSpec(e.value as { query: string, content: string, icon: string })}>
-              <Button variant="text" icon={subIcon}>
+              <Button style={dropdownBtnStyle} variant="text" icon={subIcon}>
                 {fieldSpec.content}
               </Button>
           </Dropdown>
       }
-      <Button theme="default" variant="text" icon={<Icon name="info-circle"/>} onClick={() => {
+      <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<Icon name="info-circle"/>} onClick={() => {
         nav('/about')
       }}>
         关于
@@ -180,3 +183,4 @@ export const App = observer(() => {
     </>
   )
 })
+
