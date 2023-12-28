@@ -120,7 +120,7 @@ export const App = observer(() => {
           ReqStore.question = e
         }}
         onEnter={(question, e) => {
-          if (!e.e.nativeEvent.isComposing) {
+          if (!e.e.nativeEvent.isComposing && question !== '') {
             ReqStore.queryQuestion(question, lang.query, field.field,fieldSpec.query);
           }
         }}
