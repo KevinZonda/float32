@@ -50,7 +50,7 @@ func queryQuestion(c *gin.Context) {
 		N:                1,
 		PresencePenalty:  0,
 		FrequencyPenalty: 0,
-		Model:            openai.GPT3Dot5Turbo,
+		Model:            openai.GPT3Dot5Turbo1106,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Content: content,
