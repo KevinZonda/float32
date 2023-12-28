@@ -26,6 +26,7 @@ export const ContentLayout = observer(() => {
     return (
       <>
         <Content/>
+        <div style={{height: '24px'}}/>
         <Evidence/>
       </>
     )
@@ -58,7 +59,7 @@ export const Evidence = observer(() => {
         marginBlockEnd: 0,
         textAlign: 'left'
       }}>{'📖 References'}</h3>
-      <List>
+      <List style={{textAlign: 'left'}}>
         {ReqStore.evidenceList && ReqStore.evidenceList.map((item, idx) => (
           <ListItem style={{paddingTop: 0, paddingLeft: 0}}>
             <LinkBox title={item.title} url={item.url} idx={idx} description={item.description}/>
