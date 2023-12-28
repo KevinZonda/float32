@@ -68,3 +68,21 @@ func IndexOfRunes(rs []rune, r rune) int {
 	}
 	return -1
 }
+
+func HasSensitiveWords(str string) bool {
+	for _, s := range sensitiveWords {
+		if strings.Contains(str, s) {
+			return true
+		}
+	}
+	return false
+}
+
+var sensitiveWords = []string{
+	"微信：",
+	"微信:",
+	"微信电话：",
+	"微信电话:",
+	"同城",
+	"少妇",
+}

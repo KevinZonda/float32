@@ -27,6 +27,26 @@ type urlInfo struct {
 	Description string
 }
 
+func canBeAddTo(r serp.GoogleSearchResponseItem) bool {
+	if strings.HasPrefix(r.Title, "[PDF]") {
+		return false
+	}
+	link := r.Link
+	if hasTails(link, ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls") {
+		return false
+	}
+	if strings.Contains(link, "gov.cn") {
+		return false
+	}
+	if utils.HasSensitiveWords(r.Title) {
+		return false
+	}
+	//if utils.HasSensitiveWords(r.Snippet) {
+	//	return false
+	//}
+	return true
+}
+
 func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
@@ -40,18 +60,11 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 		if len(urls) >= SearchMaxItemCount {
 			break
 		}
-		if strings.HasPrefix(r.Title, "[PDF]") {
+		if !canBeAddTo(r) {
 			continue
 		}
-		link := r.Link
-		if hasTails(link, ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls") {
-			continue
-		}
-		if strings.Contains(link, "gov.cn") {
-			continue
-		}
-		urls = append(urls, link)
-		urlMap[link] = urlInfo{
+		urls = append(urls, r.Link)
+		urlMap[r.Link] = urlInfo{
 			Title:       r.Title,
 			Description: r.Snippet,
 		}

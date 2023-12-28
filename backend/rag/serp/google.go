@@ -25,16 +25,18 @@ type GoogleSearchResponse struct {
 	//	Link    string `json:"link"`
 	//	Date    string `json:"date"`
 	//} `json:"answerBox"`
-	Result []struct {
-		Title     string `json:"title"`
-		Link      string `json:"link"`
-		Snippet   string `json:"snippet"`
-		Position  int    `json:"position"`
-		SiteLinks []struct {
-			Title string `json:"title"`
-			Link  string `json:"link"`
-		} `json:"sitelinks,omitempty"`
-	} `json:"organic"`
+	Result []GoogleSearchResponseItem `json:"organic"`
+}
+
+type GoogleSearchResponseItem struct {
+	Title     string `json:"title"`
+	Link      string `json:"link"`
+	Snippet   string `json:"snippet"`
+	Position  int    `json:"position"`
+	SiteLinks []struct {
+		Title string `json:"title"`
+		Link  string `json:"link"`
+	} `json:"sitelinks,omitempty"`
 }
 
 type _googleQuery struct {
