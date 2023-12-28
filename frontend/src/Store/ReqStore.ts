@@ -7,6 +7,7 @@ class reqStore {
   public constructor() {
     makeAutoObservable(this)
   }
+  public isRainbow = false
 
   public evidenceList: Array<Evidence> = []
   public isLoading: boolean = false

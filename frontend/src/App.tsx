@@ -103,7 +103,7 @@ export const App = observer(() => {
   const nav = useNavigate()
   return (
     <>
-      <div style={{width: '100%', textAlign: 'center'}}>
+      <div style={{width: '100%', textAlign: 'center'}} onClick={() => {ReqStore.isRainbow = !ReqStore.isRainbow}}>
         <h1 style={{
           fontFamily: `'PT Sans Narrow', sans-serif;`,
           color: 'black',
@@ -113,11 +113,12 @@ export const App = observer(() => {
           marginRight: 'auto',
           paddingLeft: '8px',
           paddingRight: '8px',
-          marginBottom: '8px',
+          marginBottom: '12px',
           borderRadius: '8px',
         }}
+            className={ReqStore.isRainbow ? 'rainbow' : ''}
         >
-          <span style={{fontFamily: `'PT Sans', sans-serif`, fontStyle: 'italic'}}>float32</span>
+          <span style={{fontFamily: `'PT Sans', sans-serif`, fontStyle: 'italic'}}>float32 AI</span>
           <span style={{fontFamily: `'PT Sans Narrow', sans-serif`, fontStyle: 'italic'}}>: Search Done Right</span>
         </h1>
       </div>
