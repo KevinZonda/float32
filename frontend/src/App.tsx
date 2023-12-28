@@ -103,15 +103,26 @@ export const App = observer(() => {
   const nav = useNavigate()
   return (
     <>
-      <h1 style={
-        ReqStore.currentAns === '' ? {fontFamily: `'Linux Libertine', 'Linux Libertine O'`} : {
-          fontFamily: `'Linux Libertine', 'Linux Libertine O'`,
-          marginTop: 0
-        }
-      }><span style={{fontStyle: 'italic'}}>float32</span> AI : Docs  &times; Elegant</h1>
-      <p className="read-the-docs">
-        曲径通幽，拒绝繁琐文档，告别无效思考。清雅绝俗，挑战世俗之见。
-      </p>
+      <div style={{width: '100%', textAlign: 'center'}}>
+        <h1 style={{
+          fontFamily: `'PT Sans Narrow', sans-serif;`,
+          color: 'black',
+          marginTop: ReqStore.currentAns && 0,
+          width: 'fit-content',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          paddingLeft: '8px',
+          paddingRight: '8px',
+          marginBottom: '8px',
+          borderRadius: '8px',
+        }}
+        >
+          <span style={{fontFamily: `'PT Sans', sans-serif`, fontStyle: 'italic'}}>float32</span>
+          <span style={{fontFamily: `'PT Sans Narrow', sans-serif`, fontStyle: 'italic'}}>: Search Done Right</span>
+        </h1>
+      </div>
+
+
       <Input
         placeholder="请输入你的问题"
         size="large"
@@ -121,7 +132,7 @@ export const App = observer(() => {
         }}
         onEnter={(question, e) => {
           if (!e.e.nativeEvent.isComposing && question !== '') {
-            ReqStore.queryQuestion(question, lang.query, field.field,fieldSpec.query);
+            ReqStore.queryQuestion(question, lang.query, field.field, fieldSpec.query);
           }
         }}
       />

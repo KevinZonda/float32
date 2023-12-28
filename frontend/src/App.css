@@ -1,6 +1,4 @@
-
-@import url('https://fonts.cdnfonts.com/css/linux-libertine-o');
-
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&family=PT+Sans:wght@700&display=swap');
 #root {
   max-width: 960px;
   margin: 0 auto;
@@ -10,3 +8,17 @@
   font-family: 'Songti SC', '宋体', 'Songti TC', 'SimSun', 'sans-serif';
 }
 
+.rainbow {
+  background: linear-gradient(
+  60deg,
+  rgba(237, 142, 137, .4) 16.7%,                 /* Red */
+  rgba(247, 182, 133, .4) 16.7%,              /* Orange */
+  rgba(247, 182, 133, .4) 33.3%,              /* Orange */
+  rgba(243, 235, 165, .4) 33.3%,              /* Yellow */
+  rgba(243, 235, 165, .4) 50%,                /* Yellow */
+  rgba(148, 198, 145, .4) 50%,               /* Green */
+  rgba(148, 198, 145, .4) 66.6%,               /* Green */
+  rgba(155, 214, 217, .4) 66.6%,                /* Blue */
+  rgba(155, 214, 217, .4) 83.3%,                /* Blue */
+  rgba(180, 168, 224, .4) 83.3%               /* Purple */);             /* Purple */
+}
