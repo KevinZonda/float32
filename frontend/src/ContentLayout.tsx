@@ -26,7 +26,7 @@ export const ContentLayout = observer(() => {
     return (
       <>
         <Content/>
-        <div style={{height: '24px'}}/>
+        <div style={{height: '30px'}}/>
         <Evidence/>
       </>
     )
