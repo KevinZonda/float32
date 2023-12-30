@@ -43,11 +43,7 @@ func main() {
 
 		if len(history) == 0 {
 			progLang := "golang"
-			if progLang == "general" {
-				progLang = ""
-			}
-
-			searched := rag.Search(rag.MapProgLang(progLang) + ", " + question)
+			searched := rag.Search(MapProgLang(progLang) + ", " + question)
 			fmt.Println("Search result:", searched)
 			fmt.Println("---------------------------")
 			content = llm.Promptc("code", question, "English", progLang, searched)
@@ -144,4 +140,15 @@ func printOutBySubStrs(sb, buf *strings.Builder, delta string, subStrs ...string
 		}
 	}
 	return
+}
+
+func MapProgLang(progLang string) string {
+	switch progLang {
+	case "Go":
+		return "Golang"
+	case "general":
+		return ""
+	default:
+		return progLang
+	}
 }

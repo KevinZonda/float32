@@ -13,15 +13,6 @@ const SearchPerItemMaxLen = 500
 const SearchMaxItemCount = 8
 const SearchMaxIncludeInContext = 5
 
-func hasTails(str string, tails ...string) bool {
-	for _, tail := range tails {
-		if strings.HasSuffix(str, tail) {
-			return true
-		}
-	}
-	return false
-}
-
 type urlInfo struct {
 	Title       string
 	Description string
@@ -32,7 +23,7 @@ func canBeAddTo(r serp.GoogleSearchResponseItem) bool {
 		return false
 	}
 	link := r.Link
-	if hasTails(link, ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls") {
+	if utils.HasTails(link, ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls") {
 		return false
 	}
 	if strings.Contains(link, "gov.cn") {
@@ -114,24 +105,8 @@ func SearchResultsToText(results []serp.SpiderResult) string {
 			log.Println("FAILED", r.Url, r.Error)
 			continue
 		}
-		sb.WriteString("* URL: ")
-		sb.WriteString(r.Url)
-		sb.WriteString("    ")
-		sb.WriteString("Title: ")
-		sb.WriteString(r.Title)
+		sb.WriteString(r.String(SearchPerItemMaxLen))
 		sb.WriteString("\n")
-		//first 1000 chars
-		sb.WriteString(utils.StrMaxLenSmart(r.Content, SearchPerItemMaxLen, ""))
-		sb.WriteString("\n\n")
 	}
 	return sb.String()
-}
-
-func MapProgLang(progLang string) string {
-	switch progLang {
-	case "Go":
-		return "Golang"
-	default:
-		return progLang
-	}
 }

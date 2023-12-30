@@ -5,6 +5,15 @@ import (
 	"unicode"
 )
 
+func HasTails(str string, tails ...string) bool {
+	for _, tail := range tails {
+		if strings.HasSuffix(str, tail) {
+			return true
+		}
+	}
+	return false
+}
+
 func CleanStr(s string) string {
 	return strings.Map(func(r rune) rune {
 		if unicode.IsGraphic(r) {
