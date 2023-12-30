@@ -1,6 +1,6 @@
 import './App.css'
 import {Button, Dropdown, Input} from "tdesign-react";
-import {Icon} from 'tdesign-icons-react';
+import {CodeIcon, Dividers1Icon, EarthIcon, InfoCircleIcon} from 'tdesign-icons-react';
 import React from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
@@ -55,8 +55,8 @@ const fieldsOpt = [
       content: '程序开发',
       field: 'code',
       options: progLangOpt,
-      icon: <Icon name="dividers-1" size="16"/>,
-      subIcon: <Icon name="code" size="16"/>
+      icon: <Dividers1Icon size={"16"}/>,
+      subIcon: <CodeIcon size="16"/>
     },
   },
   {
@@ -141,7 +141,7 @@ export const App = observer(() => {
         }}
       />
       <Dropdown options={langOpt} onClick={(e) => setLang(e.value as { query: string, content: string })}>
-        <Button style={dropdownBtnStyle} variant="text" icon={<Icon name="earth" size="16"/>}>
+        <Button style={dropdownBtnStyle} variant="text" icon={<EarthIcon size="16"/>}>
           {lang.content}
         </Button>
       </Dropdown>
@@ -173,7 +173,7 @@ export const App = observer(() => {
               </Button>
           </Dropdown>
       }
-      <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<Icon name="info-circle"/>} onClick={() => {
+      <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<InfoCircleIcon size="16"/>} onClick={() => {
         nav('/about')
       }}>
         关于
