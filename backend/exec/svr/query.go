@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sashabaranov/go-openai"
 	"io"
+	"log"
 	"strings"
 )
 
@@ -68,7 +69,8 @@ func queryQuestion(c *gin.Context) {
 	resp, err = cli.CreateChatCompletionStream(context.Background(), req)
 
 	if err != nil {
-		utils.GinErrorMsg(c, err)
+		utils.GinErrorMsg(c, errors.New("LLM backend broken"))
+		log.Println(err)
 		return
 	}
 	defer resp.Close()
