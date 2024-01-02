@@ -1,6 +1,6 @@
 {
   "name": "float32.app",
-  "short_name": "flat32",
+  "short_name": "float32",
   "theme_color": "#fff",
   "background_color": "#fff",
   "display": "standalone",
