@@ -1,4 +1,5 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
+import {BaseStore} from "./BaseStore.ts";
 
 const baseAPI = 'https://api.float32.app/query'
 const historyAPI = 'https://api.float32.app/history?id='
@@ -11,7 +12,17 @@ class reqStore {
 
   public evidenceList: Array<Evidence> = []
   public relatedList: Array<string> = []
-  public isLoading: boolean = false
+
+  //region isLoading
+  public get isLoading() {
+    return this._isLoading
+  }
+  public set isLoading(v: boolean) {
+    this._isLoading = v
+  }
+  public _isLoading: boolean = false
+  //endregion
+
   public isFailed: boolean = false
   public shareId = ''
   public question = ''
@@ -37,18 +48,22 @@ class reqStore {
     }).then(async (res) => {
       // decode res to json
       res.json().then((json) => {
-        this.isLoading = false
-        this.isFailed = false
-        this.currentAns = json.answer ?? ''
-        this.question = json.question ?? ''
-        this.evidenceList = json.evidence ?? []
-        this.relatedList = json.related ?? []
+        runInAction(() => {
+          this.isLoading = false
+          this.isFailed = false
+          this.currentAns = json.answer ?? ''
+          BaseStore.question = this.question = json.question ?? ''
+          this.evidenceList = json.evidence ?? []
+          this.relatedList = json.related ?? []
+        })
       })
 
     }).catch((e) => {
-      this.isFailed = true
-      this.isLoading = false
-      this.currentAns = 'Error: ' + e
+      runInAction(() => {
+        this.isFailed = true
+        this.isLoading = false
+        this.currentAns = 'Error: ' + e
+      })
       return
     })
   }

@@ -1,90 +1,13 @@
 import './App.css'
 import {Button, Dropdown, Input} from "tdesign-react";
-import {CodeIcon, Dividers1Icon, EarthIcon, InfoCircleIcon} from 'tdesign-icons-react';
+import {EarthIcon, InfoCircleIcon} from 'tdesign-icons-react';
 import React from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import {useNavigate, useParams} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
-import {FcPlus} from "react-icons/fc";
-import {MdOutlineMedicalInformation} from "react-icons/md";
-
-function newQuery(content: string, query: string = content) {
-  return {
-    content: content,
-    value: {
-      query: query,
-      content: content
-    },
-  }
-}
-
-const langOpt = [
-  newQuery('简体中文', 'zh'),
-  newQuery('English', 'en'),
-];
-
-
-const progLangOpt = [
-  newQuery('默认语言', ''),
-  newQuery('Go', 'golang'),
-  newQuery('Python', 'python'),
-  newQuery('PyTorch', 'Python, Pytorch, Numpy'),
-  newQuery('Rust', 'rust'),
-  newQuery('JavaScript', 'JavaScript'),
-  newQuery('TypeScript', 'TypeScript'),
-  newQuery('Java', 'Java'),
-  newQuery('C#', 'C#'),
-  newQuery('C', 'C'),
-  newQuery('C++', 'C++'),
-  newQuery('Haskell', 'Haskell'),
-];
-
-interface IField {
-  content: string
-  field: string
-  options: { content: string, value: { query: string, content: string } }[]
-  icon: React.ReactElement
-  subIcon: React.ReactElement
-}
-
-const fieldsOpt = [
-  {
-    content: '程序开发',
-    value: {
-      content: '程序开发',
-      field: 'code',
-      options: progLangOpt,
-      icon: <Dividers1Icon size={"16"}/>,
-      subIcon: <CodeIcon size="16"/>
-    },
-  },
-  {
-    content: '医学',
-    value: {
-      content: '医学',
-      field: 'med',
-      options: [
-        newQuery('NHS (UK)', 'nhs'),
-        newQuery('NICE (UK)', 'nice'),
-        newQuery('CDC (US)', 'cdc'),
-        newQuery('默认', ''),
-      ],
-      icon: <div style={{paddingRight: '8px'}}>
-        <FcPlus size={'18px'} style={{
-          fontSize: '17px',
-          verticalAlign: 'middle',
-          marginBottom: '2px'
-        }} class={'t-icon'}/></div>,
-      subIcon: <div style={{paddingRight: '8px'}}>
-        <MdOutlineMedicalInformation size={'18px'} style={{
-          fontSize: '17px',
-          verticalAlign: 'middle',
-          marginBottom: '2px'
-        }} class={'t-icon'}/></div>
-    },
-  }
-]
+import {langOpt, fieldsOpt, IField} from "./Store/const.tsx";
+import {BaseStore} from "./Store/BaseStore.ts";
 
 const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
 
@@ -108,7 +31,7 @@ export const App = observer(() => {
         ReqStore.isRainbow = !ReqStore.isRainbow
       }}>
         <h1 style={{
-          fontFamily: `'PT Sans Narrow', sans-serif;`,
+          fontFamily: `'PT Sans Narrow', sans-serif`,
           color: 'black',
           marginTop: ReqStore.currentAns && 0,
           width: 'fit-content',
@@ -136,11 +59,20 @@ export const App = observer(() => {
         }}
         onEnter={(question, e) => {
           if (!e.e.nativeEvent.isComposing && question !== '') {
+            BaseStore.lang = lang
+            BaseStore.field = field
+            BaseStore.fieldSpec = fieldSpec
+            BaseStore.question = question
             ReqStore.queryQuestion(question, lang.query, field.field, fieldSpec.query);
           }
         }}
       />
-      <Dropdown options={langOpt} onClick={(e) => setLang(e.value as { query: string, content: string })}>
+      <Dropdown options={langOpt} onClick={(e) => {
+        const l = e.value as {
+          query: string, content: string
+        }
+        setLang(l)
+      }}>
         <Button style={dropdownBtnStyle} variant="text" icon={<EarthIcon size="16"/>}>
           {lang.content}
         </Button>
@@ -167,15 +99,19 @@ export const App = observer(() => {
       {
         field.options.length > 1 &&
           <Dropdown options={field.options}
-                    onClick={(e) => setFieldSpec(e.value as { query: string, content: string, icon: string })}>
+                    onClick={(e) => {
+                      const fs = e.value as { query: string, content: string, icon: string }
+                      setFieldSpec(fs)
+                    }}>
               <Button style={dropdownBtnStyle} variant="text" icon={subIcon}>
                 {fieldSpec.content}
               </Button>
           </Dropdown>
       }
-      <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<InfoCircleIcon size="16"/>} onClick={() => {
-        nav('/about')
-      }}>
+      <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<InfoCircleIcon size="16"/>}
+              onClick={() => {
+                nav('/about')
+              }}>
         关于
       </Button>
       <div style={{height: '16px'}}></div>

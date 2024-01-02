@@ -1,7 +1,7 @@
-import {Button, NotificationPlugin, Skeleton} from "tdesign-react";
+import {Button, NotificationPlugin, Popup, Skeleton} from "tdesign-react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
-import {FileCopyIcon, ShareIcon} from "tdesign-icons-react";
+import {FileCopyIcon, RefreshIcon, ShareIcon} from "tdesign-icons-react";
 import Markdown from "react-markdown";
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm'
 
 import './Warning.css'
 import 'katex/dist/katex.min.css'
+import {BaseStore} from "./Store/BaseStore.ts";
 
 const Warning = observer(() => {
   return (
@@ -68,32 +69,47 @@ export const Content = observer(() => {
           <p>LOAD</p>
         </Skeleton> :
         <div style={{textAlign: 'left', paddingTop: '16px'}}>
-          <Button icon={<FileCopyIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
-                  onClick={() => {
-                    navigator.clipboard.writeText(regularizeMarkdown(ReqStore.currentAns))
-                    NotificationPlugin.success({
-                      title: '内容',
-                      content: '复制成功',
-                      offset: [-10, 10],
-                      placement: 'top-right',
-                      duration: 1000,
-                      closeBtn: true,
-                    });
-                  }}>
-          </Button>
-          <Button icon={<ShareIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
-                  onClick={() => {
-                    navigator.clipboard.writeText('https://float32.app/' + ReqStore.shareId)
-                    NotificationPlugin.success({
-                      title: '分享链接',
-                      content: '复制成功',
-                      offset: [-10, 10],
-                      placement: 'top-right',
-                      duration: 1000,
-                      closeBtn: true,
-                    });
-                  }}>
-          </Button>
+          <Popup trigger="hover" destroyOnClose content="复制答案">
+            <Button icon={<FileCopyIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
+                    onClick={() => {
+                      navigator.clipboard.writeText(regularizeMarkdown(ReqStore.currentAns))
+                      NotificationPlugin.success({
+                        title: '内容',
+                        content: '复制成功',
+                        offset: [-10, 10],
+                        placement: 'top-right',
+                        duration: 1000,
+                        closeBtn: true,
+                      });
+                    }}>
+            </Button>
+          </Popup>
+          <Popup trigger="hover" destroyOnClose content="复制分享链接">
+            <Button icon={<ShareIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
+                    onClick={() => {
+                      navigator.clipboard.writeText('https://float32.app/' + ReqStore.shareId)
+                      NotificationPlugin.success({
+                        title: '分享链接',
+                        content: '复制成功',
+                        offset: [-10, 10],
+                        placement: 'top-right',
+                        duration: 1000,
+                        closeBtn: true,
+                      });
+                    }}>
+            </Button>
+          </Popup>
+          <Popup trigger="hover" destroyOnClose content="刷新结果">
+            <Button icon={<RefreshIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
+                    onClick={() => {
+                      ReqStore.queryQuestion(
+                        BaseStore.question,
+                        BaseStore.lang.query,
+                        BaseStore.field.field,
+                        BaseStore.fieldSpec.query);
+                    }}>
+            </Button>
+          </Popup>
         </div>
 
       }
