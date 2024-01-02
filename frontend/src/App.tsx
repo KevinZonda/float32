@@ -1,6 +1,5 @@
 import './App.css'
 import {Button, Dropdown, Input} from "tdesign-react";
-import {EarthIcon, InfoCircleIcon} from 'tdesign-icons-react';
 import React, {useEffect, useState} from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
@@ -8,6 +7,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
 import {langOpt, fieldsOpt, IField} from "./Store/const.tsx";
 import {BaseStore} from "./Store/BaseStore.ts";
+import {RiQuestionAnswerLine} from "react-icons/ri";
+import {MdOutlineInfo} from "react-icons/md";
 
 const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
 
@@ -78,7 +79,14 @@ export const App = observer(() => {
         }
         setLang(l)
       }}>
-        <Button style={dropdownBtnStyle} variant="text" icon={<EarthIcon size="16"/>}>
+        <Button style={dropdownBtnStyle} variant="text" icon={
+          <div style={{paddingRight: '5px'}}>
+            <RiQuestionAnswerLine size={'18px'} style={{
+              fontSize: '17px',
+              verticalAlign: 'middle',
+              marginBottom: '2px',
+            }} class={'t-icon'}/></div>
+        }>
           {lang.content}
         </Button>
       </Dropdown>
@@ -115,7 +123,14 @@ export const App = observer(() => {
       }
       {
         !isMobile && (
-          <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<InfoCircleIcon size="16"/>}
+          <Button style={dropdownBtnStyle} theme="default" variant="text" icon={
+            <div style={{paddingRight: '5px'}}>
+              <MdOutlineInfo size={'18px'} style={{
+                fontSize: '17px',
+                verticalAlign: 'middle',
+                marginBottom: '2px',
+              }} class={'t-icon'}/></div>
+          }
                   onClick={() => {
                     nav('/about')
                   }}>

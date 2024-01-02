@@ -1,7 +1,7 @@
 import React from "react";
-import {CodeIcon, Dividers1Icon} from "tdesign-icons-react";
 import {FcPlus} from "react-icons/fc";
-import {MdOutlineMedicalInformation} from "react-icons/md";
+import { MdOutlineMedicalInformation} from "react-icons/md";
+import {RiCodeSSlashLine, RiCompasses2Line} from "react-icons/ri";
 
 function newQuery(content: string, query: string = content) {
   return {
@@ -49,8 +49,18 @@ export const fieldsOpt = [
       content: '程序开发',
       field: 'code',
       options: progLangOpt,
-      icon: <Dividers1Icon size={"16"}/>,
-      subIcon: <CodeIcon size="16"/>
+      icon: <div style={{paddingRight: '5px'}}>
+        <RiCompasses2Line size={'18px'} style={{
+          fontSize: '17px',
+          verticalAlign: 'middle',
+          marginBottom: '2px',
+        }} class={'t-icon'}/></div>,
+      subIcon: <div style={{paddingRight: '5px'}}>
+        <RiCodeSSlashLine size={'18px'} style={{
+          fontSize: '17px',
+          verticalAlign: 'middle',
+          marginBottom: '2px',
+        }} class={'t-icon'}/></div>
     },
   },
   {
@@ -64,13 +74,13 @@ export const fieldsOpt = [
         newQuery('CDC (US)', 'cdc'),
         newQuery('默认', ''),
       ],
-      icon: <div style={{paddingRight: '8px'}}>
+      icon: <div style={{paddingRight: '5px'}}>
         <FcPlus size={'18px'} style={{
           fontSize: '17px',
           verticalAlign: 'middle',
           marginBottom: '2px'
         }} class={'t-icon'}/></div>,
-      subIcon: <div style={{paddingRight: '8px'}}>
+      subIcon: <div style={{paddingRight: '5px'}}>
         <MdOutlineMedicalInformation size={'18px'} style={{
           fontSize: '17px',
           verticalAlign: 'middle',
@@ -79,4 +89,3 @@ export const fieldsOpt = [
     },
   }
 ]
-
