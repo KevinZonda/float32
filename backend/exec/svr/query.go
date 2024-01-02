@@ -23,11 +23,16 @@ func queryQuestion(c *gin.Context) {
 		utils.GinErrorMsg(c, err)
 		return
 	}
+	query = query.Regularize()
+	if query.Question == "" {
+		c.String(200, "")
+		return
+	}
 
 	ans, _ := db.NewAnswer(dbmodel.Answer{
 		Question: query.Question,
 	})
-	query = query.Regularize()
+
 	searched := ""
 	// TODO: Country fix
 	country := "us"
@@ -49,7 +54,6 @@ func queryQuestion(c *gin.Context) {
 	bs, _ := json.Marshal(meta.Evidences)
 	ans.Evidence = string(bs)
 
-	log.Println("QUERY:", query.Language, "=>", query.ProgLang)
 	content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
 	req := openai.ChatCompletionRequest{
 		Temperature:      0.15,

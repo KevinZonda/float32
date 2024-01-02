@@ -5,6 +5,7 @@ import (
 	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/prompt"
 	"github.com/sashabaranov/go-openai"
+	"strings"
 )
 
 func Promptc(field string, question string, answerIn string, guide string, context any) string {
@@ -17,7 +18,7 @@ func Promptc(field string, question string, answerIn string, guide string, conte
 
 func firstPromptStr(ptsName Field, varMap map[string]string) string {
 	compiled := _pts[ptsName].CompileWithOption(varMap, false)
-	return compiled.Prompts[0].Prompt
+	return strings.TrimSpace(compiled.Prompts[0].Prompt)
 }
 
 func promptc(lang string, field string, question string, guide string, context any) string {

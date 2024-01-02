@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/KevinZonda/float32/rag"
+	"strings"
 )
 
 type MetaModel struct {
@@ -47,6 +48,7 @@ func (q Query) Regularize() Query {
 		q.ProgLang = "golang"
 
 	}
+	q.Question = strings.TrimSpace(q.Question)
 	return q
 }
 
