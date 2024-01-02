@@ -5,17 +5,19 @@ import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
-import {langOpt, fieldsOpt, IField} from "./Store/const.tsx";
+import {langOpt, fieldsOpt, IField, ReactIcon} from "./Store/const.tsx";
 import {BaseStore} from "./Store/BaseStore.ts";
 import {RiQuestionAnswerLine} from "react-icons/ri";
 import {MdOutlineInfo} from "react-icons/md";
 
 const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
+
 function useQuery() {
-  const { search } = useLocation();
+  const {search} = useLocation();
 
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
+
 export const App = observer(() => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
   useEffect(() => {
@@ -83,14 +85,8 @@ export const App = observer(() => {
         }
         setLang(l)
       }}>
-        <Button style={dropdownBtnStyle} variant="text" icon={
-          <div style={{paddingRight: '5px'}}>
-            <RiQuestionAnswerLine size={'18px'} style={{
-              fontSize: '17px',
-              verticalAlign: 'middle',
-              marginBottom: '2px',
-            }} class={'t-icon'}/></div>
-        }>
+        <Button style={dropdownBtnStyle} variant="text"
+                icon={<ReactIcon><RiQuestionAnswerLine/></ReactIcon>}>
           {lang.content}
         </Button>
       </Dropdown>
@@ -127,14 +123,8 @@ export const App = observer(() => {
       }
       {
         !isMobile && (
-          <Button style={dropdownBtnStyle} theme="default" variant="text" icon={
-            <div style={{paddingRight: '5px'}}>
-              <MdOutlineInfo size={'18px'} style={{
-                fontSize: '17px',
-                verticalAlign: 'middle',
-                marginBottom: '2px',
-              }} class={'t-icon'}/></div>
-          }
+          <Button style={dropdownBtnStyle} theme="default" variant="text"
+                  icon={<ReactIcon><MdOutlineInfo/></ReactIcon>}
                   onClick={() => {
                     nav('/about')
                   }}>

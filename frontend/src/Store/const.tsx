@@ -1,7 +1,27 @@
 import React from "react";
 import {FcPlus} from "react-icons/fc";
-import { MdOutlineMedicalInformation} from "react-icons/md";
+import {MdOutlineMedicalInformation} from "react-icons/md";
 import {RiCodeSSlashLine, RiCompasses2Line} from "react-icons/ri";
+
+export interface ReactIconProp {
+  children: React.ReactElement
+}
+
+export const ReactIcon = ({children}: ReactIconProp) => {
+  return (
+    <div style={{paddingRight: '5px'}}>
+      <div style={{
+        fontSize: '18px',
+        width: '18px',
+        height: '18px',
+        verticalAlign: 'middle',
+        marginBottom: '3px'
+      }} className={'t-icon'}>
+        {children}
+      </div>
+    </div>
+  )
+}
 
 function newQuery(content: string, query: string = content) {
   return {
@@ -49,18 +69,8 @@ export const fieldsOpt = [
       content: '程序开发',
       field: 'code',
       options: progLangOpt,
-      icon: <div style={{paddingRight: '5px'}}>
-        <RiCompasses2Line size={'18px'} style={{
-          fontSize: '17px',
-          verticalAlign: 'middle',
-          marginBottom: '2px',
-        }} class={'t-icon'}/></div>,
-      subIcon: <div style={{paddingRight: '5px'}}>
-        <RiCodeSSlashLine size={'18px'} style={{
-          fontSize: '17px',
-          verticalAlign: 'middle',
-          marginBottom: '2px',
-        }} class={'t-icon'}/></div>
+      icon: <ReactIcon><RiCompasses2Line/></ReactIcon>,
+      subIcon: <ReactIcon><RiCodeSSlashLine/></ReactIcon>
     },
   },
   {
@@ -74,18 +84,9 @@ export const fieldsOpt = [
         newQuery('CDC (US)', 'cdc'),
         newQuery('默认', ''),
       ],
-      icon: <div style={{paddingRight: '5px'}}>
-        <FcPlus size={'18px'} style={{
-          fontSize: '17px',
-          verticalAlign: 'middle',
-          marginBottom: '2px'
-        }} class={'t-icon'}/></div>,
-      subIcon: <div style={{paddingRight: '5px'}}>
-        <MdOutlineMedicalInformation size={'18px'} style={{
-          fontSize: '17px',
-          verticalAlign: 'middle',
-          marginBottom: '2px'
-        }} class={'t-icon'}/></div>
+      icon: <ReactIcon><FcPlus/></ReactIcon>,
+      subIcon: <ReactIcon><MdOutlineMedicalInformation/></ReactIcon>
     },
   }
 ]
+
