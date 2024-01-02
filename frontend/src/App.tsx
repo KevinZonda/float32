@@ -3,7 +3,7 @@ import {Button, Dropdown, Input} from "tdesign-react";
 import React, {useEffect, useState} from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
 import {langOpt, fieldsOpt, IField} from "./Store/const.tsx";
 import {BaseStore} from "./Store/BaseStore.ts";
