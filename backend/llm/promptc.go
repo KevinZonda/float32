@@ -8,10 +8,14 @@ import (
 )
 
 func Promptc(field string, question string, answerIn string, guide string, context any) string {
+	lang := "English"
 	if answerIn == "简体中文" {
-		return promptcZh(field, question, guide, context)
+		lang = "Chinese or Mandarin"
+		if field == "med" {
+			return promptcZh(field, question, guide, context)
+		}
 	}
-	return promptc(field, question, guide, context)
+	return promptc(lang, field, question, guide, context)
 }
 
 func firstPromptStr(ptsName Field, varMap map[string]string) string {
@@ -19,7 +23,7 @@ func firstPromptStr(ptsName Field, varMap map[string]string) string {
 	return compiled.Prompts[0].Prompt
 }
 
-func promptc(field string, question string, guide string, context any) string {
+func promptc(lang string, field string, question string, guide string, context any) string {
 	ptsField := CodeField
 	switch field {
 	default:
@@ -32,7 +36,7 @@ func promptc(field string, question string, guide string, context any) string {
 
 	}
 	varMap := map[string]string{
-		"lang":     "English",
+		"lang":     lang,
 		"guide":    guide,
 		"question": question,
 		"context":  fmt.Sprint(context),
@@ -97,7 +101,7 @@ var _pts map[Field]*prompt.PromptC
 func init() {
 	fmt.Println("Loading promptc...")
 	_pts = make(map[Field]*prompt.PromptC)
-	_pts[CodeField] = loadPromptc("prompt.promptc")
+	_pts[CodeField] = loadPromptc("code.promptc")
 	_pts[TranslationField] = loadPromptc("translate.promptc")
 	_pts[CodeZhField] = loadPromptc("prompt_zh.promptc")
 	_pts[MedZhField] = loadPromptc("med_prompt_zh.promptc")

@@ -24,7 +24,7 @@ func ginHistory(c *gin.Context) {
 			})
 			return
 		}
-		utils.GinErrorMsg(c, err)
+		utils.GinErrorMsg(c, errors.New("db error"))
 		return
 	}
 
