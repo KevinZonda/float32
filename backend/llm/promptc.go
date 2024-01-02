@@ -9,8 +9,8 @@ import (
 
 func Promptc(field string, question string, answerIn string, guide string, context any) string {
 	lang := "English"
-	if answerIn == "简体中文" {
-		lang = "Chinese or Mandarin"
+	if answerIn == "zh" {
+		lang = "Chinese (Mandarin)"
 	}
 	return promptc(lang, field, question, guide, context)
 }
@@ -34,6 +34,7 @@ func promptc(lang string, field string, question string, guide string, context a
 			guide = " Please stand in the perspective of a programmer or an advanced software engineer. When it comes to answers in code, please express them in the Java programming language except user specified any programming language."
 		}
 	}
+	fmt.Println("Promptc", ptsField, lang, field, question)
 	varMap := map[string]string{
 		"lang":     lang,
 		"guide":    guide,

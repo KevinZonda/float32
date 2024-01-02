@@ -32,9 +32,9 @@ type Query struct {
 func (q Query) Regularize() Query {
 	switch q.Language {
 	case "简体中文", "zh":
-		q.Language = "简体中文"
+		q.Language = "zh"
 	default:
-		q.Language = "English"
+		q.Language = "en"
 	}
 	switch q.Field {
 	case "code", "med":
