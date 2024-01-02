@@ -38,10 +38,10 @@ func canBeAddTo(r serp.GoogleSearchResponseItem) bool {
 	return true
 }
 
-func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
+func SearchRaw(country, lang, query string) ([]serp.SpiderResult, error) {
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
-	resp, err := gs.Search(country, query)
+	resp, err := gs.Search(country, lang, query)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func SearchRaw(country, query string) ([]serp.SpiderResult, error) {
 }
 
 func Search(query string) string {
-	results, err := SearchRaw("us", query)
+	results, err := SearchRaw("us", "", query)
 	if err != nil {
 		return ""
 	}

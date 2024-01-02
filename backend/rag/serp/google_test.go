@@ -12,7 +12,7 @@ func TestGoogle(t *testing.T) {
 	godotenv.Load("../../.env")
 	fmt.Println(os.Getenv("SERP_DEV"))
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
-	resp, err := gs.Search("us", "How to create a file in Go?")
+	resp, err := gs.Search("us", "en-us", "How to create a file in Go?")
 	if err != nil {
 		t.Fatal(err)
 	}

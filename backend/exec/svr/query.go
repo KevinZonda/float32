@@ -34,7 +34,11 @@ func queryQuestion(c *gin.Context) {
 	if utils.StrContains(query.ProgLang, "nhs", "nice") {
 		country = "uk"
 	}
-	searchRaw, err := rag.SearchRaw(country, query.ProgLang+", "+query.Question)
+	lang := ""
+	if query.Field == "med" {
+		lang = "en-us"
+	}
+	searchRaw, err := rag.SearchRaw(country, lang, query.ProgLang+", "+query.Question)
 	if err == nil {
 		searched = rag.SearchResultsToText(searchRaw)
 	}
