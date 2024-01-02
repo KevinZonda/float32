@@ -4,6 +4,12 @@ import {BaseStore} from "./BaseStore.ts";
 const baseAPI = 'https://api.float32.app/query'
 const historyAPI = 'https://api.float32.app/history?id='
 class reqStore {
+  public get shareLink() {
+    if (!this.shareId || this.shareId === '') {
+      return 'https://float32.app'
+    }
+    return 'https://float32.app/search?id=' + this.shareId
+  }
 
   public constructor() {
     makeAutoObservable(this)
@@ -109,7 +115,7 @@ class reqStore {
             this.evidenceList = metaObj.evidences
             this.currentAns = buf.slice(idx + 2)
             this.shareId = metaObj.id
-            window.history.replaceState(null, '', "/" + metaObj.id)
+            window.history.replaceState(null, '', '/search?id=' + metaObj.id)
             hasDoneMeta = true
             continue
           }

@@ -87,7 +87,7 @@ export const Content = observer(() => {
           <Popup trigger="hover" destroyOnClose content="复制分享链接">
             <Button icon={<ShareIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
                     onClick={() => {
-                      navigator.clipboard.writeText('https://float32.app/' + ReqStore.shareId)
+                      navigator.clipboard.writeText(ReqStore.shareLink)
                       NotificationPlugin.success({
                         title: '分享链接',
                         content: '复制成功',
