@@ -5,6 +5,7 @@ import (
 	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/prompt"
 	"github.com/sashabaranov/go-openai"
+	"log"
 )
 
 func Promptc(field string, question string, answerIn string, guide string, context any) string {
@@ -12,6 +13,7 @@ func Promptc(field string, question string, answerIn string, guide string, conte
 	if answerIn == "zh" {
 		lang = "Chinese (Mandarin)"
 	}
+	log.Println("+++++++++++++++Promptc", lang, field, question)
 	return promptc(lang, field, question, guide, context)
 }
 
