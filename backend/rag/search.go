@@ -38,13 +38,20 @@ func canBeAddTo(r serp.GoogleSearchResponseItem) bool {
 	return true
 }
 
-func SearchRaw(country, lang, query string) ([]serp.SpiderResult, error) {
+type SearchRawItem struct {
+	SpiderResults []serp.SpiderResult
+	Related       []string
+}
+
+func SearchRaw(country, locale, query string) (SearchRawItem, error) {
+	rst := SearchRawItem{}
 	beforeGoogleTime := time.Now()
 	gs := serp.NewGoogleSearch(os.Getenv("SERP_DEV"))
-	resp, err := gs.Search(country, lang, query)
+	resp, err := gs.Search(country, locale, query)
 	if err != nil {
-		return nil, err
+		return SearchRawItem{}, err
 	}
+	rst.Related = resp.RelatedSearchStrs()
 	var urls []string
 	urlMap := make(map[string]urlInfo)
 	for _, r := range resp.Result {
@@ -61,7 +68,7 @@ func SearchRaw(country, lang, query string) ([]serp.SpiderResult, error) {
 		}
 	}
 	if len(urls) == 0 {
-		return nil, nil
+		return rst, nil
 	}
 
 	afterGoogleTime := time.Now()
@@ -81,10 +88,11 @@ func SearchRaw(country, lang, query string) ([]serp.SpiderResult, error) {
 	if len(results) > SearchMaxIncludeInContext {
 		results = results[:SearchMaxIncludeInContext]
 	}
+	rst.SpiderResults = results
 
 	log.Println("Search Time:", afterGoogleTime.Sub(beforeGoogleTime), "Spider Time:", spiderTime.Sub(afterGoogleTime))
 
-	return results, nil
+	return rst, nil
 }
 
 func Search(query string) string {
@@ -92,7 +100,7 @@ func Search(query string) string {
 	if err != nil {
 		return ""
 	}
-	return SearchResultsToText(results)
+	return SearchResultsToText(results.SpiderResults)
 }
 
 func SearchResultsToText(results []serp.SpiderResult) string {

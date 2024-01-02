@@ -32,15 +32,15 @@ func queryQuestion(c *gin.Context) {
 	// TODO: Country fix
 	country := "us"
 	if utils.StrContains(query.ProgLang, "nhs", "nice") {
-		country = "uk"
+		country = "gb"
 	}
-	lang := ""
+	locale := ""
 	if query.Field == "med" {
-		lang = "en-us"
+		locale = "en"
 	}
-	searchRaw, err := rag.SearchRaw(country, lang, query.ProgLang+", "+query.Question)
+	searchRaw, err := rag.SearchRaw(country, locale, query.ProgLang+", "+query.Question)
 	if err == nil {
-		searched = rag.SearchResultsToText(searchRaw)
+		searched = rag.SearchResultsToText(searchRaw.SpiderResults)
 	}
 	// write meta info to Http
 	meta := newMeta(searchRaw)

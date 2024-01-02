@@ -25,7 +25,16 @@ type GoogleSearchResponse struct {
 	//	Link    string `json:"link"`
 	//	Date    string `json:"date"`
 	//} `json:"answerBox"`
-	Result []GoogleSearchResponseItem `json:"organic"`
+	Result          []GoogleSearchResponseItem `json:"organic"`
+	RelatedSearches []RelatedSearch            `json:"relatedSearches"`
+}
+
+func (r GoogleSearchResponse) RelatedSearchStrs() []string {
+	var strs []string
+	for _, s := range r.RelatedSearches {
+		strs = append(strs, s.Query)
+	}
+	return strs
 }
 
 type GoogleSearchResponseItem struct {
@@ -37,6 +46,10 @@ type GoogleSearchResponseItem struct {
 		Title string `json:"title"`
 		Link  string `json:"link"`
 	} `json:"sitelinks,omitempty"`
+}
+
+type RelatedSearch struct {
+	Query string `json:"query"`
 }
 
 type _googleQuery struct {
@@ -54,13 +67,13 @@ const serperUrl = "https://google.serper.dev/search"
 // country: country code, e.g. us, cn
 // lang: language code, e.g. "en-us"
 // query: query string
-func (s *GoogleSearch) Search(country, lang, query string) (resp GoogleSearchResponse, err error) {
+func (s *GoogleSearch) Search(country, locale, query string) (resp GoogleSearchResponse, err error) {
 	method := "POST"
 
 	reqM := _googleQuery{
 		Query:   query,
 		Country: country,
-		Locale:  lang,
+		Locale:  locale,
 	}
 	reqB, err := json.Marshal(reqM)
 	if err != nil {

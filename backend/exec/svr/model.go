@@ -2,12 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/KevinZonda/float32/rag/serp"
+	"github.com/KevinZonda/float32/rag"
 )
 
 type MetaModel struct {
 	Evidences []SearchItem `json:"evidences"`
 	ID        string       `json:"id"`
+	Related   []string     `json:"related"`
 }
 
 type SearchItem struct {
@@ -49,9 +50,9 @@ func (q Query) Regularize() Query {
 	return q
 }
 
-func newMeta(searched []serp.SpiderResult) MetaModel {
+func newMeta(searched rag.SearchRawItem) MetaModel {
 	var evi []SearchItem
-	for _, r := range searched {
+	for _, r := range searched.SpiderResults {
 		if r.Error != nil {
 			continue
 		}
@@ -63,5 +64,6 @@ func newMeta(searched []serp.SpiderResult) MetaModel {
 	}
 	return MetaModel{
 		Evidences: evi,
+		Related:   searched.Related,
 	}
 }
