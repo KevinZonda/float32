@@ -10,7 +10,7 @@ import remarkGfm from 'remark-gfm'
 import './Warning.css'
 import 'katex/dist/katex.min.css'
 import {BaseStore} from "./Store/BaseStore.ts";
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 interface operAnswerBtnProps {
   onClick: () => void
@@ -19,6 +19,17 @@ interface operAnswerBtnProps {
 }
 
 const OperAnswerBtn = (props: operAnswerBtnProps) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
+  useEffect(() => {
+    window.addEventListener("resize", () => setIsMobile(window.innerWidth < 720))
+  })
+  if (isMobile) {
+    return (
+      <Button icon={props.icon} style={{marginRight: '8px'}} shape="square" variant="outline"
+              onClick={props.onClick}>
+      </Button>
+    )
+  }
   return (
     <Popup trigger="hover" content={props.hoverContent}>
       <Button icon={props.icon} style={{marginRight: '8px'}} shape="square" variant="outline"

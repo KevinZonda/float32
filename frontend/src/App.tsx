@@ -3,27 +3,15 @@ import {Button, Dropdown, Input} from "tdesign-react";
 import React, {useEffect, useState} from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
 import {langOpt, fieldsOpt, IField, ReactIcon} from "./Store/const.tsx";
 import {BaseStore} from "./Store/BaseStore.ts";
 import {RiQuestionAnswerLine} from "react-icons/ri";
 import {MdOutlineInfo} from "react-icons/md";
+import {Conditional, useQuery} from "./CommonComponents.tsx";
 
 const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
-
-function useQuery() {
-  const {search} = useLocation();
-
-  return React.useMemo(() => new URLSearchParams(search), [search]);
-}
-
-const Conditional = ({condition, children}: { condition: boolean, children: React.ReactElement }) => {
-  if (condition) {
-    return children
-  }
-  return <></>
-}
 
 export const App = observer(() => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
