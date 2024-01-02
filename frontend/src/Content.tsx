@@ -10,6 +10,34 @@ import remarkGfm from 'remark-gfm'
 import './Warning.css'
 import 'katex/dist/katex.min.css'
 import {BaseStore} from "./Store/BaseStore.ts";
+import React from "react";
+
+interface operAnswerBtnProps {
+  onClick: () => void
+  icon: React.ReactElement
+  hoverContent: string
+}
+
+const OperAnswerBtn = (props: operAnswerBtnProps) => {
+  return (
+    <Popup trigger="hover" content={props.hoverContent}>
+      <Button icon={props.icon} style={{marginRight: '8px'}} shape="square" variant="outline"
+              onClick={props.onClick}>
+      </Button>
+    </Popup>
+  )
+}
+
+function notifySuccess(title: string, msg: string) {
+  NotificationPlugin.success({
+    title: title,
+    content: msg,
+    offset: [-10, 10],
+    placement: 'top-right',
+    duration: 1000,
+    closeBtn: true,
+  });
+}
 
 const Warning = observer(() => {
   return (
@@ -37,7 +65,6 @@ const Warning = observer(() => {
 })
 
 export const Content = observer(() => {
-  // TODO LaTeX
   if (!ReqStore.isLoading && ReqStore.currentAns === '') {
     return <>
       <Warning/>
@@ -55,9 +82,6 @@ export const Content = observer(() => {
       }}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
       <div style={{textAlign: 'left'}}>
         <Markdown
-          // wrapperElement={{
-          //   "data-color-mode": "light"
-          // }}
           remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}
         >
           {regularizeMarkdown(ReqStore.currentAns)}
@@ -69,47 +93,30 @@ export const Content = observer(() => {
           <p>LOAD</p>
         </Skeleton> :
         <div style={{textAlign: 'left', paddingTop: '16px'}}>
-          <Popup trigger="hover" destroyOnClose content="复制答案">
-            <Button icon={<FileCopyIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
-                    onClick={() => {
-                      navigator.clipboard.writeText(regularizeMarkdown(ReqStore.currentAns))
-                      NotificationPlugin.success({
-                        title: '内容',
-                        content: '复制成功',
-                        offset: [-10, 10],
-                        placement: 'top-right',
-                        duration: 1000,
-                        closeBtn: true,
-                      });
-                    }}>
-            </Button>
-          </Popup>
-          <Popup trigger="hover" destroyOnClose content="复制分享链接">
-            <Button icon={<ShareIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
-                    onClick={() => {
-                      navigator.clipboard.writeText(ReqStore.shareLink)
-                      NotificationPlugin.success({
-                        title: '分享链接',
-                        content: '复制成功',
-                        offset: [-10, 10],
-                        placement: 'top-right',
-                        duration: 1000,
-                        closeBtn: true,
-                      });
-                    }}>
-            </Button>
-          </Popup>
-          <Popup trigger="hover" destroyOnClose content="刷新结果">
-            <Button icon={<RefreshIcon/>} style={{marginRight: '8px'}} shape="square" variant="outline"
-                    onClick={() => {
-                      ReqStore.queryQuestion(
-                        BaseStore.question,
-                        BaseStore.lang.query,
-                        BaseStore.field.field,
-                        BaseStore.fieldSpec.query);
-                    }}>
-            </Button>
-          </Popup>
+          <OperAnswerBtn icon={<FileCopyIcon/>}
+                         hoverContent="复制答案"
+                         onClick={() => {
+                           navigator.clipboard.writeText(regularizeMarkdown(ReqStore.currentAns))
+                           notifySuccess('内容', '复制成功');
+                         }}
+          />
+          <OperAnswerBtn icon={<ShareIcon/>}
+                         hoverContent="复制分享链接"
+                         onClick={() => {
+                           navigator.clipboard.writeText(ReqStore.shareLink)
+                           notifySuccess('分享链接', '复制成功');
+                         }}
+          />
+          <OperAnswerBtn icon={<RefreshIcon/>}
+                         hoverContent="重新生成"
+                         onClick={() => {
+                           ReqStore.queryQuestion(
+                             BaseStore.question,
+                             BaseStore.lang.query,
+                             BaseStore.field.field,
+                             BaseStore.fieldSpec.query);
+                         }}
+          />
         </div>
 
       }
