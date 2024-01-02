@@ -1,7 +1,7 @@
 import './App.css'
 import {Button, Dropdown, Input} from "tdesign-react";
 import {EarthIcon, InfoCircleIcon} from 'tdesign-icons-react';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import {useNavigate, useParams} from "react-router-dom";
@@ -12,6 +12,11 @@ import {BaseStore} from "./Store/BaseStore.ts";
 const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
 
 export const App = observer(() => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
+  useEffect(() => {
+    window.addEventListener("resize", () => setIsMobile(window.innerWidth < 720))
+  })
+
   const [lang, setLang] = React.useState(langOpt[0].value);
   const [field, setField] = React.useState(fieldsOpt[0].value);
   const [fieldSpec, setFieldSpec] = React.useState(field.options[0].value);
@@ -108,12 +113,17 @@ export const App = observer(() => {
               </Button>
           </Dropdown>
       }
-      <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<InfoCircleIcon size="16"/>}
-              onClick={() => {
-                nav('/about')
-              }}>
-        关于
-      </Button>
+      {
+        !isMobile && (
+          <Button style={dropdownBtnStyle} theme="default" variant="text" icon={<InfoCircleIcon size="16"/>}
+                  onClick={() => {
+                    nav('/about')
+                  }}>
+            关于
+          </Button>
+        )
+      }
+
       <div style={{height: '16px'}}></div>
       <ContentLayout/>
     </>

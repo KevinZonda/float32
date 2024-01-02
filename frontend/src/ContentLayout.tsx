@@ -8,19 +8,8 @@ import {RelatedQuestion} from "./RelatedQuestion.tsx";
 
 export const ContentLayout = observer(() => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
-
-//choose the screen size
-  const handleResize = () => {
-    if (window.innerWidth < 720) {
-      setIsMobile(true)
-    } else {
-      setIsMobile(false)
-    }
-  }
-
-// create an event listener
   useEffect(() => {
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", () => setIsMobile(window.innerWidth < 720))
   })
 
   if (isMobile) {
