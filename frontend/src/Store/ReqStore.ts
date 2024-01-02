@@ -92,6 +92,7 @@ class reqStore {
             this.evidenceList = metaObj.evidences
             this.currentAns = buf.slice(idx + 2)
             this.shareId = metaObj.id
+            window.history.replaceState(null, '', "/" + metaObj.id)
             hasDoneMeta = true
             continue
           }
