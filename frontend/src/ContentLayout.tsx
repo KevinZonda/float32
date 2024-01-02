@@ -4,6 +4,7 @@ import {observer} from "mobx-react-lite";
 import ReqStore from "./Store/ReqStore.ts";
 import ListItem from "tdesign-react/es/list/ListItem";
 import {useEffect, useState} from "react";
+import {RelatedQuestion} from "./RelatedQuestion.tsx";
 
 export const ContentLayout = observer(() => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
@@ -26,6 +27,7 @@ export const ContentLayout = observer(() => {
     return (
       <>
         <Content/>
+        <RelatedQuestion/>
         <div style={{height: '30px'}}/>
         <Evidence/>
       </>
@@ -37,6 +39,7 @@ export const ContentLayout = observer(() => {
       <Row>
         <Col span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 8 : 12}>
           <Content/>
+          <RelatedQuestion/>
         </Col>
         <Col style={{textAlign: 'left', paddingLeft: '24px'}}
              span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>

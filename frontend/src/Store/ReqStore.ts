@@ -10,6 +10,7 @@ class reqStore {
   public isRainbow = false
 
   public evidenceList: Array<Evidence> = []
+  public relatedList: Array<string> = []
   public isLoading: boolean = false
   public isFailed: boolean = false
   public shareId = ''
@@ -41,6 +42,7 @@ class reqStore {
         this.currentAns = json.answer ?? ''
         this.question = json.question ?? ''
         this.evidenceList = json.evidence ?? []
+        this.relatedList = json.related ?? []
       })
 
     }).catch((e) => {
