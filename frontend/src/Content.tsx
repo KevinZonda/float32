@@ -95,6 +95,9 @@ export const Content = observer(() => {
         <MarkdownPreview
           remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}
           source={regularizeMarkdown(ReqStore.currentAns)}
+          wrapperElement={{
+            "data-color-mode": "light"
+          }}
         />
       </div>
 
