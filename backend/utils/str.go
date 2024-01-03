@@ -98,27 +98,29 @@ var sensitiveWords = []string{
 	"Google My Maps",
 }
 
-func writeSplitByRune(w io.Writer, sb, buf *strings.Builder, delta string, subStr rune) (needContinue bool) {
+func writeSplitByRune(w io.Writer, buf *strings.Builder, delta string, subStr rune) (newDelta string, needContinue bool) {
 	rs := []rune(delta)
 	idx := IndexOfRunes(rs, subStr)
 	if idx < 0 {
 		// buf.WriteString(delta)
+		newDelta = delta
 		return
 	}
 	toPrint := buf.String() + string(rs[:idx+1])
 	w.Write([]byte(toPrint))
 	buf.Reset()
-	sb.WriteString(string(rs[idx+1:]))
 	needContinue = true
+	newDelta = string(rs[idx+1:])
 	return
 }
 
-func WriteSplitByRune(w io.Writer, sb, buf *strings.Builder, delta string, subStrs ...rune) (needContinue bool) {
+func WriteSplitByRune(w io.Writer, buf *strings.Builder, delta string, subStrs ...rune) (needContinue bool) {
 	for _, subString := range subStrs {
-		if writeSplitByRune(w, sb, buf, delta, subString) {
-			needContinue = true
+		if delta, needContinue = writeSplitByRune(w, buf, delta, subString); needContinue {
+			buf.WriteString(delta)
 			return
 		}
 	}
+	buf.WriteString(delta)
 	return
 }

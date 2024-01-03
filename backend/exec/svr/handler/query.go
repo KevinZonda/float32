@@ -104,10 +104,9 @@ func Search(c *gin.Context) {
 		delta = utils.CleanStr(delta)
 		sb.WriteString(delta)
 
-		if utils.WriteSplitByRune(w, &sb, &buf, delta, '\n', '.', ';', '。', '？', '?') {
+		if utils.WriteSplitByRune(w, &buf, delta, '\n', '.', ';', '。', '？', '?') {
 			return true
 		}
-		buf.WriteString(delta)
 		return true
 	})
 	fmt.Println(sb.String(), "\n->", ans)
