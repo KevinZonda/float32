@@ -17,6 +17,12 @@ float32.app 支持自托管，你可以在本地搭建一个 float32.app 服务�
 - MySQL 数据库  
   **可选。** 用于历史服务，如没有 MySQL 数据库，则历史服务/分享服务不可用。
 
+> [!NOTE]
+> 一键部署？试试看 [deploy.sh](deploy.sh)。
+> ```
+> bash deploy.sh
+> ```
+
 ### .env 文件
 
 .env 文件用于配置服务，你可以参考 [backend/exec/svr/README.md](backend/exec/svr/README.md) 的描述与 [backend/exec/svr/init.go](backend/exec/svr/init.go) 中的实现代码。
