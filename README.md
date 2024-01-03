@@ -19,7 +19,7 @@ float32.app 支持自托管，你可以在本地搭建一个 float32.app 服务�
 
 > [!NOTE]
 > 一键部署？试试看 [deploy.sh](deploy.sh)。
-> ```
+> ```bash
 > bash deploy.sh
 > ```
 
@@ -49,6 +49,6 @@ float32.app 使用 promptc 标准来实践 prompt 开发的解耦。请参阅 [p
 
 > [!NOTE]
 > 如果你是 macOS，则需要安装 `gsed` 以运行 `generate.sh`。  
-> ```
+> ```bash
 > brew install gnu-sed
 > ```
