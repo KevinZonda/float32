@@ -1,7 +1,42 @@
-# float32：现代 AI 驱动的搜索引擎
+# [float32.app](https://float32.app)：现代 AI 驱动的搜索引擎
 
 float32 是一个基于大语言模型驱动的搜索引擎，它可以帮助你快速找到你想要的答案。依赖 RAG 技术，float32 可以获取互联网信息以提供更准确的答复。
 
 ## 尝试一下
 
-<https://float32.app>
+[float32.app](https://float32.app)
+
+## Server 端
+
+float32.app 支持自托管，你可以在本地搭建一个 float32.app 服务。服务相关代码可以参考 [backend/exec/svr/...](backend/exec/svr)
+
+为了能运行，你需要
+- OpenAI API 服务  
+  必须。包括 API Key 和 EndPoint（如适用）
+- Serper.dev 服务  
+  必须。用于获取搜索引擎结果。包括一个 API Key。
+- 一个 MySQL 数据库  
+  可选。用于历史服务，如没有 MySQL 数据库，则历史服务/分享服务不可用。
+
+### .env 文件
+
+.env 文件用于配置服务，你可以参考 [backend/exec/svr/README.md](backend/exec/svr/README.md) 的描述与 [backend/exec/svr/init.go](backend/exec/svr/init.go) 中的实现代码。
+
+```ini
+DEBUG=1                                     # Optional. 1 or 0, 1 means debug mode on.
+LISTEN_ADDR=127.0.0.1:1145                  # Optional, default 0.0.0.0:8080
+
+DB_URL=mysql://root:root@localhost:3306/xxx # Optional
+
+OPENAI=sk-xfeusx233fchwwe239430xxxxxxxxx    # Mandatory. OpenAI API Key
+OPENAI_ENDPOINT=http://localhost:5000       # Optional
+
+SERP_DEV=183fjcs92fwewefhwiu382d8uwjcncsk   # Mandatory, serper.dev's API KEY
+```
+
+## Prompt 与 PromptC 文件
+
+float32.app 使用 promptc 标准来实践 prompt 开发的解耦。请参阅 [promptc.dev](https://promptc.dev/) 与 [promptc-go](https://github.com/promptc/promptc-go) 获得更多信息。
+
+- `code.promptc`：代码相关 prompt
+- `med.promptc`：医学相关的 prompt
