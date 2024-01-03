@@ -34,5 +34,15 @@ SERP_DEV=183fjcs92fwewefhwiu382d8uwjcncsk   # Mandatory. serper.dev's API KEY
 
 float32.app 使用 promptc 标准来实践 prompt 开发的解耦。请参阅 [promptc.dev](https://promptc.dev/) 与 [promptc-go](https://github.com/promptc/promptc-go) 获得更多信息。
 
-- `code.promptc`：代码相关 prompt
-- `med.promptc`：医学相关的 prompt
+所有 float32.app 使用的 prompt 都位于 [prompt](prompt) 目录下。它们包括：
+
+- [`code.promptc`](prompt/code.promptc)：代码相关 prompt
+- [`med.promptc`](prompt/med.promptc)：医学相关的 prompt
+
+目前所有的 prompt 是基于基础模板 [`base.promptc`](prompt/base.promptc) 使用 `sed` 与 [`generate.sh`](prompt/generate.sh) 生成的。
+
+> [!NOTE]
+> 如果你是 macOS，则需要安装 `gsed` 以运行 `generate.sh`。  
+> ```
+> brew install gnu-sed
+> ```
