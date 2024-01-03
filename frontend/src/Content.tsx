@@ -2,10 +2,10 @@ import {Button, NotificationPlugin, Popup, Skeleton} from "tdesign-react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
 import {FileCopyIcon, RefreshIcon, ShareIcon} from "tdesign-icons-react";
-import Markdown from "react-markdown";
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import remarkGfm from 'remark-gfm'
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import './Warning.css'
 import 'katex/dist/katex.min.css'
@@ -92,11 +92,10 @@ export const Content = observer(() => {
         marginBottom: '16px'
       }}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
       <div style={{textAlign: 'left'}}>
-        <Markdown
+        <MarkdownPreview
           remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}
-        >
-          {regularizeMarkdown(ReqStore.currentAns)}
-        </Markdown>
+          source={regularizeMarkdown(ReqStore.currentAns)}
+        />
       </div>
 
       {ReqStore.isLoading ?
