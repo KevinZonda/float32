@@ -56,8 +56,7 @@ func Search(c *gin.Context) {
 	bs, _ := json.Marshal(meta.Evidences)
 	ans.Evidence = string(bs)
 
-	content := llm.Promptc(query.Field, query.Question, query.Language, query.ProgLang, searched)
-	log.Println(content)
+	content := llm.Promptc(query.Language, query.Question, query.Field, query.ProgLang, searched)
 
 	req := openai.ChatCompletionRequest{
 		Temperature:      0.15,
