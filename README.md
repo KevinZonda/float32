@@ -52,3 +52,14 @@ float32.app 使用 promptc 标准来实践 prompt 开发的解耦。请参阅 [p
 > ```bash
 > brew install gnu-sed
 > ```
+
+## 前端
+
+前端使用 pnpm + React + Vite + MobX + TDesign 的结构。请使用以下命令以启动开发服务器：
+
+```bash
+cd frontend
+bash tdesign.sh # 获取 TDesign 资源
+pnpm i
+pnpm dev
+```
