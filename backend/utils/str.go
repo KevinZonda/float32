@@ -102,7 +102,7 @@ func writeSplitByRune(w io.Writer, sb, buf *strings.Builder, delta string, subSt
 	rs := []rune(delta)
 	idx := IndexOfRunes(rs, subStr)
 	if idx < 0 {
-		sb.WriteString(delta)
+		buf.WriteString(delta)
 		return
 	}
 	toPrint := buf.String() + string(rs[:idx+1])
