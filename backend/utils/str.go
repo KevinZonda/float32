@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"io"
 	"strings"
 	"unicode"
 )
@@ -95,4 +96,28 @@ var sensitiveWords = []string{
 	"同城",
 	"少妇",
 	"Google My Maps",
+}
+
+func writeSplitByRune(w io.Writer, sb, buf *strings.Builder, delta string, subStr rune) (needContinue bool) {
+	rs := []rune(delta)
+	idx := IndexOfRunes(rs, subStr)
+	if idx < 0 {
+		return
+	}
+	toPrint := buf.String() + string(rs[:idx+1])
+	w.Write([]byte(toPrint))
+	buf.Reset()
+	sb.WriteString(string(rs[idx+1:]))
+	needContinue = true
+	return
+}
+
+func WriteSplitByRune(w io.Writer, sb, buf *strings.Builder, delta string, subStrs ...rune) (needContinue bool) {
+	for _, subString := range subStrs {
+		if writeSplitByRune(w, sb, buf, delta, subString) {
+			needContinue = true
+			return
+		}
+	}
+	return
 }

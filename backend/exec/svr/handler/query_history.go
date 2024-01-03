@@ -1,15 +1,16 @@
-package main
+package handler
 
 import (
 	"encoding/json"
 	"errors"
 	"github.com/KevinZonda/float32/exec/svr/db"
+	"github.com/KevinZonda/float32/exec/svr/reqmodel"
 	"github.com/KevinZonda/float32/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-func ginHistory(c *gin.Context) {
+func QueryHistory(c *gin.Context) {
 	id := c.Query("id")
 	if id == "" {
 		utils.GinErrorMsg(c, errors.New("id not set"))
@@ -28,7 +29,7 @@ func ginHistory(c *gin.Context) {
 		return
 	}
 
-	var evi []SearchItem
+	var evi []reqmodel.SearchItem
 	if ans.Evidence != "" {
 		_ = json.Unmarshal([]byte(ans.Evidence), &evi)
 	}
@@ -41,7 +42,7 @@ func ginHistory(c *gin.Context) {
 }
 
 type HistoryResponse struct {
-	Question string       `json:"question"`
-	Answer   string       `json:"answer"`
-	Evidence []SearchItem `json:"evidence"`
+	Question string                `json:"question"`
+	Answer   string                `json:"answer"`
+	Evidence []reqmodel.SearchItem `json:"evidence"`
 }

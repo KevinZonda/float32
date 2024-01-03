@@ -4,24 +4,16 @@ import (
 	"fmt"
 	"github.com/KevinZonda/GoX/pkg/iox"
 	"github.com/promptc/promptc-go/prompt"
-	"github.com/sashabaranov/go-openai"
+	"log"
 	"strings"
 )
 
-func Promptc(field string, question string, answerIn string, guide string, context any) string {
-	lang := "English"
-	if answerIn == "zh" {
-		lang = "Chinese (Mandarin)"
-	}
-	return promptc(lang, field, question, guide, context)
-}
-
-func firstPromptStr(ptsName Field, varMap map[string]string) string {
+func systemPrompt(ptsName Field, varMap map[string]string) string {
 	compiled := _pts[ptsName].CompileWithOption(varMap, false)
 	return strings.TrimSpace(compiled.Prompts[0].Prompt)
 }
 
-func promptc(lang string, field string, question string, guide string, context any) string {
+func Promptc(lang string, field string, question string, guide string, context any) string {
 	ptsField := CodeField
 	switch field {
 
@@ -41,50 +33,7 @@ func promptc(lang string, field string, question string, guide string, context a
 		"question": question,
 		"context":  fmt.Sprint(context),
 	}
-	return firstPromptStr(ptsField, varMap)
-}
-
-//func promptcZh(field string, question string, guide string, context any) string {
-//	ptsField := CodeZhField
-//
-//	switch field {
-//	case "med":
-//		ptsField = MedZhField
-//	default: // "code"
-//		ptsField = CodeZhField
-//		if guide != "" {
-//			guide = fmt.Sprintf("如果需要用代码作答，请用 %s 程序语言来表达。", guide)
-//		} else {
-//			guide = "请站在程序员或高级软件工程师的角度作答。用代码作答时，除用户指定的任何编程语言外，请用 Java 编程语言表达。"
-//		}
-//	}
-//
-//	varMap := map[string]string{
-//		"lang":     "简体中文",
-//		"guide":    guide,
-//		"question": question,
-//		"context":  fmt.Sprint(context),
-//	}
-//	return firstPromptStr(ptsField, varMap)
-//}
-
-func Translate(toLang string, content string) []openai.ChatCompletionMessage {
-	varMap := map[string]string{
-		"to":      toLang,
-		"content": content,
-	}
-
-	compiled := _pts[TranslationField].CompileWithOption(varMap, false)
-	return []openai.ChatCompletionMessage{
-		{
-			Content: compiled.Prompts[0].Prompt,
-			Role:    openai.ChatMessageRoleAssistant,
-		},
-		{
-			Content: compiled.Prompts[1].Prompt,
-			Role:    openai.ChatMessageRoleUser,
-		},
-	}
+	return systemPrompt(ptsField, varMap)
 }
 
 type Field string
@@ -92,27 +41,22 @@ type Field string
 const (
 	CodeField Field = "code"
 	MedField  Field = "med"
-	//MedZhField       Field = "med_zh"
-	//CodeZhField      Field = "code_zh"
-	TranslationField Field = "trans"
 )
 
 var _pts map[Field]*prompt.PromptC
 
 func init() {
-	fmt.Println("Loading promptc...")
-	_pts = make(map[Field]*prompt.PromptC)
-	_pts[CodeField] = loadPromptc("code.promptc")
-	_pts[MedField] = loadPromptc("med.promptc")
-	_pts[TranslationField] = loadPromptc("translate.promptc")
-	//_pts[CodeZhField] = loadPromptc("prompt_zh.promptc")
-	//_pts[MedZhField] = loadPromptc("med_prompt_zh.promptc")
+	log.Println("Loading promptc...")
+	_pts = map[Field]*prompt.PromptC{
+		CodeField: loadPromptc("code.promptc"),
+		MedField:  loadPromptc("med.promptc"),
+	}
 }
 
 func loadPromptc(path string) *prompt.PromptC {
 	pt, err := iox.ReadAllText(path)
 	if err != nil {
-		fmt.Println("Failed to load promptc", err)
+		log.Println("Failed to load promptc", err)
 		panic(err)
 	}
 	return prompt.ParsePromptC(pt)

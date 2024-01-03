@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"context"
@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"github.com/KevinZonda/float32/exec/svr/db"
 	"github.com/KevinZonda/float32/exec/svr/dbmodel"
+	"github.com/KevinZonda/float32/exec/svr/reqmodel"
+	"github.com/KevinZonda/float32/exec/svr/shared"
 	"github.com/KevinZonda/float32/llm"
 	"github.com/KevinZonda/float32/rag"
 	"github.com/KevinZonda/float32/utils"
@@ -17,8 +19,8 @@ import (
 	"strings"
 )
 
-func queryQuestion(c *gin.Context) {
-	var query Query
+func Search(c *gin.Context) {
+	var query reqmodel.Query
 	if err := c.BindJSON(&query); err != nil {
 		utils.GinErrorMsg(c, err)
 		return
@@ -48,7 +50,7 @@ func queryQuestion(c *gin.Context) {
 		searched = rag.SearchResultsToText(searchRaw.SpiderResults)
 	}
 	// write meta info to Http
-	meta := newMeta(searchRaw)
+	meta := reqmodel.NewMeta(searchRaw)
 	meta.ID = ans.ID
 	c.String(200, "%s\r\n", meta.Json())
 	bs, _ := json.Marshal(meta.Evidences)
@@ -75,7 +77,7 @@ func queryQuestion(c *gin.Context) {
 
 	var resp *openai.ChatCompletionStream
 
-	resp, err = cli.CreateChatCompletionStream(context.Background(), req)
+	resp, err = shared.Cli.CreateChatCompletionStream(context.Background(), req)
 
 	if err != nil {
 		utils.GinErrorMsg(c, errors.New("LLM backend broken"))
@@ -101,7 +103,7 @@ func queryQuestion(c *gin.Context) {
 		delta = utils.CleanStr(delta)
 		sb.WriteString(delta)
 
-		if writeBySubStrs(w, &sb, &buf, delta, '\n', '.', ';', '。', '？', '?') {
+		if utils.WriteSplitByRune(w, &sb, &buf, delta, '\n', '.', ';', '。', '？', '?') {
 			return true
 		}
 		buf.WriteString(delta)

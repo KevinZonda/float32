@@ -17,7 +17,7 @@ import (
 
 func main() {
 	godotenv.Load(".env")
-	token := os.Getenv("OPENAI_SB")
+	token := os.Getenv("OPENAI")
 	fmt.Println("Work at:", os.Getenv("PWD"))
 	fmt.Println("Token found:", token)
 	cfg := openai.DefaultConfig(token)
@@ -70,20 +70,20 @@ func main() {
 
 		fmt.Println()
 
-		req = openai.ChatCompletionRequest{
-			Model:       openai.GPT3Dot5Turbo,
-			Temperature: 0.3,
-			N:           1,
-			Messages:    llm.Translate("Chinese (Mandarin)", respS),
-		}
-
-		resp, err = cli.CreateChatCompletionStream(context.Background(), req)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Print("<< ")
-		respS, _ = recvByLine(resp)
-		resp.Close()
+		//req = openai.ChatCompletionRequest{
+		//	Model:       openai.GPT3Dot5Turbo,
+		//	Temperature: 0.3,
+		//	N:           1,
+		//	Messages:    llm.Translate("Chinese (Mandarin)", respS),
+		//}
+		//
+		//resp, err = cli.CreateChatCompletionStream(context.Background(), req)
+		//if err != nil {
+		//	panic(err)
+		//}
+		//fmt.Print("<< ")
+		//respS, _ = recvByLine(resp)
+		//resp.Close()
 		history = append(history, openai.ChatCompletionMessage{
 			Content: respS,
 			Role:    openai.ChatMessageRoleAssistant,

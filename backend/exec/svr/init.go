@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/KevinZonda/float32/exec/svr/db"
+	"github.com/KevinZonda/float32/exec/svr/shared"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -10,8 +11,6 @@ import (
 	"os"
 	"strings"
 )
-
-var cli *openai.Client
 
 func initAll() {
 	godotenv.Load(".env")
@@ -36,7 +35,7 @@ func initChatGPT() {
 	if ep != "" {
 		cfg.BaseURL = ep
 	}
-	cli = openai.NewClientWithConfig(cfg)
+	shared.Cli = openai.NewClientWithConfig(cfg)
 }
 
 var g *gin.Engine
