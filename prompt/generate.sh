@@ -12,5 +12,5 @@ med="You are a helpful medicine / doctor assistant built by Float32 AI Lab. Your
 code="You are a helpful coding assistant built by Float32 AI Lab. Your job is to help developers to solve their programming problems. Please think step by step. Describe your plan for what to build in pseudocode, written out in great detail."
 
 
-gsed "s|%JOB_DESCRIPTION%|$med|g"  base.promptc > med.promptc
-gsed "s|%JOB_DESCRIPTION%|$code|g" base.promptc > code.promptc
+$sed "s|%JOB_DESCRIPTION%|$med|g"  base.promptc > med.promptc
+$sed "s|%JOB_DESCRIPTION%|$code|g" base.promptc > code.promptc
