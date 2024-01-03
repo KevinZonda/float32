@@ -10,6 +10,8 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/promptc/promptc-go v0.1.2
 	github.com/sashabaranov/go-openai v1.17.9
+	gorm.io/driver/mysql v1.5.2
+	gorm.io/gorm v1.25.5
 )
 
 require (
@@ -48,6 +50,4 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/mysql v1.5.2 // indirect
-	gorm.io/gorm v1.25.5 // indirect
 )
