@@ -1,7 +1,6 @@
 package reqmodel
 
 import (
-	"log"
 	"strings"
 )
 
@@ -30,7 +29,6 @@ func (q Query) Regularize() Query {
 		q.ProgLang = "golang"
 
 	}
-	log.Println("Regularized query:", q)
 	q.Question = strings.TrimSpace(q.Question)
 	return q
 }
