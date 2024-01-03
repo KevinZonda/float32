@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
+	"log"
 	"os"
 	"strings"
 )
@@ -23,7 +24,8 @@ func initAll() {
 func initDb() {
 	dbUrl := os.Getenv("DB_URL")
 	if dbUrl == "" {
-		panic("DB_URL not set")
+		log.Println("DB_URL not set, HISTORY will not work")
+		return
 	}
 	db.InitDb(dbUrl)
 }
