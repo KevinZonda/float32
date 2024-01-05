@@ -1,10 +1,11 @@
-import {Col, Link, List, Row} from "tdesign-react";
+import {Col, Input, Link, List, Row} from "tdesign-react";
 import {Content} from "./Content.tsx";
 import {observer} from "mobx-react-lite";
 import ReqStore, {Evidence} from "./Store/ReqStore.ts";
 import ListItem from "tdesign-react/es/list/ListItem";
 import {useEffect, useState} from "react";
 import {RelatedQuestion} from "./RelatedQuestion.tsx";
+import {BaseStore} from "./Store/BaseStore.ts";
 
 export const ContentLayout = observer(() => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 720)
@@ -15,26 +16,50 @@ export const ContentLayout = observer(() => {
   return (
     <>
       {
-        ReqStore.prevQA.map((v) => {
+        ReqStore.autoPrevOA.map((v) => {
           return <>
             <ContentLayoutItem
               isMobile={isMobile} loading={false}
               text={v.answer} evidenceList={v.evidence}
-              question={v.question}
+              question={v.question} failed={false}
             />
             <div style={{height: '18px'}}></div>
           </>
         })
       }
 
+
       <ContentLayoutItem
         isMobile={isMobile} loading={ReqStore.isLoading}
         text={ReqStore.currentAns} evidenceList={ReqStore.evidenceList}
-        question={''}
+        question={''} failed={ReqStore.isFailed}
       />
+
+      {
+        !ReqStore.isLoading && ReqStore.currentAns !== '' &&
+          <ContinueAsk/>
+      }
+
     </>
   )
 })
+
+const ContinueAsk = () => {
+
+  return (
+    <Input
+      placeholder="继续提问"
+      size="large"
+      onEnter={(question, e) => {
+        if (e.e.nativeEvent.isComposing || question === '') {
+          return
+        }
+        ReqStore.continuousQuery(question, BaseStore.lang.query, BaseStore.field.field, BaseStore.fieldSpec.query);
+
+      }}
+    />
+  )
+}
 
 
 const ContentLayoutItem = (prop: {
@@ -42,15 +67,16 @@ const ContentLayoutItem = (prop: {
   loading: boolean,
   question: string,
   text: string,
+  failed: boolean,
   evidenceList: Array<Evidence>
 }) => {
   if (prop.isMobile) {
     return (
       <>
-        <Content loading={prop.loading} text={prop.text} question={prop.question}/>
+        <Content failed={prop.failed} loading={prop.loading} text={prop.text} question={prop.question}/>
         <RelatedQuestion/>
         <div style={{height: '30px'}}/>
-        <EvidenceList/>
+        <EvidenceList evidenceList={prop.evidenceList}/>
       </>
     )
   }
@@ -59,19 +85,19 @@ const ContentLayoutItem = (prop: {
     <>
       <Row>
         <Col span={prop.evidenceList && prop.evidenceList.length > 0 ? 8 : 12}>
-          <Content loading={prop.loading} text={prop.text} question={prop.question}/>
+          <Content failed={prop.failed} loading={prop.loading} text={prop.text} question={prop.question}/>
           <RelatedQuestion/>
         </Col>
         <Col style={{textAlign: 'left', paddingLeft: '24px'}}
              span={prop.evidenceList && prop.evidenceList.length > 0 ? 4 : 0}>
-          <EvidenceList/>
+          <EvidenceList evidenceList={prop.evidenceList}/>
         </Col>
       </Row>
     </>)
 }
 
-export const EvidenceList = observer(() => {
-  if (!ReqStore.evidenceList || ReqStore.evidenceList.length === 0) {
+export const EvidenceList = ({evidenceList}: { evidenceList: Array<Evidence> }) => {
+  if (!evidenceList || evidenceList.length === 0) {
     return <></>
   }
   return (
@@ -84,7 +110,7 @@ export const EvidenceList = observer(() => {
         textAlign: 'left'
       }}>{'📖 References'}</h3>
       <List style={{textAlign: 'left'}}>
-        {ReqStore.evidenceList && ReqStore.evidenceList.map((item, idx) => (
+        {evidenceList && evidenceList.map((item, idx) => (
           <ListItem style={{paddingTop: 0, paddingLeft: 0}}>
             <LinkBox title={item.title} url={item.url} idx={idx} description={item.description}/>
           </ListItem>
@@ -92,7 +118,7 @@ export const EvidenceList = observer(() => {
       </List>
     </>
   )
-})
+}
 
 interface LinkBoxProps {
   title: string

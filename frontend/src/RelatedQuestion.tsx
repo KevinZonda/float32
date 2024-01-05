@@ -3,6 +3,9 @@ import ReqStore from "./Store/ReqStore.ts";
 import {Button} from "tdesign-react";
 
 export const RelatedQuestion = observer(() => {
+  return (
+    <></>
+  )
   if (ReqStore.relatedList && ReqStore.relatedList.length === 0) {
     return <></>
   }

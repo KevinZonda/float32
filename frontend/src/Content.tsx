@@ -76,7 +76,7 @@ const Warning = observer(() => {
 })
 
 export const Content = observer((
-  {loading, question, text}: {loading : boolean, question: string,  text: string }) => {
+  {loading, failed, question, text}: {loading : boolean, failed : boolean, question: string,  text: string }) => {
   if (!loading && text === '') {
     return <>
       <Warning/>
@@ -95,7 +95,7 @@ export const Content = observer((
                 marginBlockEnd: 0,
                 textAlign: 'left'
               }}>{'🤔 Question'}</h3>
-              <p style={{textAlign: 'left', paddingBottom: 0, marginBlockStart: 0}}>
+              <p style={{textAlign: 'left', fontSize: '16px', paddingBottom: 0, marginBlockStart: 0}}>
                 {question}
               </p>
           </>
@@ -106,7 +106,7 @@ export const Content = observer((
         marginBlockEnd: 0,
         textAlign: 'left',
         marginBottom: '16px'
-      }}>{ReqStore.isFailed ? '⚠️ Error' : '🔍 Answer'}</h3>
+      }}>{failed ? '⚠️ Error' : '🔍 Answer'}</h3>
       <div style={{textAlign: 'left'}}>
         <MarkdownPreview
           remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}
@@ -121,7 +121,7 @@ export const Content = observer((
         <Skeleton animation={'flashed'} theme={'paragraph'} style={{paddingTop: '16px', paddingBottom: '16px'}}>
           <p>LOAD</p>
         </Skeleton> :
-        <div style={{textAlign: 'left', paddingTop: '16px'}}>
+        <div style={{textAlign: 'left', paddingTop: '16px', paddingBottom: '16px'}}>
           <OperAnswerBtn icon={<FileCopyIcon/>}
                          hoverContent="复制答案"
                          onClick={() => {

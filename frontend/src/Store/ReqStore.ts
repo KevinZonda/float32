@@ -3,7 +3,7 @@ import {BaseStore} from "./BaseStore.ts";
 
 const baseAPI = 'https://api.float32.app/query'
 const historyAPI = 'https://api.float32.app/history?id='
-const continueAPI = 'https://api.float32.app/coninue'
+const continueAPI = 'https://api.float32.app/continue'
 class reqStore {
   public get shareLink() {
     if (!this.shareId || this.shareId === '') {
@@ -42,11 +42,16 @@ class reqStore {
   public prevQA : PrevAnsItem[] = []
   private _parentId = ''
 
+  public get autoPrevOA() {
+    if (this.isLoading) return this.prevQA
+    if (this.prevQA.length < 1) return []
+    return this.prevQA.slice(0, this.prevQA.length - 1)
+  }
+
   private resetCore() {
     this.isFailed = false
     this.currentAns = ''
     this.evidenceList = []
-    this.prevQA = []
   }
 
   public async queryHistory(id: string) {
@@ -55,6 +60,7 @@ class reqStore {
     this._currentHistory = id
     this.shareId = id
     this._parentId = id
+    this.prevQA = []
 
     this.resetCore()
     this.isLoading = true
@@ -73,6 +79,7 @@ class reqStore {
           BaseStore.question = this.question = json.question ?? ''
           this.evidenceList = json.evidence ?? []
           this.relatedList = json.related ?? []
+          this.pushQA(this.question, this.currentAns, this.evidenceList)
         })
       })
 
@@ -86,7 +93,7 @@ class reqStore {
     })
   }
 
-  private async afterResponse(resp : Promise<Response>) {
+  private async afterResponse(question: string, resp : Promise<Response>) {
     resp.then(async (res) => {
       let buf = ''
       let hasDoneMeta = false
@@ -107,13 +114,16 @@ class reqStore {
             const metaObj: AnsMetaInfo = JSON.parse(meta)
             this.evidenceList = metaObj.evidences
             this.currentAns = buf.slice(idx + 2)
-            this.shareId = metaObj.id
+                        this.shareId = metaObj.id
             this._parentId = metaObj.id
+            this.relatedList = metaObj.related ?? []
             window.history.replaceState(null, '', '/search?id=' + metaObj.id)
             hasDoneMeta = true
             continue
           }
         }
+        this.pushQA(question,this.currentAns, this.evidenceList)
+
         if (done) break;
       }
       this.isLoading = false
@@ -132,6 +142,7 @@ class reqStore {
     this.isLoading = true
     this.shareId = ''
     this._parentId = ''
+    this.prevQA = []
 
     const fresp =  fetch(baseAPI, {
       method: 'POST',
@@ -145,18 +156,21 @@ class reqStore {
         'field': field,
       })
     })
-    await this.afterResponse(fresp)
+    await this.afterResponse(question, fresp)
+  }
+
+  private pushQA(question: string, answer: string, evidence: Evidence[]) {
+    this.prevQA.push({
+      question: question,
+      answer: answer,
+      evidence: evidence,
+    })
   }
 
 
 
   public async continuousQuery(question: string, lang: string, field: string, spec: string) {
     if (this.isLoading) return
-    this.prevQA.push({
-      question: question,
-      answer: this.currentAns,
-      evidence: this.evidenceList,
-    })
     this.resetCore()
     this.isLoading = true
     const fresp =  fetch(continueAPI, {
@@ -172,13 +186,14 @@ class reqStore {
         'parent_id': this._parentId,
       })
     })
-    await this.afterResponse(fresp)
+    await this.afterResponse(question, fresp)
   }
 }
 
 export interface AnsMetaInfo {
   evidences: Evidence[]
   id: string
+  related: string[]
 }
 
 export interface Evidence {
