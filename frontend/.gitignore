@@ -25,3 +25,5 @@ dist-ssr
 
 tdesign.min.css
 tdesign.min.js
+public/tdesign.min.js
+public/tdesign.min.css
