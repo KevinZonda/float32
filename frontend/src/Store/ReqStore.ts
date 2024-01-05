@@ -74,7 +74,7 @@ class reqStore {
     })
   }
 
-  public async queryQuestion(question: string, lang: string, field : string, progLang: string) {
+  public async queryQuestion(question: string, lang: string, field : string, spec: string) {
     if (this.isLoading) return
 
     this.isLoading = true
@@ -91,7 +91,7 @@ class reqStore {
       body: JSON.stringify({
         'question': question,
         'language': lang,
-        'prog_lang': progLang,
+        'prog_lang': spec,
         'field': field,
       })
     }).then(async (res) => {

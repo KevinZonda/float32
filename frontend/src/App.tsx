@@ -29,6 +29,18 @@ export const App = observer(() => {
   const id = query.get('id')
   if (id && id !== '') {
     ReqStore.queryHistory(id);
+  } else {
+    const q = query.get('q')
+    if (q && q !== '') {
+      const field = query.get('field') ?? '' // field
+      const lang = query.get('lang') ?? '' // lang
+      const spec = query.get('spec') ?? '' // spec
+      BaseStore.fieldSpec = fieldSpec
+      BaseStore.question = q
+      ReqStore.question = q
+      // TODO: sync field & spec to state
+      ReqStore.queryQuestion(q, lang, field, spec);
+    }
   }
 
   const nav = useNavigate()
