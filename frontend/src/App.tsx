@@ -27,7 +27,7 @@ export const App = observer(() => {
 
   const query = useQuery();
   const id = query.get('id')
-  if (id && id !== '') {
+  if (id && id !== '' && id !== ReqStore.shareId) {
     ReqStore.queryHistory(id);
   } else {
     const q = query.get('q')
