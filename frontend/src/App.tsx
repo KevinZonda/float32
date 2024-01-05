@@ -30,8 +30,8 @@ export const App = observer(() => {
   if (id && id !== '' && id !== ReqStore.shareId) {
     ReqStore.queryHistory(id);
   } else {
-    const q = query.get('q')
-    if (q && q !== '') {
+    const q = (query.get('q') ?? '').trim()
+    if (q && q !== '' && q !== ReqStore.question) {
       const field = query.get('field') ?? 'code' // field
       const lang = query.get('lang') ?? 'zh' // lang
       const spec = query.get('spec') ?? '' // spec
