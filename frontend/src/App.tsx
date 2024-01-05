@@ -44,9 +44,7 @@ export const App = observer(() => {
 
   return (
     <>
-      <div style={{width: '100%', textAlign: 'center'}} onClick={() => {
-        ReqStore.isRainbow = !ReqStore.isRainbow
-      }}>
+      <div style={{width: '100%', textAlign: 'center'}}>
         <h1 style={{
           fontFamily: `'PT Sans Narrow', sans-serif`,
           color: 'black',
@@ -58,8 +56,18 @@ export const App = observer(() => {
           paddingRight: '8px',
           marginBottom: '12px',
           borderRadius: '8px',
+          cursor: 'pointer',
+          userSelect: 'none'
         }}
             className={ReqStore.isRainbow ? 'rainbow' : ''}
+            onClick={() => {
+              console.log(window.location.pathname)
+              if (window.location.pathname !== '/') {
+                window.location.href = '/'
+              } else {
+                ReqStore.isRainbow = !ReqStore.isRainbow
+              }
+            }}
         >
           <span style={{fontFamily: `'PT Sans', sans-serif`, fontStyle: 'italic'}}>float32 AI</span>
           <span style={{fontFamily: `'PT Sans Narrow', sans-serif`, fontStyle: 'italic'}}>: Search Done Right</span>
