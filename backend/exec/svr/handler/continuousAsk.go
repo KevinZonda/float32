@@ -69,5 +69,7 @@ func ContinuousAsk(c *gin.Context) {
 		},
 	}
 
-	chatStreamToGin(c, req)
+	ans.FirstAnswer = chatStreamToGin(c, req)
+	ans.IsOk = true
+	db.UpdateAnswer(ans)
 }
