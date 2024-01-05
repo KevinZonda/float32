@@ -32,8 +32,8 @@ export const App = observer(() => {
   } else {
     const q = query.get('q')
     if (q && q !== '') {
-      const field = query.get('field') ?? '' // field
-      const lang = query.get('lang') ?? '' // lang
+      const field = query.get('field') ?? 'code' // field
+      const lang = query.get('lang') ?? 'zh' // lang
       const spec = query.get('spec') ?? '' // spec
       BaseStore.fieldSpec = fieldSpec
       BaseStore.question = q
