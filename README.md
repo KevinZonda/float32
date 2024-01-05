@@ -5,6 +5,11 @@ float32 是一个基于大语言模型驱动的搜索引擎，它可以帮助你
 > [!NOTE]
 > 尝试一下 [float32.app](https://float32.app)
 
+## Acknowledged
+
+This project is affiliated to [Limit-LAB](https://github.com/Limit-LAB).  
+Special thanks to [@ZincCat](https://github.com/zinccat).
+
 ## Server 端
 
 float32.app 支持自托管，你可以在本地搭建一个 float32.app 服务。服务相关代码可以参考 [backend/exec/svr/...](backend/exec/svr)
