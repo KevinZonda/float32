@@ -44,6 +44,9 @@ var g *gin.Engine
 
 func initGin() {
 	g = gin.Default()
+	g = gin.New()
+	g.Use(gin.Logger(), gin.Recovery())
+
 	config := cors.DefaultConfig()
 	if strings.TrimSpace(os.Getenv("DEBUG")) == "1" {
 		gin.SetMode(gin.DebugMode)
@@ -51,7 +54,9 @@ func initGin() {
 		g.Use(cors.New(config))
 	} else {
 		gin.SetMode(gin.ReleaseMode)
-		config.AllowOrigins = []string{"https://float32.app"}
+		ao := os.Getenv("ALLOW_ORIGINS")
+		config.AllowOrigins = strings.Split(ao, " ")
+		//config.AllowOrigins = []string{"https://float32.app"}
 	}
 	g.Use(cors.New(config))
 }

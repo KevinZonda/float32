@@ -41,6 +41,7 @@ DB_URL=mysql://root:root@localhost:3306/xxx # Optional
 OPENAI=sk-xfeusx233fchwwe239430xxxxxxxxx    # Mandatory. OpenAI API Key
 OPENAI_ENDPOINT=http://localhost:5000       # Optional
 SERP_DEV=183fjcs92fwewefhwiu382d8uwjcncsk   # Mandatory. serper.dev's API KEY
+ALLOW_ORIGINS=https://float32.app           # Optional, CORS, split by space
 ```
 
 ## Prompt 与 PromptC 文件

@@ -12,4 +12,9 @@ OPENAI=sk-xfeusx233fchwwe239430xxxxxxxxx    # Mandatory. OpenAI API Key
 OPENAI_ENDPOINT=http://localhost:5000       # Optional
 
 SERP_DEV=183fjcs92fwewefhwiu382d8uwjcncsk   # Mandatory, serper.dev's API KEY
+ALLOW_ORIGINS=https://float32.app           # Optional, CORS, split by space
 ```
+
+## Debug 模式
+
+在此模式 CORS 将会被配置为 Allows All Origins，且 gin 会使用 Debug 模式。
