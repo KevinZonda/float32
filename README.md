@@ -3,7 +3,9 @@
 float32 是一个基于大语言模型驱动的搜索助手，它可以帮助你快速找到你想要的答案。依赖 RAG 技术，float32 可以获取互联网信息以提供更准确的答复。
 
 > [!TIP]
-> 尝试一下 [float32.app](https://float32.app)
+> 尝试一下 [float32.app](https://float32.app)。
+> 如果你对 float32 的 prompt 感兴趣，可以看看 [📁 ./prompt/*.promptc](prompt/)。
+> 里面的 `.promptc` 文件记录了你感兴趣的东西。
 
 ## Acknowledged
 
