@@ -76,7 +76,7 @@ const Warning = observer(() => {
 })
 
 export const Content = observer((
-  {loading, failed, question, text}: {loading : boolean, failed : boolean, question: string,  text: string }) => {
+  {shareId, loading, failed, question, text}: {shareId: string, loading : boolean, failed : boolean, question: string,  text: string }) => {
   if (!loading && text === '') {
     return <>
       <Warning/>
@@ -132,7 +132,7 @@ export const Content = observer((
           <OperAnswerBtn icon={<ShareIcon/>}
                          hoverContent="复制分享链接"
                          onClick={() => {
-                           navigator.clipboard.writeText(ReqStore.shareLink)
+                           navigator.clipboard.writeText(ReqStore.shareLink(shareId))
                            notifySuccess('分享链接', '复制成功');
                          }}
           />

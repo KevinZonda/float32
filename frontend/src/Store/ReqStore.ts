@@ -4,12 +4,13 @@ import {BaseStore} from "./BaseStore.ts";
 const baseAPI = 'https://api.float32.app/query'
 const historyAPI = 'https://api.float32.app/history?id='
 const continueAPI = 'https://api.float32.app/continue'
+
 class reqStore {
-  public get shareLink() {
-    if (!this.shareId || this.shareId === '') {
+  public shareLink(shareId: string) {
+    if (!shareId || shareId === '') {
       return 'https://float32.app'
     }
-    return 'https://float32.app/search?id=' + this.shareId
+    return 'https://float32.app/search?id=' + shareId
   }
 
   public constructor() {
@@ -39,7 +40,7 @@ class reqStore {
   public warning = ''
   public currentAns: string = ''
   private _currentHistory = ''
-  public prevQA : PrevAnsItem[] = []
+  public prevQA: PrevAnsItem[] = []
   private _parentId = ''
 
   public get autoPrevOA() {
@@ -79,7 +80,7 @@ class reqStore {
           BaseStore.question = this.question = json.question ?? ''
           this.evidenceList = json.evidence ?? []
           this.relatedList = json.related ?? []
-          this.pushQA(this.question, this.currentAns, this.evidenceList)
+          this.pushQA(id, this.question, this.currentAns, this.evidenceList)
         })
       })
 
@@ -93,7 +94,7 @@ class reqStore {
     })
   }
 
-  private async afterResponse(question: string, resp : Promise<Response>) {
+  private async afterResponse(question: string, resp: Promise<Response>) {
     resp.then(async (res) => {
       let buf = ''
       let hasDoneMeta = false
@@ -114,7 +115,7 @@ class reqStore {
             const metaObj: AnsMetaInfo = JSON.parse(meta)
             this.evidenceList = metaObj.evidences
             this.currentAns = buf.slice(idx + 2)
-                        this.shareId = metaObj.id
+            this.shareId = metaObj.id
             this._parentId = metaObj.id
             this.relatedList = metaObj.related ?? []
             window.history.replaceState(null, '', '/search?id=' + metaObj.id)
@@ -122,7 +123,7 @@ class reqStore {
             continue
           }
         }
-        this.pushQA(question,this.currentAns, this.evidenceList)
+        this.pushQA(this.shareId, question, this.currentAns, this.evidenceList)
 
         if (done) break;
       }
@@ -144,7 +145,7 @@ class reqStore {
     this._parentId = ''
     this.prevQA = []
 
-    const fresp =  fetch(baseAPI, {
+    const fresp = fetch(baseAPI, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -159,21 +160,21 @@ class reqStore {
     await this.afterResponse(question, fresp)
   }
 
-  private pushQA(question: string, answer: string, evidence: Evidence[]) {
+  private pushQA(shareId: string, question: string, answer: string, evidence: Evidence[]) {
     this.prevQA.push({
       question: question,
       answer: answer,
       evidence: evidence,
+      shareId: shareId
     })
   }
-
 
 
   public async continuousQuery(question: string, lang: string, field: string, spec: string) {
     if (this.isLoading) return
     this.resetCore()
     this.isLoading = true
-    const fresp =  fetch(continueAPI, {
+    const fresp = fetch(continueAPI, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -206,6 +207,7 @@ export interface PrevAnsItem {
   question: string
   answer: string
   evidence: Evidence[]
+  shareId: string
 }
 
 export default new reqStore()

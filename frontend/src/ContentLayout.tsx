@@ -22,6 +22,7 @@ export const ContentLayout = observer(() => {
               isMobile={isMobile} loading={false}
               text={v.answer} evidenceList={v.evidence}
               question={v.question} failed={false}
+              shareId={v.shareId}
             />
             <div style={{height: '18px'}}></div>
           </>
@@ -33,6 +34,7 @@ export const ContentLayout = observer(() => {
         isMobile={isMobile} loading={ReqStore.isLoading}
         text={ReqStore.currentAns} evidenceList={ReqStore.evidenceList}
         question={''} failed={ReqStore.isFailed}
+        shareId={ReqStore.shareId}
       />
 
       {
@@ -68,12 +70,13 @@ const ContentLayoutItem = (prop: {
   question: string,
   text: string,
   failed: boolean,
-  evidenceList: Array<Evidence>
+  evidenceList: Array<Evidence>,
+  shareId: string
 }) => {
   if (prop.isMobile) {
     return (
       <>
-        <Content failed={prop.failed} loading={prop.loading} text={prop.text} question={prop.question}/>
+        <Content shareId={prop.shareId} failed={prop.failed} loading={prop.loading} text={prop.text} question={prop.question}/>
         <RelatedQuestion/>
         <div style={{height: '30px'}}/>
         <EvidenceList evidenceList={prop.evidenceList}/>
@@ -85,7 +88,7 @@ const ContentLayoutItem = (prop: {
     <>
       <Row>
         <Col span={prop.evidenceList && prop.evidenceList.length > 0 ? 8 : 12}>
-          <Content failed={prop.failed} loading={prop.loading} text={prop.text} question={prop.question}/>
+          <Content shareId={prop.shareId} failed={prop.failed} loading={prop.loading} text={prop.text} question={prop.question}/>
           <RelatedQuestion/>
         </Col>
         <Col style={{textAlign: 'left', paddingLeft: '24px'}}
