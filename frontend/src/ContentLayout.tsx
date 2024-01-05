@@ -1,7 +1,7 @@
 import {Col, Link, List, Row} from "tdesign-react";
 import {Content} from "./Content.tsx";
 import {observer} from "mobx-react-lite";
-import ReqStore from "./Store/ReqStore.ts";
+import ReqStore, {Evidence} from "./Store/ReqStore.ts";
 import ListItem from "tdesign-react/es/list/ListItem";
 import {useEffect, useState} from "react";
 import {RelatedQuestion} from "./RelatedQuestion.tsx";
@@ -12,13 +12,45 @@ export const ContentLayout = observer(() => {
     window.addEventListener("resize", () => setIsMobile(window.innerWidth < 720))
   })
 
-  if (isMobile) {
+  return (
+    <>
+      {
+        ReqStore.prevQA.map((v) => {
+          return <>
+            <ContentLayoutItem
+              isMobile={isMobile} loading={false}
+              text={v.answer} evidenceList={v.evidence}
+              question={v.question}
+            />
+            <div style={{height: '18px'}}></div>
+          </>
+        })
+      }
+
+      <ContentLayoutItem
+        isMobile={isMobile} loading={ReqStore.isLoading}
+        text={ReqStore.currentAns} evidenceList={ReqStore.evidenceList}
+        question={''}
+      />
+    </>
+  )
+})
+
+
+const ContentLayoutItem = (prop: {
+  isMobile: boolean,
+  loading: boolean,
+  question: string,
+  text: string,
+  evidenceList: Array<Evidence>
+}) => {
+  if (prop.isMobile) {
     return (
       <>
-        <Content loading={ReqStore.isLoading} text={ReqStore.currentAns}/>
+        <Content loading={prop.loading} text={prop.text} question={prop.question}/>
         <RelatedQuestion/>
         <div style={{height: '30px'}}/>
-        <Evidence/>
+        <EvidenceList/>
       </>
     )
   }
@@ -26,19 +58,19 @@ export const ContentLayout = observer(() => {
   return (
     <>
       <Row>
-        <Col span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 8 : 12}>
-          <Content loading={ReqStore.isLoading}  text={ReqStore.currentAns}/>
+        <Col span={prop.evidenceList && prop.evidenceList.length > 0 ? 8 : 12}>
+          <Content loading={prop.loading} text={prop.text} question={prop.question}/>
           <RelatedQuestion/>
         </Col>
         <Col style={{textAlign: 'left', paddingLeft: '24px'}}
-             span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 4 : 0}>
-          <Evidence/>
+             span={prop.evidenceList && prop.evidenceList.length > 0 ? 4 : 0}>
+          <EvidenceList/>
         </Col>
       </Row>
     </>)
-})
+}
 
-export const Evidence = observer(() => {
+export const EvidenceList = observer(() => {
   if (!ReqStore.evidenceList || ReqStore.evidenceList.length === 0) {
     return <></>
   }

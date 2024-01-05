@@ -76,7 +76,7 @@ const Warning = observer(() => {
 })
 
 export const Content = observer((
-  {loading, text}: {loading : boolean,  text: string }) => {
+  {loading, question, text}: {loading : boolean, question: string,  text: string }) => {
   if (!loading && text === '') {
     return <>
       <Warning/>
@@ -85,6 +85,21 @@ export const Content = observer((
   return (
     <>
       <Warning/>
+      {
+        question && question !== '' &&
+          <>
+              <h3 style={{
+                paddingBottom: '16px',
+                marginBlock: 0,
+                marginBlockStart: 0,
+                marginBlockEnd: 0,
+                textAlign: 'left'
+              }}>{'🤔 Question'}</h3>
+              <p style={{textAlign: 'left', paddingBottom: 0, marginBlockStart: 0}}>
+                {question}
+              </p>
+          </>
+      }
       <h3 style={{
         marginBlock: 0,
         marginBlockStart: 0,
