@@ -75,8 +75,9 @@ const Warning = observer(() => {
   )
 })
 
-export const Content = observer(() => {
-  if (!ReqStore.isLoading && ReqStore.currentAns === '') {
+export const Content = observer((
+  {loading, text}: {loading : boolean,  text: string }) => {
+  if (!loading && text === '') {
     return <>
       <Warning/>
     </>
@@ -94,14 +95,14 @@ export const Content = observer(() => {
       <div style={{textAlign: 'left'}}>
         <MarkdownPreview
           remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}
-          source={regularizeMarkdown(ReqStore.currentAns)}
+          source={regularizeMarkdown(text)}
           wrapperElement={{
             "data-color-mode": "light"
           }}
         />
       </div>
 
-      {ReqStore.isLoading ?
+      {loading ?
         <Skeleton animation={'flashed'} theme={'paragraph'} style={{paddingTop: '16px', paddingBottom: '16px'}}>
           <p>LOAD</p>
         </Skeleton> :
@@ -109,7 +110,7 @@ export const Content = observer(() => {
           <OperAnswerBtn icon={<FileCopyIcon/>}
                          hoverContent="复制答案"
                          onClick={() => {
-                           navigator.clipboard.writeText(regularizeMarkdown(ReqStore.currentAns))
+                           navigator.clipboard.writeText(regularizeMarkdown(text))
                            notifySuccess('内容', '复制成功');
                          }}
           />

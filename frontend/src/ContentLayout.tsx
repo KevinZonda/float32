@@ -15,7 +15,7 @@ export const ContentLayout = observer(() => {
   if (isMobile) {
     return (
       <>
-        <Content/>
+        <Content loading={ReqStore.isLoading} text={ReqStore.currentAns}/>
         <RelatedQuestion/>
         <div style={{height: '30px'}}/>
         <Evidence/>
@@ -27,7 +27,7 @@ export const ContentLayout = observer(() => {
     <>
       <Row>
         <Col span={ReqStore.evidenceList && ReqStore.evidenceList.length > 0 ? 8 : 12}>
-          <Content/>
+          <Content loading={ReqStore.isLoading}  text={ReqStore.currentAns}/>
           <RelatedQuestion/>
         </Col>
         <Col style={{textAlign: 'left', paddingLeft: '24px'}}

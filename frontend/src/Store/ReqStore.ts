@@ -3,6 +3,7 @@ import {BaseStore} from "./BaseStore.ts";
 
 const baseAPI = 'https://api.float32.app/query'
 const historyAPI = 'https://api.float32.app/history?id='
+const continueAPI = 'https://api.float32.app/coninue'
 class reqStore {
   public get shareLink() {
     if (!this.shareId || this.shareId === '') {
@@ -14,6 +15,7 @@ class reqStore {
   public constructor() {
     makeAutoObservable(this)
   }
+
   public isRainbow = false
 
   public evidenceList: Array<Evidence> = []
@@ -23,9 +25,11 @@ class reqStore {
   public get isLoading() {
     return this._isLoading
   }
+
   public set isLoading(v: boolean) {
     this._isLoading = v
   }
+
   public _isLoading: boolean = false
   //endregion
 
@@ -35,18 +39,26 @@ class reqStore {
   public warning = ''
   public currentAns: string = ''
   private _currentHistory = ''
+  public prevQA : PrevAnsItem[] = []
+  private _parentId = ''
+
+  private resetCore() {
+    this.isFailed = false
+    this.currentAns = ''
+    this.evidenceList = []
+    this.prevQA = []
+  }
 
   public async queryHistory(id: string) {
     if (this.isLoading) return
     if (id === this._currentHistory) return
     this._currentHistory = id
     this.shareId = id
+    this._parentId = id
 
+    this.resetCore()
     this.isLoading = true
-    this.isFailed = false
-    this.currentAns = ''
-    this.evidenceList = []
-    await fetch(historyAPI+id, {
+    await fetch(historyAPI + id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -74,27 +86,8 @@ class reqStore {
     })
   }
 
-  public async queryQuestion(question: string, lang: string, field : string, spec: string) {
-    if (this.isLoading) return
-
-    this.isLoading = true
-    this.isFailed = false
-    this.currentAns = ''
-    this.evidenceList = []
-    this.shareId = ''
-
-    await fetch(baseAPI, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'question': question,
-        'language': lang,
-        'prog_lang': spec,
-        'field': field,
-      })
-    }).then(async (res) => {
+  private async afterResponse(resp : Promise<Response>) {
+    resp.then(async (res) => {
       let buf = ''
       let hasDoneMeta = false
       const reader = res.body!.pipeThrough(new TextDecoderStream()).getReader();
@@ -111,10 +104,11 @@ class reqStore {
           if (idx !== -1) {
             const meta = buf.slice(0, idx)
             console.log(meta)
-            const metaObj : AnsMetaInfo = JSON.parse(meta)
+            const metaObj: AnsMetaInfo = JSON.parse(meta)
             this.evidenceList = metaObj.evidences
             this.currentAns = buf.slice(idx + 2)
             this.shareId = metaObj.id
+            this._parentId = metaObj.id
             window.history.replaceState(null, '', '/search?id=' + metaObj.id)
             hasDoneMeta = true
             continue
@@ -130,6 +124,56 @@ class reqStore {
       return
     })
   }
+
+  public async queryQuestion(question: string, lang: string, field: string, spec: string) {
+    if (this.isLoading) return
+
+    this.resetCore()
+    this.isLoading = true
+    this.shareId = ''
+    this._parentId = ''
+
+    const fresp =  fetch(baseAPI, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'question': question,
+        'language': lang,
+        'prog_lang': spec,
+        'field': field,
+      })
+    })
+    await this.afterResponse(fresp)
+  }
+
+
+
+  public async continuousQuery(question: string, lang: string, field: string, spec: string) {
+    if (this.isLoading) return
+    this.prevQA.push({
+      question: question,
+      answer: this.currentAns,
+      evidence: this.evidenceList,
+    })
+    this.resetCore()
+    this.isLoading = true
+    const fresp =  fetch(continueAPI, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'question': question,
+        'language': lang,
+        'prog_lang': spec,
+        'field': field,
+        'parent_id': this._parentId,
+      })
+    })
+    await this.afterResponse(fresp)
+  }
 }
 
 export interface AnsMetaInfo {
@@ -137,10 +181,16 @@ export interface AnsMetaInfo {
   id: string
 }
 
-export  interface Evidence {
+export interface Evidence {
   url: string
   title: string
   description: string
+}
+
+export interface PrevAnsItem {
+  question: string
+  answer: string
+  evidence: Evidence[]
 }
 
 export default new reqStore()
