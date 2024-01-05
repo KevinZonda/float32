@@ -1,16 +1,18 @@
 import {makeAutoObservable, runInAction} from "mobx";
 import {BaseStore} from "./BaseStore.ts";
+import {BaseAPI, BaseWeb} from "../Config.ts";
 
-const baseAPI = 'https://api.float32.app/query'
-const historyAPI = 'https://api.float32.app/history?id='
-const continueAPI = 'https://api.float32.app/continue'
+
+const queryAPI = BaseAPI + '/query'
+const historyAPI = BaseAPI + '/history?id='
+const continueAPI = BaseAPI + '/continue'
 
 class reqStore {
   public shareLink(shareId: string) {
     if (!shareId || shareId === '') {
-      return 'https://float32.app'
+      return BaseWeb
     }
-    return 'https://float32.app/search?id=' + shareId
+    return BaseWeb + '/search?id=' + shareId
   }
 
   public constructor() {
@@ -145,7 +147,7 @@ class reqStore {
     this._parentId = ''
     this.prevQA = []
 
-    const fresp = fetch(baseAPI, {
+    const fresp = fetch(queryAPI, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
