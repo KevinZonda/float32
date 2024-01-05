@@ -61,7 +61,6 @@ export const App = observer(() => {
         }}
             className={ReqStore.isRainbow ? 'rainbow' : ''}
             onClick={() => {
-              console.log(window.location.pathname)
               if (window.location.pathname !== '/') {
                 window.location.href = '/'
               } else {
