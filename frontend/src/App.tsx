@@ -3,13 +3,12 @@ import {Button, Dropdown, Input} from "tdesign-react";
 import React, {useEffect, useState} from "react";
 import ReqStore from "./Store/ReqStore.ts";
 import {observer} from "mobx-react-lite";
-import {useNavigate} from "react-router-dom";
 import {ContentLayout} from "./ContentLayout.tsx";
 import {langOpt, fieldsOpt, IField, ReactIcon} from "./Store/const.tsx";
 import {BaseStore} from "./Store/BaseStore.ts";
 import {RiQuestionAnswerLine} from "react-icons/ri";
-import {MdOutlineInfo} from "react-icons/md";
 import {Conditional, useQuery} from "./CommonComponents.tsx";
+import {FaGithub} from "react-icons/fa";
 
 const dropdownBtnStyle = {paddingRight: '8px', paddingLeft: '8px'}
 
@@ -43,7 +42,6 @@ export const App = observer(() => {
     }
   }
 
-  const nav = useNavigate()
   return (
     <>
       <div style={{width: '100%', textAlign: 'center'}} onClick={() => {
@@ -132,11 +130,9 @@ export const App = observer(() => {
 
       <Conditional condition={!isMobile}>
         <Button style={dropdownBtnStyle} theme="default" variant="text"
-                icon={<ReactIcon><MdOutlineInfo/></ReactIcon>}
-                onClick={() => {
-                  nav('/about')
-                }}>
-          关于
+                icon={<ReactIcon><FaGithub/></ReactIcon>}
+                href="https://github.com/KevinZonda/float32">
+          GitHub
         </Button>
       </Conditional>
 
