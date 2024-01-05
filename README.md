@@ -7,6 +7,8 @@ float32 是一个基于大语言模型驱动的搜索助手，它可以帮助你
 
 ## Acknowledged
 
+<a href="https://limit.dev"><img width="50" height="50" align="left" style="float: left; margin: 0 0px 0 0; margin-left: 10px;" alt="Limit-LAB logo" src="https://avatars.githubusercontent.com/u/116355161?s=200&v=4"></a>
+
 This project is affiliated to [Limit-LAB](https://github.com/Limit-LAB).  
 Special thanks to [@ZincCat](https://github.com/zinccat).
 
