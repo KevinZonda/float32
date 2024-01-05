@@ -1,6 +1,7 @@
 package reqmodel
 
 import (
+	"github.com/KevinZonda/float32/utils"
 	"strings"
 )
 
@@ -31,4 +32,23 @@ func (q Query) Regularize() Query {
 	}
 	q.Question = strings.TrimSpace(q.Question)
 	return q
+}
+
+func (q Query) Locale() string {
+	if q.Field == "med" {
+		return "en"
+	}
+	return ""
+}
+
+func (q Query) Country() string {
+	if utils.StrContains(q.ProgLang, "nhs", "nice") {
+		return "gb"
+	}
+	return "us"
+}
+
+type ContinuousAskQuery struct {
+	Query
+	ParentId string `json:"parent_id"`
 }

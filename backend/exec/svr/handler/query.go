@@ -2,9 +2,7 @@ package handler
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/KevinZonda/float32/exec/svr/db"
 	"github.com/KevinZonda/float32/exec/svr/dbmodel"
 	"github.com/KevinZonda/float32/exec/svr/reqmodel"
@@ -36,16 +34,7 @@ func Search(c *gin.Context) {
 	})
 
 	searched := ""
-	// TODO: Country fix
-	country := "us"
-	if utils.StrContains(query.ProgLang, "nhs", "nice") {
-		country = "gb"
-	}
-	locale := ""
-	if query.Field == "med" {
-		locale = "en"
-	}
-	searchRaw, err := rag.SearchRaw(country, locale, query.ProgLang+", "+query.Question)
+	searchRaw, err := rag.SearchRaw(query.Country(), query.Locale(), query.ProgLang+", "+query.Question)
 	if err == nil {
 		searched = rag.SearchResultsToText(searchRaw.SpiderResults)
 	}
@@ -53,17 +42,14 @@ func Search(c *gin.Context) {
 	meta := reqmodel.NewMeta(searchRaw)
 	meta.ID = ans.ID
 	c.String(200, "%s\r\n", meta.Json())
-	bs, _ := json.Marshal(meta.Evidences)
-	ans.Evidence = string(bs)
+	ans.Evidence = utils.Json(meta.Evidences)
 
 	content := llm.Promptc(query.Language, query.Question, query.Field, query.ProgLang, searched)
 
 	req := openai.ChatCompletionRequest{
-		Temperature:      0.15,
-		N:                1,
-		PresencePenalty:  0,
-		FrequencyPenalty: 0,
-		Model:            openai.GPT3Dot5Turbo1106,
+		Temperature: 0.15,
+		N:           1,
+		Model:       openai.GPT3Dot5Turbo1106,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Content: content,
@@ -76,9 +62,16 @@ func Search(c *gin.Context) {
 		},
 	}
 
+	ans.FirstAnswer = chatStreamToGin(c, req)
+	ans.IsOk = true
+	db.UpdateAnswer(ans)
+	//log.Println("COUNT:", strings.Count(sb.String(), "\n"))
+}
+
+func chatStreamToGin(c *gin.Context, req openai.ChatCompletionRequest) (completeAns string) {
 	var resp *openai.ChatCompletionStream
 
-	resp, err = shared.Cli.CreateChatCompletionStream(context.Background(), req)
+	resp, err := shared.Cli.CreateChatCompletionStream(context.Background(), req)
 
 	if err != nil {
 		utils.GinErrorMsg(c, errors.New("LLM backend broken"))
@@ -109,9 +102,6 @@ func Search(c *gin.Context) {
 		}
 		return true
 	})
-	fmt.Println(sb.String(), "\n->", ans)
-	ans.FirstAnswer = sb.String()
-	ans.IsOk = true
-	db.UpdateAnswer(ans)
-	//log.Println("COUNT:", strings.Count(sb.String(), "\n"))
+	completeAns = sb.String()
+	return
 }

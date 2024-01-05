@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"io"
 	"strings"
 	"unicode"
@@ -123,4 +124,9 @@ func WriteSplitByRune(w io.Writer, buf *strings.Builder, delta string, subStrs .
 	}
 	buf.WriteString(delta)
 	return
+}
+
+func Json(v any) string {
+	bs, _ := json.Marshal(v)
+	return string(bs)
 }
