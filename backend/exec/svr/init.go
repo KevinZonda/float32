@@ -43,7 +43,6 @@ func initChatGPT() {
 var g *gin.Engine
 
 func initGin() {
-	g = gin.Default()
 	g = gin.New()
 	g.Use(gin.Logger(), gin.Recovery())
 
