@@ -23,6 +23,7 @@ export const ContentLayout = observer(() => {
               text={v.answer} evidenceList={v.evidence}
               question={v.question} failed={false}
               shareId={v.shareId}
+              key={v.shareId}
             />
             <div style={{height: '18px'}}></div>
           </>
@@ -33,7 +34,7 @@ export const ContentLayout = observer(() => {
       <ContentLayoutItem
         isMobile={isMobile} loading={ReqStore.isLoading}
         text={ReqStore.currentAns} evidenceList={ReqStore.evidenceList}
-        question={''} failed={ReqStore.isFailed}
+        question={ReqStore.currentQuestion} failed={ReqStore.isFailed}
         shareId={ReqStore.shareId}
       />
 
