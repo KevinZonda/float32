@@ -41,6 +41,7 @@ class reqStore {
   public question = ''
   public warning = ''
   public currentAns: string = ''
+  public currentQuestion: string = ''
   private _currentHistory = ''
   public prevQA: PrevAnsItem[] = []
   private _parentId = ''
@@ -176,6 +177,7 @@ class reqStore {
     if (this.isLoading) return
     this.resetCore()
     this.isLoading = true
+    this.currentQuestion = question
     const fresp = fetch(continueAPI, {
       method: 'POST',
       headers: {

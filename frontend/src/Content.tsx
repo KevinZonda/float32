@@ -95,7 +95,7 @@ export const Content = observer((
                 marginBlockEnd: 0,
                 textAlign: 'left'
               }}>{'🤔 Question'}</h3>
-              <p style={{textAlign: 'left', fontSize: '16px', paddingBottom: 0, marginBlockStart: 0}}>
+              <p style={{textAlign: 'left', fontSize: '20px', paddingBottom: 0, marginBlockStart: 0, fontWeight: 'bold'}}>
                 {question}
               </p>
           </>
