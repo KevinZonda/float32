@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
 import {App} from "./App.tsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {About} from "./About.tsx";
+
+import 'tdesign-react/es/style/index.css'; // 少量公共样式
+import './index.css'
 
 const router = createBrowserRouter([
   {

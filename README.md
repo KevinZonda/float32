@@ -65,9 +65,6 @@ float32.app 使用 promptc 标准来实践 prompt 开发的解耦。请参阅 [p
 
 ## 前端
 
-> [!CAUTION]
-> 前端需要先运行 `tdesign.sh` 否则会丢失样式。
-
 前端使用 pnpm + React + Vite + MobX + TDesign 的结构。请使用以下命令以启动开发服务器：
 
 ```bash
