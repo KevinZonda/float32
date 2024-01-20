@@ -27,7 +27,7 @@ func translate(content string) string {
 		return content
 	}
 	txt := resp.Choices[0].Message.Content
-	log.Println("TRANSLATE> ", txt, "----->", txt)
+	log.Println("TRANSLATE> ", content, "----->", txt)
 	txt = strings.TrimSpace(strings.ReplaceAll(txt, "\n", " "))
 	if strings.Contains(strings.ToLower(txt), "err") {
 		return content
