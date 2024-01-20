@@ -1,0 +1,16 @@
+var: {
+  content: string
+}
+
+prompts : [
+    '''role: system
+    Please translate the text into English with accurate tune. Text will be bracketed by `<NeedTranslate>`
+    You only need to translate the content under the `</NeedTranslate>` without explaination.
+    If you meet something you cannot translate, just output `Error` without explaination.
+    ''',
+    '''
+    <NeedTranslate>
+    {content}
+    </NeedTranslate>
+    '''
+]
