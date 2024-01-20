@@ -18,13 +18,21 @@ flowchart LR
     llm(LLM, ChatGPT)
     subgraph Global RAG / 全局 RAG
         subgraph User Defined RAG / 用户定义 RAG
-            vdb ---> agent
+            vdb  ---> agent
             othr ---> agent
         end
-        google(Google Search)
+        subgraph float32 Managed RAG / float32 托管 RAG
+            google(Google Search)
+            db(float32 Managed DB i.e. MySQL)
+            mvdb(float32 Managed Vector DB e.g. pgvector)
+        end
     end
-    start ---> google
-    start ---> agent
+    start  ---> google
+    start  ---> agent
+    start  ---> db
+    start  ..-> mvdb
+    db     ---> pt
+    mvdb   ..-> pt
     google ---> pt
     agent  ---> pt
     pt     ---> llm
