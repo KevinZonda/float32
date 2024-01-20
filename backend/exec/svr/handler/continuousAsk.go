@@ -1,16 +1,38 @@
 package handler
 
 import (
+	"context"
 	"errors"
 	"github.com/KevinZonda/float32/exec/svr/db"
 	"github.com/KevinZonda/float32/exec/svr/dbmodel"
 	"github.com/KevinZonda/float32/exec/svr/reqmodel"
+	"github.com/KevinZonda/float32/exec/svr/shared"
 	"github.com/KevinZonda/float32/llm"
 	"github.com/KevinZonda/float32/rag"
 	"github.com/KevinZonda/float32/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/sashabaranov/go-openai"
+	"log"
+	"strings"
 )
+
+func translate(content string) string {
+	req := llm.PromptcTranslate(content)
+	resp, e := shared.Cli.CreateChatCompletion(context.Background(), req)
+	if e != nil {
+		log.Println(e)
+		return content
+	}
+	if len(resp.Choices) == 0 {
+		return content
+	}
+	txt := resp.Choices[0].Message.Content
+	txt = strings.TrimSpace(strings.ReplaceAll(txt, "\n", " "))
+	if strings.Contains(strings.ToLower(txt), "err") {
+		return content
+	}
+	return txt
+}
 
 func ContinuousAsk(c *gin.Context) {
 	var query reqmodel.ContinuousAskQuery
@@ -34,7 +56,7 @@ func ContinuousAsk(c *gin.Context) {
 		Question: query.Question,
 	})
 
-	searchRaw, err := rag.SearchRaw(query.Country(), query.Locale(), query.ProgLang+", "+query.Question)
+	searchRaw, err := rag.SearchRaw(query.Country(), query.Locale(), query.ProgLang+", "+translate(query.Question))
 	searched := rag.SearchResultsToText(searchRaw.SpiderResults)
 
 	// write meta info to Http
