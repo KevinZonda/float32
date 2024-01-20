@@ -7,6 +7,30 @@ float32 是一个基于大语言模型驱动的搜索助手，它可以帮助你
 > 如果你对 float32 的 prompt 感兴趣，可以看看 [📁 ./prompt/*.promptc](prompt/)。
 > 里面的 `.promptc` 文件记录了你感兴趣的东西。
 
+```mermaid
+flowchart LR
+    start(Query)
+    
+    agent(Agent)
+    vdb[(Vector DB e.g. Milvus)]
+    othr(Other)
+    pt(Prompt Engineer)
+    llm(LLM, ChatGPT)
+    subgraph Global RAG / 全局 RAG
+        subgraph User Defined RAG / 用户定义 RAG
+            vdb ---> agent
+            othr ---> agent
+        end
+        google(Google Search)
+    end
+    start ---> google
+    start ---> agent
+    google ---> pt
+    agent  ---> pt
+    pt     ---> llm
+
+```
+
 ## Acknowledged
 
 > [!NOTE]
