@@ -34,7 +34,7 @@ func Search(c *gin.Context) {
 	})
 
 	searched := ""
-	searchRaw, err := rag.SearchRaw(query.Country(), query.Locale(), query.ProgLang+", "+query.Question)
+	searchRaw, err := rag.SearchRaw(query.Country(), query.Locale(), query.ProgLang+", "+translate(query.Question))
 	if err == nil {
 		searched = rag.SearchResultsToText(searchRaw.SpiderResults)
 	}
