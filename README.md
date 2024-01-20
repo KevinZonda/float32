@@ -22,12 +22,14 @@ flowchart LR
             othr ---> agent
         end
         subgraph float32 Managed RAG / float32 托管 RAG
+            translate(Translation)
             google(Google Search)
+            translate ---> google
             db(float32 Managed DB i.e. MySQL)
             mvdb(float32 Managed Vector DB e.g. pgvector)
         end
     end
-    start  ---> google
+    start  ---> translate
     start  ---> agent
     start  ---> db
     start  ..-> mvdb
