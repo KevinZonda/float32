@@ -3,6 +3,8 @@ package serp
 import (
 	"bytes"
 	"errors"
+	md "github.com/JohannesKaufmann/html-to-markdown"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/go-shiori/go-readability"
 	"io"
 	"log"
@@ -38,18 +40,19 @@ func (s *SimpleSpider) Search(urls ...string) (results []SpiderResult) {
 				result.Error = err
 				goto store
 			}
+			defer resp.Body.Close()
 			if resp.StatusCode != http.StatusOK {
 				result.Error = errors.New("status code not 200")
 				goto store
 			}
-			defer resp.Body.Close()
 			body, err = readAllWithTimeout(resp.Body, s.Timeout)
 			if err != nil {
 				result.Error = err
 				spiderEnd = time.Now()
 				goto store
 			}
-			result = readabilityScrab(url, bytes.NewReader(body))
+			// Different Strategy
+			result = mdScrab(url, bytes.NewReader(body))
 			spiderEnd = time.Now()
 		store:
 			syncMap.Store(idx, result)
@@ -121,5 +124,20 @@ func readabilityScrab(urlS string, r io.Reader) (resp SpiderResult) {
 	resp.Title = strings.TrimSpace(rd.Title)
 	resp.Description = strings.TrimSpace(rd.Excerpt)
 	resp.Content = strings.Replace(strings.TrimSpace(rd.TextContent), "\n\n", "\n", -1)
+	return
+}
+
+func mdScrab(urlS string, r io.Reader) (ret SpiderResult) {
+	ret.Url = urlS
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		ret.Error = err
+		return
+	}
+
+	ret.Title = doc.Find("title").First().Text()
+
+	converter := md.NewConverter("", true, &md.Options{})
+	ret.Content = converter.Convert(doc.Selection)
 	return
 }

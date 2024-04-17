@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-type Spider interface {
+type ISpider interface {
 	Search(urls ...string) (resp []SpiderResult)
 }
 
