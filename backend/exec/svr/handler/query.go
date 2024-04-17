@@ -46,15 +46,10 @@ func Search(c *gin.Context) {
 
 	content := llm.Promptc(query.Language, query.Field, query.Question, query.ProgLang, searched)
 
-	req := openai.ChatCompletionRequest{
-		Temperature: 0.15,
-		N:           1,
-		Model:       openai.GPT3Dot5Turbo1106,
-		Messages: []openai.ChatCompletionMessage{
-			utils.ChatMsgFromSystem(content),
-			utils.ChatMsgFromUser(query.Question),
-		},
-	}
+	req := utils.ModelGPT35Request([]openai.ChatCompletionMessage{
+		utils.ChatMsgFromSystem(content),
+		utils.ChatMsgFromUser(query.Question),
+	})
 
 	ans.FirstAnswer = chatStreamToGin(c, req)
 	ans.IsOk = true

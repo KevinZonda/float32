@@ -22,3 +22,12 @@ func ChatMsgFromAssistant(txt string) openai.ChatCompletionMessage {
 		Content: txt,
 	}
 }
+
+func ModelGPT35Request(msg []openai.ChatCompletionMessage) openai.ChatCompletionRequest {
+	return openai.ChatCompletionRequest{
+		Temperature: 0.1,
+		N:           1,
+		Model:       openai.GPT3Dot5Turbo0125,
+		Messages:    msg,
+	}
+}
