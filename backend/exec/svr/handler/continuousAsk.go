@@ -73,22 +73,10 @@ func ContinuousAsk(c *gin.Context) {
 		N:           1,
 		Model:       openai.GPT3Dot5Turbo1106,
 		Messages: []openai.ChatCompletionMessage{
-			{
-				Content: content,
-				Role:    openai.ChatMessageRoleSystem,
-			},
-			{
-				Content: prevAns.Question,
-				Role:    openai.ChatMessageRoleUser,
-			},
-			{
-				Content: prevAns.FirstAnswer,
-				Role:    openai.ChatMessageRoleAssistant,
-			},
-			{
-				Content: query.Question,
-				Role:    openai.ChatMessageRoleUser,
-			},
+			utils.ChatMsgFromSystem(content),
+			utils.ChatMsgFromUser(prevAns.Question),
+			utils.ChatMsgFromAssistant(prevAns.FirstAnswer),
+			utils.ChatMsgFromUser(query.Question),
 		},
 	}
 

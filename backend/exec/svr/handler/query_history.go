@@ -13,7 +13,7 @@ import (
 func QueryHistory(c *gin.Context) {
 	id := c.Query("id")
 	if id == "" {
-		utils.GinErrorMsg(c, errors.New("id not set"))
+		utils.GinErrorMsgTxt(c, "id not set")
 		return
 	}
 
@@ -25,7 +25,7 @@ func QueryHistory(c *gin.Context) {
 			})
 			return
 		}
-		utils.GinErrorMsg(c, errors.New("db error"))
+		utils.GinErrorMsgTxt(c, "db error")
 		return
 	}
 

@@ -51,14 +51,8 @@ func Search(c *gin.Context) {
 		N:           1,
 		Model:       openai.GPT3Dot5Turbo1106,
 		Messages: []openai.ChatCompletionMessage{
-			{
-				Content: content,
-				Role:    openai.ChatMessageRoleSystem,
-			},
-			{
-				Content: query.Question,
-				Role:    openai.ChatMessageRoleUser,
-			},
+			utils.ChatMsgFromSystem(content),
+			utils.ChatMsgFromUser(query.Question),
 		},
 	}
 
@@ -74,7 +68,7 @@ func chatStreamToGin(c *gin.Context, req openai.ChatCompletionRequest) (complete
 	resp, err := shared.Cli.CreateChatCompletionStream(context.Background(), req)
 
 	if err != nil {
-		utils.GinErrorMsg(c, errors.New("LLM backend broken"))
+		utils.GinErrorMsgTxt(c, "LLM backend broken")
 		log.Println(err)
 		return
 	}

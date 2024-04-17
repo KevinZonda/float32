@@ -7,3 +7,9 @@ func GinErrorMsg(c *gin.Context, err error) {
 		"message": err.Error(),
 	})
 }
+
+func GinErrorMsgTxt(c *gin.Context, err string) {
+	c.JSON(500, gin.H{
+		"message": err,
+	})
+}

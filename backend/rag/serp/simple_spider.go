@@ -89,7 +89,7 @@ func NewSimpleSpider() *SimpleSpider {
 			Timeout: 5 * time.Second,
 		},
 		Timeout: 5 * time.Second,
-		HttpReq: GoogleBotHeader,
+		HttpReq: RandomBotHeader,
 	}
 }
 
